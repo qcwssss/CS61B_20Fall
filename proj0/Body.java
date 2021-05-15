@@ -71,8 +71,61 @@ The Body Class and Its Constructor
         di = this.calcDistance(d);
         force = (grav_G*mass_d*mass_this)/(di*di);
         return force;
+    }
 
+    // calculate the force exerted on x and y directions, **with signs**
+    public double calcForceExertedByX(Body d){
+        // calculate the difference in distance of the two bodies
+        double xxDiff, distance;
+        distance = this.calcDistance(d);
+        xxDiff = d.xxPos - this.xxPos;
+        
+        double force_whole, force_xx;
+        force_whole = this.calcForceExertedBy(d);
+        force_xx = force_whole*xxDiff/distance;
 
+        return force_xx;     
+    }
+
+    public double calcForceExertedByY(Body d){
+        // calculate the difference in distance of the two bodies
+        double yyDiff, distance;
+        distance = this.calcDistance(d); // duplicate
+        yyDiff = d.yyPos - this.yyPos;
+        
+        double force_whole, force_yy;
+        force_whole = this.calcForceExertedBy(d); // duplicate
+        force_yy = force_whole*yyDiff/distance;
+
+        return force_yy;
+    } 
+
+    //calculate all net forces exerted on both x, y directions
+    public double calcNetForceExertedByX(Body[] allBodys){
+        double sumOfForce_xx = 0;
+        for (Body object : allBodys){
+            if (this.equals(object)){
+                continue;
+            }
+
+            sumOfForce_xx += this.calcForceExertedByX(object);
+
+        }
+            return sumOfForce_xx;
+
+    }
+
+    public double calcNetForceExertedByY(Body[] allBodys){
+        double sumOfForce_yy = 0;
+        for (Body object : allBodys){
+            if (this.equals(object)){
+                continue;
+            }
+
+            sumOfForce_yy += this.calcForceExertedByY(object);
+
+        }
+            return sumOfForce_yy;
     }
     
  }
