@@ -127,5 +127,20 @@ The Body Class and Its Constructor
         }
             return sumOfForce_yy;
     }
+
+    // update the body status
+    public void update(double dt, double x_force, double y_force){
+        // calculate net acceleration
+        double aX_net, aY_net;
+        aX_net = x_force/this.mass;
+        aY_net = y_force/this.mass;
+        // new velocity
+        xxVel = this.xxVel + dt*aX_net;
+        yyVel = this.yyVel + dt*aY_net;
+        //new position
+        xxPos = this.xxPos + dt*xxVel;
+        yyPos = this.yyPos + dt*yyVel;
+
+    }
     
  }
