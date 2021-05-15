@@ -4,6 +4,8 @@ The Body Class and Its Constructor
 
  */
 
+ import java.lang.Math;
+
  public class Body {
     // 6 instance variables
     public double xxPos;
@@ -26,11 +28,51 @@ The Body Class and Its Constructor
             }
     
     public Body(Body b){
-        return b;
+        xxPos = b.xxPos;
+        yyPos = b.yyPos;
+        xxVel = b.xxVel;
+        yyVel = b.yyVel;
+        mass = b.mass;
+        imgFileName = b.imgFileName;
 
     }
-    
+    // instance methods
+    public double calcDistance(Body c){
+        double xxPos_c;
+        double yyPos_c;
+        xxPos_c = c.xxPos;
+        yyPos_c = c.yyPos;
+        
+        double xxPos_this;
+        double yyPos_this;
+        xxPos_this = this.xxPos;
+        yyPos_this = this.yyPos;
+
+        double dx;
+        double dy;
+        dx = xxPos_this - xxPos_c;
+        dy = yyPos_this - yyPos_c;
+
+        double dist_square, dist;
+        dist_square = dx*dx + dy*dy;
+        dist = Math.sqrt(dist_square);
+
+        return dist;
+
+    }
+
+    public double calcForceExertedBy(Body d){
+        final double grav_G = 6.67e-11;
+        
+        double di, force, mass_this, mass_d;
+        mass_this = this.mass;
+        mass_d = d.mass;
+
+        di = this.calcDistance(d);
+        force = (grav_G*mass_d*mass_this)/(di*di);
+        return force;
 
 
+    }
     
  }
