@@ -81,8 +81,24 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return B;
+        }
+        IntList L = A;
+        while (L.rest != null) {
+            L = L.rest;
+        }
+        L.rest = B;
+        return A;
     }
+
+    public static IntList dcatenateRecursive(IntList A, IntList B) {
+    if(A==null){
+        return B;
+    }
+    A.rest = dcatenateRecursive(A.rest,B);
+    return A;
+}
 
     /**
      * Returns a of consisting of the elements of A followed by the
@@ -90,9 +106,33 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return null;
+        }
+        IntList newLList = new IntList(A.first, A.rest);
+        IntList temp = newLList;
+        while (temp.rest != null) {
+            temp = temp.rest;
+        }
+        temp.rest = B;
+        return newLList;
     }
 
+    public static IntList concatenateRecursive(IntList A, IntList B) {
+        //TODO:  fill in method
+        if (A == null) {
+            return B;
+        }
+        return new IntList(A.first, concatenateRecursive(A.rest, B));
+        /** 
+         * return new IntList(A.first, catenateRecursive(A.rest, B))
+         *                             return new IntList(A.rest.first, catenateRecursie(A.rest.rest, B))
+         *                                                              return new IntList(A.rest.rest.first, catenateRecursive(A.rest.rest.rest, B))
+                                                                                                              B
+                                                                        
+         * 
+         */
+    }
 
     /**
      * DO NOT MODIFY ANYTHING BELOW THIS LINE! Many of the concepts below here
