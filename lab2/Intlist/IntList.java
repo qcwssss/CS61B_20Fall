@@ -107,23 +107,30 @@ public class IntList {
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
         if (A == null) {
-            return null;
+            return B;
         }
-        IntList newLList = new IntList(A.first, A.rest);
-        IntList temp = newLList;
-        while (temp.rest != null) {
-            temp = temp.rest;
+        IntList newLList = new IntList(A.first, null);
+        IntList pointer = newLList;
+        while (A.rest != null) {
+            A = A.rest;
+            pointer.rest = new IntList(A.first, null);
+            pointer = pointer.rest;
         }
-        temp.rest = B;
+
+        while (B != null) {
+            pointer.rest = new IntList(B.first, null);
+            B = B.rest;
+            pointer = pointer.rest;
+        }
         return newLList;
     }
 
-    public static IntList concatenateRecursive(IntList A, IntList B) {
+    public static IntList catenateRecursive(IntList A, IntList B) {
         //TODO:  fill in method
         if (A == null) {
             return B;
         }
-        return new IntList(A.first, concatenateRecursive(A.rest, B));
+        return new IntList(A.first, catenateRecursive(A.rest, B));
         /** 
          * return new IntList(A.first, catenateRecursive(A.rest, B))
          *                             return new IntList(A.rest.first, catenateRecursie(A.rest.rest, B))
