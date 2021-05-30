@@ -1,8 +1,6 @@
 /** An SLList is a list of integers, which hide us 
  * from the naked truth*/
 public class SLList {
-    private IntNode first;
-    private int size;
 
     /** nested class */
     private static class IntNode {
@@ -14,38 +12,38 @@ public class SLList {
             next = n;
         }
     }
+    private IntNode first;
+    /** The first item (if it's exist) is at sentinal.next.  */
+    private IntNode sentinal;
+    private int size;
 
     /** Constructor */
     public SLList(int x) {
         first = new IntNode(x, null);
+        sentinal = new IntNode(999, first);
         size ++;
     }
 
     /** Build an empty list. */
     public SLList() {
-        first = null;
+        sentinal = new IntNode(999, null);
         size = 0;
     }
 
     /** Adds an item to the front of the list. */
     public void addFirst(int x) {
-        first = new IntNode(x, first);
+        sentinal.next = new IntNode(x, sentinal.next);
         size ++;
     }
     /** Retrieves the front item from the list. */
     public int getFirst() {
-        return first.item;
+        return sentinal.next.item;
     }
 
     /** Add an item to the last of the list */
     public void addLast(int x) {
-        IntNode p = first;
-        if (first == null) {
-            first = new IntNode(x, null);
-            size ++;
-            return;
-        }
-
+        IntNode p = sentinal;
+        /** Advance p to the end. */
         while (p.next != null) {
             p = p.next;
         }
@@ -65,9 +63,9 @@ public class SLList {
         L.addLast(20);
         // an empty list
         SLList empty = new SLList();
+        System.out.println(empty.size());
         empty.addLast(9);
 
-        System.out.println(empty.size());
 
 
     }
