@@ -19,29 +19,28 @@ public class DLList<DataType> {
     /** Constructor */
     public DLList(DataType x) {
         first = new StuffNode(x, null);
-        DataType watcher = 999;
-        sentinal = new StuffNode(watcher, first);
+        sentinal = new StuffNode(null, first);
         size ++;
     }
 
     /** Build an empty list. */
     public DLList() {
-        sentinal = new StuffNode(999, null);
+        sentinal = new StuffNode(null, null);
         size = 0;
     }
 
     /** Adds an item to the front of the list. */
-    public void addFirst(int x) {
+    public void addFirst(DataType x) {
         sentinal.next = new StuffNode(x, sentinal.next);
         size ++;
     }
     /** Retrieves the front item from the list. */
-    public int getFirst() {
+    public DataType getFirst() {
         return sentinal.next.item;
     }
 
     /** Add an item to the last of the list */
-    public void addLast(int x) {
+    public void addLast(DataType x) {
         StuffNode p = sentinal;
         /** Advance p to the end. */
         while (p.next != null) {
@@ -57,12 +56,12 @@ public class DLList<DataType> {
 
     public static void main(String[] args) {
         /** Create a list of integers */
-        SLList L = new SLList(15);
+        DLList L = new DLList(15);
         L.addFirst(10);
         L.addFirst(5);
         L.addLast(20);
         // an empty list
-        SLList empty = new SLList();
+        DLList<Integer> empty = new DLList<>();
         System.out.println(empty.size());
         empty.addLast(9);
 
