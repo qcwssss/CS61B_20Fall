@@ -48,6 +48,7 @@ public class LinkedListDeque<InputType> {
      */
     public LinkedListDeque(LinkedListDeque other) {
         sentinel = new Node(null, sentinel, sentinel);
+
         size = 0;
 
         for (int i = 0; i < size; i++) {
@@ -57,7 +58,9 @@ public class LinkedListDeque<InputType> {
 
     /**  Constructor to create an empty linked list deque. */
     public LinkedListDeque() {
-        sentinel = new Node(null, sentinel, sentinel);
+        sentinel = new Node(null, null, null);
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
         size = 0;
     }
 
@@ -67,8 +70,24 @@ public class LinkedListDeque<InputType> {
      * @param item the data of the new Node.
      */
     public void addFirst(InputType item) {
-        first.next = new Node(item, first, sentinel);
-        sentinel.prev = first.next;
+        Node newFirst = new Node(item);
+        if (first != null) {
+            Node oldFirst = first;
+            first = newFirst;
+            // link the new first, 4 steps
+            first.next = oldFirst;
+            first.prev = sentinel;
+
+            sentinel.next = first;
+            oldFirst.prev = first;
+        } else {
+          // when deque is empty
+          first = newFirst;
+          sentinel.next = first;
+          sentinel.prev = first;
+          first.prev = sentinel;
+          first.next = sentinel;
+        }
         size++;
     }
 
@@ -91,7 +110,7 @@ public class LinkedListDeque<InputType> {
      * @return true if it's empty, false otherwise.
      */
     public boolean isEmpty() {
-        if (sentinel.next == null || sentinel.prev == null) {
+        if (sentinel.next == sentinel || sentinel.prev == sentinel) {
             return true;
         }
         return false;
@@ -117,7 +136,7 @@ public class LinkedListDeque<InputType> {
             temp = first;
             while (i < size) {
                 InputType x = temp.data;
-                System.out.print(x);
+                System.out.print(x + " ");
                 temp = temp.next;
                 i++;
             }
