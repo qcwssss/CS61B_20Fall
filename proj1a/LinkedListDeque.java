@@ -131,14 +131,10 @@ public class LinkedListDeque<InputType> {
     public void printDeque() {
         // Check first whether the deque is empty.
         if (!isEmpty()) {
-            int i = 0;
-            Node temp;
-            temp = first;
-            while (i < size) {
-                InputType x = temp.data;
-                System.out.print(x + " ");
+            Node temp = sentinel;
+            while (temp.next != sentinel) {
+                System.out.print(temp.next.data + " ");
                 temp = temp.next;
-                i++;
             }
             System.out.print("\n");
             return;
@@ -205,9 +201,9 @@ public class LinkedListDeque<InputType> {
                     (" Index must less than size-1! ");
         }
         InputType item = null;
-        Node temp = this.first;
-        for (int i = 0; i < index; i++) {
-            item = temp.data;
+        Node temp = this.sentinel;
+        while (temp.next != sentinel) {
+            item = temp.next.data;
             temp = temp.next;
         }
 
@@ -221,15 +217,14 @@ public class LinkedListDeque<InputType> {
         }
         // Base case
         if (index == 0) {
-            return first.data;
+            return sentinel.next.data;
         }
-
-        Node temp = first.next;
+        Node temp = sentinel.next.next;
         return getTraverse(index - 1, temp);
-
     }
 
     /**
+     * Helper methods for getRecursive.
      *
      * @param indexII the index of deque
      * @param node the node of deque
@@ -241,6 +236,21 @@ public class LinkedListDeque<InputType> {
         }
         return getTraverse(indexII - 1, node.next);
     }
+
+    public static void main(String[] args) {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        for (int i = 0; i < 6; i++) {
+            deque.addLast(i);
+            System.out.printf("deque[%d]: %d \n", i, deque.getRecursive(i));
+            System.out.printf("deque[%d]: %d \n", i, deque.get(i));
+
+        }
+        deque.printDeque();
+
+
+    }
+
+
 
 
 }
