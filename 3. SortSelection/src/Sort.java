@@ -4,8 +4,7 @@ public class Sort {
 		// find the smallest item.
 		// move it to the front, swap it
 		// keep sort for the rest of the array
-		int smallestIdx = findSmallest(arrayOfString);
-		swap(arrayOfString, 0, smallestIdx);
+		sort(arrayOfString, 0);
 	}
 
 	/**
@@ -15,9 +14,13 @@ public class Sort {
 	 * @param start the starting index of an unsorted array.
 	 */
 	private static void sort(String[] array, int start) {
-		
-		int smallestIdx = findSmallest(array);
-		swap(array,0, smallestIdx);
+		//Base case
+		if (start == array.length) {
+			return;
+		}
+
+		int smallestIdx = findSmallest(array, start);
+		swap(array, start, smallestIdx);
 
 		sort(array, start + 1);
 	}
@@ -28,9 +31,9 @@ public class Sort {
 	 * @param x the string will be sorted.
 	 * @return the smallest.
 	 */
-	public static int findSmallest(String[] x) {
-		int smallestIndex = 0;
-		for (int i = 0; i < x.length; i++) {
+	public static int findSmallest(String[] x, int start) {
+		int smallestIndex = start;
+		for (int i = start; i < x.length; i++) {
 			int compare = x[smallestIndex].compareTo(x[i]);
 			if (compare > 0) {
 				smallestIndex = i;
