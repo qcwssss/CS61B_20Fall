@@ -12,33 +12,38 @@
  size: The number of items in the list should be size.
 */
 
-public class AList {
-    private int items[];
+public class AList<Type> {
+    private Type[] items;
     private int size;
 
     /** Creates an empty list. */
     public AList() {
-        items = new int[100];
+        items = (Type[]) new Object[100];
         size = 0;
     }
 
+    /** Resize the underlying array to the target capacity. */
+    public void reSize(int capacity) {
+        Type[] a = (Type[]) new Object[capacity];
+        System.arraycopy(items, 0, a, 0, size);
+        items = a;
+    }
+
     /** Inserts X into the back of the list. */
-    public void addLast(int x) {
+    public void addLast(Type x) {
         if (size == items.length) {
-            int[] a = new int[size + 1];
-            System.arraycopy(items, 0, a, 0, size);
-            items = a;
-            return;
+            reSize(size + 1);
         }
         items[size] = x;
+        size++;
     }
 
     /** Returns the item from the back of the list. */
-    public int getLast() {
+    public Type getLast() {
         return items[size - 1];        
     }
     /** Gets the ith item in the list (0 is the front). */
-    public int get(int i) {
+    public Type get(int i) {
         return items[i];        
     }
 
@@ -49,8 +54,8 @@ public class AList {
 
     /** Deletes items from back of the list and
       * returns deleted item. */
-    public int removeLast() {
-        int last = this.getLast();
+    public Type removeLast() {
+        Type last = this.getLast();
         // items[size] = 0; fine, but unnecessary
         size--;
         return last;
