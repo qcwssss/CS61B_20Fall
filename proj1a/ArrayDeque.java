@@ -18,6 +18,22 @@ public class ArrayDeque<T> {
     }
 
     /**
+     * Deep copy another deque.
+     * @param other deque.
+     */
+    public ArrayDeque(ArrayDeque other) {
+        size = other.size();
+        nextFirst = other.getNextFirst();
+        nextLast = other.getNextLast();
+
+        items = (T[]) new Object[other.getCapacity()];
+        // copy all items from other
+        for (int i = 0; i < other.getCapacity(); i++ ) {
+            items[i] = (T) other.items[i];
+        }
+    }
+
+    /**
      * Getters helper methods.
      *
      * Return the value of nextFirst.
@@ -25,6 +41,14 @@ public class ArrayDeque<T> {
      */
     public int getNextFirst() {
         return this.nextFirst;
+    }
+
+    /**
+     * Get the items of deque.
+     * @return items.
+     */
+    public T[] getItems() {
+        return this.items;
     }
 
     /**

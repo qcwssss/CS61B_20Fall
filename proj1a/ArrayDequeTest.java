@@ -2,7 +2,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Test for ArrayDeque class.
@@ -12,11 +12,13 @@ import static org.junit.Assert.assertEquals;
 public class ArrayDequeTest {
 	private ArrayDeque<Integer> deque;
 	private ArrayDeque<String> deque1;
+	private ArrayDeque<Integer> dequeCopy;
 
 	@Before
 	public void setUp() {
 		deque = new ArrayDeque<>();
 		deque1 = new ArrayDeque<>();
+		//dequeCopy = new ArrayDeque<>();
 
 	}
 	@Test
@@ -173,14 +175,28 @@ public class ArrayDequeTest {
 
 		// test the index of nextLast
 		assertEquals(1, deque1.getNextLast());
-		// add item out of bound
+		// add item till out of bound
 		deque1.addLast("Whoops!");
 		deque1.addLast("more");
 		deque1.addLast("and");
 		deque1.addLast("more!");
 
 		deque1.addLast("It should explode now!");
+	}
 
+	@Test
+	public void testDeepCopy() {
+		deque.addFirst(3);
+		deque.addFirst(2);
+		deque.addFirst(1);
+
+		dequeCopy = new ArrayDeque(deque);
+		// compare two objects attributes.
+		assertArrayEquals(deque.getItems(), dequeCopy.getItems());
+		assertEquals(dequeCopy.size(), deque.size());
+		assertEquals(dequeCopy.getCapacity(), deque.getCapacity());
+		assertEquals(dequeCopy.getNextFirst(), deque.getNextFirst());
+		assertEquals(dequeCopy.getNextLast(), deque.getNextLast());
 
 	}
 
