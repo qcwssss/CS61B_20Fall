@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 
 /**
  * Test for ArrayDeque class.
- *
  * @author Chen Qiu
  */
 public class ArrayDequeTest {
@@ -197,6 +196,65 @@ public class ArrayDequeTest {
 		assertEquals(dequeCopy.getCapacity(), deque.getCapacity());
 		assertEquals(dequeCopy.getNextFirst(), deque.getNextFirst());
 		assertEquals(dequeCopy.getNextLast(), deque.getNextLast());
+
+	}
+
+	@Test
+	public void testResize() {
+		// test cycle
+		deque.addFirst(6);
+		deque.addFirst(5);
+		deque.addFirst(4);
+		deque.addFirst(3);
+		deque.addFirst(2);
+		deque.addFirst(1);
+		deque.addFirst(8);
+		deque.addFirst(7);
+
+		deque.printDeque();
+		// after resize
+		deque.addFirst(10);
+		deque.printDeque();
+		int actual = deque.get(15);
+		assertEquals(10, actual);
+
+	}
+
+	@Test
+	public void testCheckSizeUsage() {
+		int num = deque.getCapacity() * 2;
+		for (int i = 0; i < num * 10 ; i++) {
+			deque.addLast(i);
+		}
+		System.out.printf("Current capacity: %d; Current size: %d\n",
+				deque.getCapacity(), deque.size());
+
+		for (int i = 0; i < num * 8 ; i++) {
+			deque.removeLast();
+		}
+		System.out.printf("Current capacity: %d; Current size: %d\n",
+				deque.getCapacity(), deque.size());
+		//deque.printDeque();
+		assertEquals(128, deque.getCapacity());
+
+	}
+
+	@Test
+	public void testCheckSizeUsage2() {
+		int num = deque.getCapacity() * 2;
+		for (int i = 0; i < num * 10 ; i++) {
+			deque.addFirst(i);
+		}
+		System.out.printf("Current capacity: %d; Current size: %d\n",
+				deque.getCapacity(), deque.size());
+
+		for (int i = 0; i < num * 8 ; i++) {
+			deque.removeFirst();
+		}
+		System.out.printf("Current capacity: %d; Current size: %d\n",
+				deque.getCapacity(), deque.size());
+		//deque.printDeque();
+		assertEquals(128, deque.getCapacity());
 
 	}
 

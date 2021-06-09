@@ -6,6 +6,7 @@ public class ArrayDeque<T> {
 
     // initialize max capacity
     private int capacity = 8;
+    private static int REFACTOR = 2;
 
 
     /** Constructor to create an empty ArrayDeque. */
@@ -72,17 +73,14 @@ public class ArrayDeque<T> {
      * @param item the item will be added.
      */
     public void addFirst(T item) {
-        if (!isFull()) {
-            items[nextFirst] = item;
-            nextFirst--;
-            // check after minus
-            nextFirst = checkNext(nextFirst);
-            size++;
-
-            return;
+        if (isFull()) {
+          resize(capacity * REFACTOR);
         }
-        System.out.println("--Error, deque already full.--");
-        System.out.println("--Can't addFirst item: " + item + " --");
+        items[nextFirst] = item;
+        nextFirst--;
+        // check after minus
+        nextFirst = checkNext(nextFirst);
+        size++;
 
     }
 
@@ -91,17 +89,14 @@ public class ArrayDeque<T> {
      * @param item the item will be added.
      */
     public void addLast(T item) {
-        if (!isFull()) {
-            items[nextLast]  = item;
-            nextLast++;
-            //check
-            nextLast = checkNext(nextLast);
-            size++;
-
-            return;
+        if (isFull()) {
+            resize(capacity * REFACTOR);
         }
-        System.out.println("--Error, deque already full.--");
-        System.out.println("--Can't addLast item: " + item + " --");
+        items[nextLast]  = item;
+        nextLast++;
+        //check
+        nextLast = checkNext(nextLast);
+        size++;
 
     }
 
@@ -144,7 +139,46 @@ public class ArrayDeque<T> {
      * @param nextLast nextLast.
      */
     private void checkNextEqual(int nextFirst, int nextLast) {
+      if (nextFirst == nextLast) {
+        // which indicates only one empty box left
+      }
+    }
 
+    /**
+     * Check capacity usage, shrink when necessary.
+     */
+    public void checkSizeUsage() {
+        if (getCapacity() > 16 && size() < getCapacity() / 4) {
+            // shrink deque, make usage of 25% of new capacity
+            int newCapacity = size() * 4;
+            T[] temp = (T[]) new Object[newCapacity];
+            System.arraycopy(items, 0, temp, 0, newCapacity);
+
+            // reset attributes
+            items = temp;
+            capacity = newCapacity;
+            // set new bound
+            if (nextFirst > capacity) {
+                nextFirst = capacity - 1;
+            }
+            else if (nextLast > capacity) {
+                nextLast = capacity - 1;
+            }
+        }
+    }
+
+    /**
+     * Resize the capacity when full.
+     * @param newCapacity new capacity.
+     */
+    public void resize(int newCapacity) {
+        T[] temp = (T[]) new Object[newCapacity];
+        System.arraycopy(items, 0, temp, 0, capacity);
+        items = temp;
+        // set new next index
+        nextLast = capacity;
+        nextFirst = newCapacity - 1;
+        this.capacity = newCapacity;
     }
 
 
@@ -208,11 +242,13 @@ public class ArrayDeque<T> {
         // in case out of bound, reset next index
         nextFirst = checkNext(nextFirst);
         size--;
+
+        checkSizeUsage();// check capacity usage
         return val;
     }
 
     /**
-     * Removes and return the last item.     *
+     * Removes and return the last item.
      * @return last item of the circular array.
      */
     public T removeLast() {
@@ -222,13 +258,14 @@ public class ArrayDeque<T> {
         }
         if (nextLast == 0) {
           nextLast = capacity;
-
         }
         T val = items[nextLast - 1];
         items[nextLast - 1] = null;
         nextLast--;
         nextLast = checkNext(nextLast);
         size--;
+
+        checkSizeUsage();// check capacity usage
         return val;
     }
 
