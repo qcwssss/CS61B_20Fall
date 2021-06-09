@@ -73,11 +73,10 @@ public class ArrayDeque<T> {
      */
     public void addFirst(T item) {
         if (!isFull()) {
-            if (nextFirst < 0) {
-                nextFirst = circulateNext(nextFirst);
-            }
             items[nextFirst] = item;
             nextFirst--;
+            // check after minus
+            nextFirst = checkNext(nextFirst);
             size++;
 
             return;
@@ -93,12 +92,10 @@ public class ArrayDeque<T> {
      */
     public void addLast(T item) {
         if (!isFull()) {
-            if (nextLast > capacity -1) {
-                // circulate nextLast to 0
-                nextLast = circulateNext(nextLast);
-            }
             items[nextLast]  = item;
             nextLast++;
+            //check
+            nextLast = checkNext(nextLast);
             size++;
 
             return;
@@ -126,11 +123,27 @@ public class ArrayDeque<T> {
         return nextIndex;
     }
 
+  /**
+   * check whether the nextFirst/nextLast index is in
+   * the range of capacity. If so, reset.
+   *
+   * @param index next index.
+   * @return next index.
+   */
+    private int checkNext(int index) {
+        if (index > capacity - 1 || index < 0) {
+            index = circulateNext(index);
+        }
+        return index;
+    }
+
     /**
-     * check whether the index is in the range of
-     * valid value, instead of null.
+     * Check whether the two next index are the same.
+     * A helper function for resize.
+     * @param nextFirst nextFirst.
+     * @param nextLast nextLast.
      */
-    private void checkIndex() {
+    private void checkNextEqual(int nextFirst, int nextLast) {
 
     }
 
@@ -186,21 +199,14 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        if (nextFirst > capacity -1) {
-            nextFirst++; // reset next
-            nextFirst = circulateNext(nextFirst);
-        }
-        else if (nextFirst == capacity -1) {
+        if (nextFirst == capacity -1) {
             nextFirst = -1;
-            T val = items[nextFirst + 1];
-            items[nextFirst + 1] = null;
-            nextFirst++;
-            size--;
-            return val;
         }
         T val = items[nextFirst + 1];
         items[nextFirst + 1] = null;
         nextFirst++;
+        // in case out of bound, reset next index
+        nextFirst = checkNext(nextFirst);
         size--;
         return val;
     }
@@ -214,20 +220,14 @@ public class ArrayDeque<T> {
             System.out.println("*** Cannot remove an empty deque ***");
             return null;
         }
-        if (nextLast < 0) {
-            nextLast = circulateNext(nextLast);
-        }
-        else if (nextLast == 0) {
-            nextLast = capacity;
-            T val = items[nextLast - 1];
-            items[nextLast - 1] = null;
-            nextLast--;
-            size--;
-            return val;
+        if (nextLast == 0) {
+          nextLast = capacity;
+
         }
         T val = items[nextLast - 1];
         items[nextLast - 1] = null;
         nextLast--;
+        nextLast = checkNext(nextLast);
         size--;
         return val;
     }
