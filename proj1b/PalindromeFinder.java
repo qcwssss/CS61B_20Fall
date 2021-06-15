@@ -7,20 +7,21 @@ public class PalindromeFinder {
         Palindrome palindrome = new Palindrome();
         OffByOne offByOne = new OffByOne();
 
-        /**
         while (!in.isEmpty()) {
             String word = in.readString();
             if (word.length() >= minLength && palindrome.isPalindrome(word)) {
                 System.out.println(word);
             }
         }
-        System.out.println("Palindromes printed.");
-        */
+        System.out.println("Palindromes printed.\n");
+
 
         // Off by one
+        In in1 = new In("../library-fa20/data/words.txt");
+
         System.out.println("Palindromes off by one: ");
-        while (!in.isEmpty()) {
-            String word = in.readString();
+        while (!in1.isEmpty()) {
+            String word = in1.readString();
             if (word.length() >= minLength && palindrome.isPalindrome(word, offByOne)) {
                 System.out.println(word);
                 //System.out.println("There's nothing left");
