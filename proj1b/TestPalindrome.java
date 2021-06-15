@@ -18,6 +18,16 @@ public class TestPalindrome {
 
     @Test
     public void testIsPalindrome() {
-        assertTrue();
+        assertTrue(palindrome.isPalindrome("racecar") );
+        assertTrue(palindrome.isPalindrome("noon") );
+        assertTrue(palindrome.isPalindrome("tenet") );
+        // 1 or 0 character are all palindrome
+        assertTrue(palindrome.isPalindrome("a") );
+        assertTrue(palindrome.isPalindrome("a") );
+
+        assertFalse(palindrome.isPalindrome("dance") );
+        assertFalse(palindrome.isPalindrome("dance") );
+        assertFalse(palindrome.isPalindrome("horse") );
+
     }
 }
