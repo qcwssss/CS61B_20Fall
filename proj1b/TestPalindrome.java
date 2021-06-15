@@ -15,5 +15,9 @@ public class TestPalindrome {
         }
         assertEquals("persiflage", actual);
     }
+
+    @Test
+    public void testIsPalindrome() {
+        assertTrue();
+    }
 }
-/** Uncomment this class once you've created your Palindrome class. */
