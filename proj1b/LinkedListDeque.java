@@ -146,16 +146,13 @@ public class LinkedListDeque<T> implements Deque<T>{
     @Override
     public T removeFirst() {
         if (!isEmpty()) {
-            // move first pointer to next
-            Node temp = first;
-            first = first.next;
-            // erase the link of first
-            temp.next = null;
-            temp.prev = null;
+            //Node temp = sentinel.next; // store old first
+            T firstItem = sentinel.next.data;
+            sentinel.next.next.prev = sentinel;
+            sentinel.next = sentinel.next.next;
+            size -= 1;
 
-            first.prev = sentinel;
-            sentinel.next = first;
-            return temp.data;
+            return firstItem;
         }
         return null;
     }
@@ -172,13 +169,16 @@ public class LinkedListDeque<T> implements Deque<T>{
         if (!isEmpty()) {
             // Relocate the last node pointer
             Node temp = sentinel.prev;
+            T lastItem = sentinel.prev.data;
             sentinel.prev = temp.prev;
+            sentinel.prev.next = sentinel;
+
             // nullify the pointer of the old last
             temp.prev = null;
             temp.next = null;
 
-            sentinel.prev.next = sentinel;
-            return temp.data;
+            size--;
+            return lastItem;
         }
         return null;
     }
@@ -246,16 +246,14 @@ public class LinkedListDeque<T> implements Deque<T>{
 
         }
         while (!deque.isEmpty()) {
-            //deque.removeLast();
-            deque.removeFirst();
+            deque.removeLast();
+            //deque.removeFirst();
             deque.printDeque();
         }
+
         deque.printDeque();
 
-
     }
-
-
 
 
 }
