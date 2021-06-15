@@ -58,16 +58,9 @@ public class Palindrome {
 		}
 
 		if (dequeOfWord.size() > 1) {
-			try {
-				if (cc.equalChars((char)dequeOfWord.removeFirst(), (char)dequeOfWord.removeLast())){
-					return isPalindrome(dequeToString(dequeOfWord), cc);
-				}
-			} catch (Exception e) {
-				throw new IllegalArgumentException
-						(" * word * can't contain non-alphabetical characters.");
-
+			if (cc.equalChars((char)dequeOfWord.removeFirst(), (char)dequeOfWord.removeLast())){
+				return isPalindrome(dequeToString(dequeOfWord), cc);
 			}
-
 		}
 		return false;
 	}
