@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 /** Array based list.
  *  @author Josh Hug
  */
@@ -12,9 +14,42 @@
  size: The number of items in the list should be size.
 */
 
-public class AList<Item> {
+public class AList<Item> implements Iterable<Item>{
     private Item[] items;
     private int size;
+
+
+    /**
+     * Instantiate an AListIterator object.
+     * @return AListIterator
+     */
+    public Iterator<Item> iterator(){
+        return new AListIterator();
+    }
+
+    /** Nested AList Iterator class */
+    private class AListIterator implements Iterator<Item> {
+        private int pos;
+
+        /** Constructor. */
+        public AListIterator() {
+            pos = 0;
+        }
+
+
+
+        @Override
+        public boolean hasNext() {
+            return pos < size;
+        }
+
+        @Override
+        public Item next() {
+            Item returnItem = items[pos];
+            pos++;
+            return returnItem;
+        }
+    }
 
     /** Creates an empty list. */
     public AList() {
