@@ -1,6 +1,8 @@
+import java.util.Iterator;
+
 /** An SLList is a list of integers, which hides the terrible truth
  * of the nakedness within. */
-public class SLList<Item> {
+public class SLList<Item> implements List<Item>{
 	private class IntNode {
 		public Item item;
 		public IntNode next;
@@ -39,6 +41,7 @@ public class SLList<Item> {
 	}
 
 	/** Adds x to the end of the list. */
+	@Override
 	public void addLast(Item x) {
 		size = size + 1;
 
@@ -53,6 +56,7 @@ public class SLList<Item> {
 	}
 
 	/** returns last item in the list */
+	@Override
 	public Item getLast() {
 		size = size + 1;
 
@@ -67,15 +71,39 @@ public class SLList<Item> {
 	}
 
 
-		/** Returns the size of the list. */
+	/** Returns the size of the list. */
+	@Override
 	public int size() {
 		return size;
+	}
+
+	@Override
+	public Item get(int index) {
+		int counter = -1; // index starts from 0
+		IntNode temp = sentinel;
+		while(counter < index) {
+			temp = temp.next;
+			counter++;
+		}
+
+		return temp.item;
+	}
+
+	@Override
+	public Iterator<Item> iterator() {
+		return null;
 	}
 
 	public static void main(String[] args) {
 		/* Creates a list of one integer, namely 10 */
 		SLList L = new SLList();
-		L.addLast(20);
+		for (int i = 0; i < 5; i++) {
+			L.addLast(i);
+			System.out.println(L.get(i));
+
+		}
+		System.out.print("size: ");
 		System.out.println(L.size());
+
 	}
 }

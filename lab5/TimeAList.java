@@ -32,7 +32,6 @@ public class TimeAList {
         for (int i = 0; i < exponent; i++) {
             dataSize.addLast(thousand * (int)Math.pow(2, i));
         }
-        //System.out.println(dataSize.size());
         System.out.println("Timing table for addLast");
 
         // Apply Iterator for enhanced for loop
