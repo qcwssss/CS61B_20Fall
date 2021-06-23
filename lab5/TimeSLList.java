@@ -23,6 +23,29 @@ public class TimeSLList {
 
     public static void timeGetLast() {
         // TODO: YOUR CODE HERE
+        int exponent = 8;// constant
+        int thousand = 1000;
+
+        Stopwatch sw = new Stopwatch();
+        SLList<Integer> dataSize = new SLList<>();
+        SLList<Double> time = new SLList<>();
+
+        // add different size of the data structure in a list
+        for (int i = 0; i < exponent; i++) {
+            dataSize.addLast(thousand * (int)Math.pow(2, i));
+        }
+        System.out.println("Timing table for addLast(SLList)");
+        // test addLast for SLList
+        SLList<Integer> testAddLast = new SLList<>(); // arbitrarily choose Integer
+        for (Integer num : dataSize) {
+            for (int i = 0; i < num; i++) {
+                testAddLast.addLast(num);
+            }
+            time.addLast(sw.elapsedTime());
+        }
+        //for (Double second : time) { System.out.println(second);}
+        printTimingTable(dataSize, time, dataSize);
+
     }
 
 }
