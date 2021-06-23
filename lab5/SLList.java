@@ -2,7 +2,7 @@ import java.util.Iterator;
 
 /** An SLList is a list of integers, which hides the terrible truth
  * of the nakedness within. */
-public class SLList<Item> implements List<Item>{
+public class SLList<Item> implements List<Item> {
 	private class IntNode {
 		public Item item;
 		public IntNode next;
@@ -13,9 +13,40 @@ public class SLList<Item> implements List<Item>{
 		}
 	}
 
-	/* The first item (if it exists) is at sentinel.next. */
+	/** The first item (if it exists) is at sentinel.next. */
 	private IntNode sentinel;
 	private int size;
+
+	/**
+	 * Instantiate an SLListIterator object.
+	 * @return SLListIterator
+	 */
+	@Override
+	public Iterator<Item> iterator() {
+		return new SLListIterator();
+	}
+
+	/** Nested SLListIterator class. */
+	private class SLListIterator implements Iterator<Item> {
+		private int pos;
+
+		/** Constructor. */
+		public SLListIterator() {
+			pos = 0;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return pos < size;
+		}
+
+		@Override
+		public Item next() {
+			Item returnItem = get(pos);
+			pos++;
+			return returnItem;
+		}
+	}
 
 	/** Creates an empty SLList. */
 	public SLList() {
@@ -41,7 +72,6 @@ public class SLList<Item> implements List<Item>{
 	}
 
 	/** Adds x to the end of the list. */
-	@Override
 	public void addLast(Item x) {
 		size = size + 1;
 
@@ -56,7 +86,6 @@ public class SLList<Item> implements List<Item>{
 	}
 
 	/** returns last item in the list */
-	@Override
 	public Item getLast() {
 		size = size + 1;
 
@@ -89,10 +118,6 @@ public class SLList<Item> implements List<Item>{
 		return temp.item;
 	}
 
-	@Override
-	public Iterator<Item> iterator() {
-		return null;
-	}
 
 	public static void main(String[] args) {
 		/* Creates a list of one integer, namely 10 */

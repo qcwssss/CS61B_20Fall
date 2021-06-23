@@ -12,6 +12,5 @@ public interface List<Item> extends Iterable<Item> {
 	Item getLast();
 	int size();
 	Item get(int index);
-	Iterator<Item> iterator();
 
 }

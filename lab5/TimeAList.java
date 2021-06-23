@@ -28,15 +28,15 @@ public class TimeAList {
         AList<Integer> dataSize = new AList<>();
         AList<Double> time = new AList<>();
 
-        // calculate time while in loop
+        // a list of size
         for (int i = 0; i < exponent; i++) {
             dataSize.addLast(thousand * (int)Math.pow(2, i));
         }
-        System.out.println("Timing table for addLast");
+        System.out.println("Timing table for addLast(AList)");
 
         // Apply Iterator for enhanced for loop
         for (Integer num : dataSize) {
-            // test addLast
+            // test addLast for AList
             AList<Integer> timeTest = new AList<>();
             for (int i = 0; i < num; i++) {
                 timeTest.addLast(num);

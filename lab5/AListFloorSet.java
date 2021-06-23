@@ -9,10 +9,18 @@ public class AListFloorSet implements Lab5FloorSet {
     }
 
     public void add(double x) {
-        return;
+        items.addLast(x);
     }
 
     public double floor(double x) {
-        return 0;
+        double best = Double.NEGATIVE_INFINITY;
+        for (Double num : items) {
+            if (num < x) {
+              if (best < num) {
+                  best = num;
+              }
+            }
+        }
+        return best;
     }
 }
