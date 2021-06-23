@@ -5,7 +5,7 @@ import java.util.List;
  * Class that collects timing information about SLList getLast method.
  */
 public class TimeSLList {
-    private static void printTimingTable(List<Integer> Ns, List<Double> times, List<Integer> opCounts) {
+    private static void printTimingTable(SLList<Integer> Ns, SLList<Double> times, SLList<Integer> opCounts) {
         System.out.printf("%12s %12s %12s %12s\n", "N", "time (s)", "# ops", "microsec/op");
         System.out.printf("------------------------------------------------------------\n");
         for (int i = 0; i < Ns.size(); i += 1) {
