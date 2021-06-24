@@ -84,7 +84,6 @@ public class Plip extends Creature {
      * @return energy from  0 to 2
      */
     private double checkEnergy(double energy) {
-
         energy = Math.min(energy, energyMax);
         energy = Math.max(energyMin, energy);
         return energy;
@@ -144,7 +143,7 @@ public class Plip extends Creature {
             if (neighbors.get(d).name().equals("empty")) {
                 emptyNeighbors.add(d);
             }
-            else if (neighbors.get(d).name().equals("Clorus")) {
+            else if (neighbors.get(d).name().equals("clorus")) {
                 anyClorus = true;
             }
         }

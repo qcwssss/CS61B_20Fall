@@ -76,35 +76,40 @@ public class TestClorus {
     HashMap<Direction, Occupant> topEmpty = new HashMap<>();
     topEmpty.put(Direction.TOP, new Empty());
     topEmpty.put(Direction.BOTTOM, new Plip());
-    topEmpty.put(Direction.LEFT, new Plip(1.5));
+    topEmpty.put(Direction.LEFT, new Impassible());
     topEmpty.put(Direction.RIGHT, new Plip(2));
 
     Action actual2 = c2.chooseAction(topEmpty);
-    Action expected2 = new Action((Action.ActionType.ATTACK));
+    Action expected2 = new Action(Action.ActionType.ATTACK, Direction.BOTTOM );
+    Action expected2b = new Action(Action.ActionType.ATTACK, Direction.RIGHT );
 
-    assertEquals(expected2, actual2);
+    assertTrue(actual2.equals(expected2) || actual2.equals(expected2b));
 
 
     // Otherwise, energy >= 1, REPLICATE to a random empty square.
     HashMap<Direction, Occupant> allEmpty = new HashMap<>();
-    topEmpty.put(Direction.TOP, new Empty());
-    topEmpty.put(Direction.BOTTOM, new Empty());
-    topEmpty.put(Direction.LEFT, new Empty());
-    topEmpty.put(Direction.RIGHT, new Empty());
+    allEmpty.put(Direction.TOP, new Empty());
+    allEmpty.put(Direction.BOTTOM, new Impassible());
+    allEmpty.put(Direction.LEFT, new Impassible());
+    allEmpty.put(Direction.RIGHT, new Empty());
 
     Action actual3 = c2.chooseAction(allEmpty);
-    Action expected3 = new Action((Action.ActionType.REPLICATE));
+    Action expected3 = new Action(Action.ActionType.REPLICATE, Direction.RIGHT);
+    Action expected3b = new Action(Action.ActionType.REPLICATE, Direction.TOP);
 
-    assertEquals(expected3, actual3);
+    //assertEquals(expected3, actual3);
+    assertTrue(actual3.equals(expected3) || actual3.equals(expected3b));
 
 
     // if energy < 1, MOVE to a random empty square.
     Clorus c4 = new Clorus(0.4);
 
     Action actual4 = c4.chooseAction(allEmpty);
-    Action expected4 = new Action((Action.ActionType.STAY));
+    Action expected4 = new Action(Action.ActionType.MOVE, Direction.RIGHT);
+    Action expected4b = new Action(Action.ActionType.MOVE, Direction.TOP);
 
-    assertEquals(expected4, actual4);
+    //assertEquals(expected4, actual4);
+    assertTrue(actual4.equals(expected4) || actual4.equals(expected4b));
 
   }
 }

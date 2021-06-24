@@ -41,7 +41,7 @@ public class SampleCreature extends Creature {
     /**
      * degree of color shift to allow.
      */
-    private int colorShift = 5;
+    private int colorShift = 8;
     /**
      * fraction of energy to retain when replicating.
      */
