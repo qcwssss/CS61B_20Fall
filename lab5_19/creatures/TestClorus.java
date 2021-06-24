@@ -35,6 +35,22 @@ public class TestClorus {
   }
 
   @Test
+  public void testStay() {
+    double expected = c1.energy() -0.01;
+    c1.stay();
+    double actual = c1.energy();
+    assertEquals(expected, actual, 0.01);
+  }
+
+  @Test
+  public void testMove() {
+    double expected = c1.energy() - 0.03;
+    c1.move();
+    double actual = c1.energy();
+    assertEquals(expected, actual, 0.01);
+  }
+
+  @Test
   public void testReplicate() {
     double oldE = c2.energy();
     Clorus c2Son = c2.replicate();
