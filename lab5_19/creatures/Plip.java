@@ -30,6 +30,12 @@ public class Plip extends Creature {
      */
     private int b;
 
+    /** Use variable to store constants, avoid magic numbers. */
+    private static final double moveCost = 0.15;
+    private static final double stayGain = 0.2;
+    private static final double energyMax = 2;
+    private static final double energyMin = 0;
+
     /**
      * creates plip with energy equal to E.
      */
@@ -38,7 +44,7 @@ public class Plip extends Creature {
         r = 0;
         g = 0;
         b = 0;
-        energy = e;
+        energy = checkEnergy(e);
     }
 
     /**
@@ -57,7 +63,9 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
+        r = 99;
+        b = 76;
+        g = (int)(96 * energy() + 63);
         return color(r, g, b);
     }
 
@@ -69,12 +77,28 @@ public class Plip extends Creature {
     }
 
     /**
+     * A helper method to check if the energy is in a legal range.
+     * @param energy energy
+     * @return energy from  0 to 2
+     */
+    private double checkEnergy(double energy) {
+        if (energy > energyMax) {
+            energy = energyMax;
+        }
+        else if (energy < energyMin) {
+            energy = energyMin;
+        }
+        return energy;
+    }
+
+    /**
      * Plips should lose 0.15 units of energy when moving. If you want to
      * to avoid the magic number warning, you'll need to make a
      * private static final variable. This is not required for this lab.
      */
     public void move() {
         // TODO
+        energy = checkEnergy(energy - moveCost);
     }
 
 
@@ -83,6 +107,7 @@ public class Plip extends Creature {
      */
     public void stay() {
         // TODO
+        energy =checkEnergy(energy + stayGain);
     }
 
     /**
@@ -91,7 +116,9 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        double ratio = 0.5;
+        energy = energy * ratio;
+        return new Plip(energy);
     }
 
     /**

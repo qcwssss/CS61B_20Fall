@@ -1,4 +1,5 @@
 package creatures;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.HashMap;
@@ -14,6 +15,12 @@ import huglife.Empty;
  */
 
 public class TestPlip {
+    private Plip p_e1;
+
+    @Before
+    public void setUp() {
+        p_e1 = new Plip();
+    }
 
     @Test
     public void testBasics() {
@@ -31,8 +38,28 @@ public class TestPlip {
     }
 
     @Test
+    public void testCheckEnergy() {
+        Plip p1 = new Plip(3);
+        Plip p2 = new Plip(-1);
+        assertEquals(2, p1.energy(), 0.01);
+        assertEquals(0, p2.energy(), 0.01);
+        // test move and stay
+        p2.move();
+        assertEquals(0, p2.energy(), 0.01);
+        p1.stay();
+        assertEquals(2, p1.energy(), 0.01);
+
+    }
+
+    @Test
     public void testReplicate() {
         // TODO
+        double oldEnergy = p_e1.energy();
+        Plip newborn = p_e1.replicate();
+        assertFalse(newborn.equals(p_e1));
+        assertEquals(oldEnergy * 0.5, p_e1.energy(), 0.01);
+        assertEquals(oldEnergy * 0.5, newborn.energy(), 0.01);
+
     }
 
     //@Test
