@@ -10,6 +10,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
 
+import static huglife.HugLifeUtils.randomEntry;
+
 /**
  * An implementation of a motile pacifist photosynthesizer.
  *
@@ -82,12 +84,9 @@ public class Plip extends Creature {
      * @return energy from  0 to 2
      */
     private double checkEnergy(double energy) {
-        if (energy > energyMax) {
-            energy = energyMax;
-        }
-        else if (energy < energyMin) {
-            energy = energyMin;
-        }
+
+        energy = Math.min(energy, energyMax);
+        energy = Math.max(energyMin, energy);
         return energy;
     }
 
@@ -140,18 +139,29 @@ public class Plip extends Creature {
         boolean anyClorus = false;
         // TODO
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
-
-        if (false) { // FIXME
-            // TODO
+        /** If no empty adjacent spaces, emptyNeighbors deque will be empty. */
+        for (Direction d : neighbors.keySet()) { // d is key
+            if (neighbors.get(d).name().equals("empty")) {
+                emptyNeighbors.add(d);
+            }
+            else if (neighbors.get(d).name().equals("Clorus")) {
+                anyClorus = true;
+            }
         }
-
+        if (emptyNeighbors.isEmpty()) { // FIXME
+            // TODO
+            return new Action(Action.ActionType.STAY);
+        }
         // Rule 2
-        // HINT: randomEntry(emptyNeighbors)
-
+        else if (energy > 1) {
+            return new Action(Action.ActionType.REPLICATE, randomEntry(emptyNeighbors));
+        }
         // Rule 3
-
+        else if (anyClorus) {
+            return new Action(Action.ActionType.MOVE, randomEntry(emptyNeighbors));
         // Rule 4
-        return new Action(Action.ActionType.STAY);
+        } else {
+            return new Action(Action.ActionType.STAY);
+        }
     }
 }

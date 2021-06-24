@@ -62,7 +62,7 @@ public class TestPlip {
 
     }
 
-    //@Test
+    @Test
     public void testChoose() {
 
         // No empty adjacent spaces; stay.
