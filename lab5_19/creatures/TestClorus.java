@@ -19,20 +19,6 @@ public class TestClorus {
     c2 = new Clorus(2.5);
   }
 
-  @Test
-  public void testClorusBasics() {
-    Clorus c3 = new Clorus(0.4);
-    assertEquals(2.5, c2.energy(), 0.01);
-    assertEquals(new Color(34, 0, 231), c2.color());
-    c2.move();
-    assertEquals(2.47, c2.energy(), 0.001);
-    for (int i = 0; i < 50; i++) {
-      c1.move();
-      c3.stay();
-    }
-    assertEquals(0, c1.energy(), 0.01);
-    assertEquals(0, c3.energy(), 0.01);
-  }
 
   @Test
   public void testStay() {

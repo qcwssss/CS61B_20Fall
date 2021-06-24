@@ -26,7 +26,7 @@ public class Clorus extends Creature {
     r = 0;
     g = 0;
     b = 0;
-    energy = checkClorusEnergy(e);
+    energy = e;
   }
 
   /** Creates a Clorus with energy equal to 1. */
@@ -40,27 +40,16 @@ public class Clorus extends Creature {
     return color(34, 0, 231);
   }
 
-  /**
-   * A helper method to check whether the energy of a Clorus is below 0. If so, return 0.
-   *
-   * @param e energy
-   * @return checked energy.
-   */
-  private double checkClorusEnergy(double e) {
-    e = Math.max(0, e);
-    return e;
-  }
-
   /** Cloruses lose 0.03 units of energy on a MOVE. */
   @Override
   public void move() {
-    energy = checkClorusEnergy(energy - 0.03);
+    energy -= 0.03;
   }
 
   /** Cloruses lose 0.01 units of energy on a STAY. */
   @Override
   public void stay() {
-    energy = checkClorusEnergy(energy - 0.01);
+    energy -= 0.01;
   }
 
   /**
