@@ -16,6 +16,10 @@ public class UnionFind {
     /* Throws an exception if v1 is not a valid vertex. */
     private void validate(int v1) {
         // TODO
+        if (v1 < 0 || v1 > parent.length - 1) {
+            throw new IllegalArgumentException("Invalid vertex: " + v1);
+        }
+        System.out.println("Great! Vertex" + v1 + " is valid");
     }
 
     /* Returns the size of the set v1 belongs to. */
