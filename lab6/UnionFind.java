@@ -41,10 +41,8 @@ public class UnionFind {
         // TODO
         validate(v1);
         validate(v2);
-        if (parent[v1] < 0 || parent[v2] < 0) {
-            return false;
-        }
-        return (parent[v1] == v2 || parent[v2] == v1);
+
+        return find(v1) == find(v2);
     }
 
     /* Connects two elements v1 and v2 together. v1 and v2 can be any valid 
@@ -62,13 +60,13 @@ public class UnionFind {
 
         int root1 = find(v1);
         int root2 = find(v2);
-        int newRoot = parent[root2] + parent[root1];
+        int newRoot = sizeOf(v1) + sizeOf(v2);
         if (sizeOf(v1) > sizeOf(v2)) {
             parent[root2] = root1;
-            parent[root1] = newRoot;
+            parent[root1] = -newRoot;
         } else {
             parent[root1] = root2;
-            parent[root2] = newRoot;
+            parent[root2] = -newRoot;
         }
     }
 
