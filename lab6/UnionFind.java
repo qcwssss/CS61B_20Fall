@@ -16,32 +16,23 @@ public class UnionFind {
     /* Throws an exception if v1 is not a valid vertex. */
     private void validate(int v1) {
         // TODO
-        if (v1 < 0 || v1 > parent.length - 1) {
+        if (v1 > parent.length - 1) {
             throw new IllegalArgumentException("Invalid vertex: " + v1);
         }
     }
 
     /* Returns the size of the set v1 belongs to. */
     public int sizeOf(int v1) {
-        //int root = find(v1); // root is -1
         validate(v1);
-        int ptr = parent[v1];
-        int size = 1;
-        while (ptr != -1) {
-            ptr = parent[ptr];
-            size++;
-        }
-        return size;
-        // or use -find(v1), which is also size
+        // root stores the value -size
+        int root = find(v1);
+        return -parent[root];
     }
 
     /* Returns the parent of v1. If v1 is the root of a tree, returns the
        negative size of the tree for which v1 is the root. */
     public int parent(int v1) {
         validate(v1);
-        if (parent[v1] == -1) {
-            return -sizeOf(v1);
-        }
         return parent[v1];
     }
 
@@ -50,6 +41,9 @@ public class UnionFind {
         // TODO
         validate(v1);
         validate(v2);
+        if (parent[v1] < 0 || parent[v2] < 0) {
+            return false;
+        }
         return (parent[v1] == v2 || parent[v2] == v1);
     }
 
@@ -62,15 +56,20 @@ public class UnionFind {
         // TODO
         validate(v1);
         validate(v2);
+        if (isConnected(v1, v2)) {
+            return;
+        }
 
         int root1 = find(v1);
         int root2 = find(v2);
+        int newRoot = parent[root2] + parent[root1];
         if (sizeOf(v1) > sizeOf(v2)) {
             parent[root2] = root1;
-        } else if (sizeOf(v1) <= sizeOf(v2)) {
+            parent[root1] = newRoot;
+        } else {
             parent[root1] = root2;
+            parent[root2] = newRoot;
         }
-
     }
 
     /* Returns the root of the set v1 belongs to. Path-compression is employed
@@ -78,7 +77,7 @@ public class UnionFind {
     public int find(int v1) {
         // TODO
         validate(v1);
-        if (parent(v1) == -1) {
+        if (parent[v1] < 0) {
             return v1;
         }
         return find(parent[v1]);
