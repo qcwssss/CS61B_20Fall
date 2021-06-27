@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Falling Bubbles.
  * lab6 cs61b-berkley
@@ -5,27 +8,42 @@
  *
  * A grid of bubbles.
  */
-public class BubbleGrid extends UnionFind{
+public class BubbleGrid {
 
 	private int numOfRows;
 	private int numOfColumns;
 	private int[][] grid;
 
+
 	/**
+	 * Constructor #1.
+	 * Creates a BubbleGrid.
+	 */
+	public BubbleGrid(int[][] grid) {
+		this.grid = grid;
+		numOfRows = grid.length;
+		numOfColumns = grid[0].length;
+	}
+
+	/**
+	 * Constructor #2.
 	 * Create a grid with certain rows and columns.
 	 * @param rows number of rows
 	 * @param columns number of columns
 	 */
 	public BubbleGrid(int rows, int columns) {
-		super(columns);
 		numOfRows = rows;
 		numOfColumns = columns;
+		this.grid = createGrid(rows, columns);
+	}
 
-		grid = new int[rows][columns];
-		for (int i = 0; i < rows; i++) {
-			grid[i] = this.parent;
-		}
-
+	/**
+	 * A helper method, build a grid with certain rows and columns.
+	 * @param rows number of rows
+	 * @param columns number of columns
+	 */
+	private int[][] createGrid(int rows, int columns) {
+		return new int[rows][columns];
 	}
 
 	/**
@@ -64,5 +82,36 @@ public class BubbleGrid extends UnionFind{
 	public int[] popBubbles(int[][] darts) {
 
 		return new int[0];
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null) {
+			return false;
+		}
+		if (this.getClass() != o.getClass()) {
+			return false;
+		}
+		// start compare
+		BubbleGrid other = (BubbleGrid)o;
+		if (this.numOfColumns != other.numOfColumns) {
+			return false;
+		}
+		if (this.numOfRows != other.numOfRows) {
+			return false;
+		}
+
+		return Arrays.equals(this.getGrid(), other.getGrid());
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(numOfRows, numOfColumns);
+		result = 31 * result + Arrays.hashCode(grid);
+		return result;
 	}
 }
