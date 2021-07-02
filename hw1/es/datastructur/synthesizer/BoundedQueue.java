@@ -1,6 +1,8 @@
 package es.datastructur.synthesizer;
 
-public interface BoundedQueue<T> {
+import java.util.Iterator;
+
+public interface BoundedQueue<T> extends Iterable<T> {
   /**
    * Return size of the buffer.
    * @return size
@@ -30,6 +32,9 @@ public interface BoundedQueue<T> {
    * @return items
    */
   T peek();
+
+  @Override
+  Iterator<T> iterator();
 
   /**
    * See if a BoundedQueue is empty.

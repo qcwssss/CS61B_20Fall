@@ -107,6 +107,45 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         return returnVal;
     }
 
+    /** ArrayRingBuffer Iterator class. */
+    private class ARingBufferIterator implements Iterator<T> {
+        private int idxPos;
+
+        /** Constructor. */
+        public ARingBufferIterator() {
+            idxPos = first;
+        }
+
+        @Override
+        public boolean hasNext() {
+            int nextPos = idxPos + 1;
+            // wrap
+            if (nextPos > rb.length - 1) {
+                nextPos = 0;
+            }
+            return (rb[nextPos] != null);
+
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                return null;
+            }
+            idxPos++;
+            return rb[idxPos];
+        }
+    }
+
+    /**
+     * Generate a ArrayRingBuffer Iterator.
+     * @return ARingBufferIterator
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new ARingBufferIterator();
+    }
+
     // TODO: When you get to part 4, implement the needed code to support
     //       iteration and equals.
 }
