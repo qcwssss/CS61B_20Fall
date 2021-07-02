@@ -28,11 +28,19 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         rb = (T[]) new Object[capacity];
     }
 
+    /**
+     * Return capacity.
+     * @return capacity
+     */
     @Override
     public int capacity() {
         return rb.length;
     }
 
+    /**
+     * Return fillCount.
+     * @return fillCount
+     */
     @Override
     public int fillCount() {
         return fillCount;
@@ -49,6 +57,10 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         //       get to task 4.
         if (isFull()) {
             return;
+        }
+        // circulate
+        if (last > rb.length - 1) {
+            last = 0;
         }
         rb[last] = x;
         fillCount++;
@@ -67,6 +79,10 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         if (isEmpty()) {
             return null;
         }
+        // circulate
+        if (first > rb.length - 1) {
+            first = 0;
+        }
         T returnVal = rb[first];
         rb[first] = null;
         first++;
@@ -83,6 +99,10 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         // TODO: Return the first item. None of your instance variables should
         //       change. Don't worry about throwing the RuntimeException until you
         //       get to task 4.
+        // circulate
+        if (first > rb.length - 1) {
+            first = 0;
+        }
         T returnVal = rb[first];
         return returnVal;
     }
