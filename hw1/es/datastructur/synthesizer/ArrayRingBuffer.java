@@ -1,5 +1,7 @@
 package es.datastructur.synthesizer;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 //TODO: Make sure to that this class and all of its methods are public
 //TODO: Make sure to add the override tag for all overridden methods
@@ -56,7 +58,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         //       last. Don't worry about throwing the RuntimeException until you
         //       get to task 4.
         if (isFull()) {
-            return;
+            throw new RuntimeException("Ring Buffer overflow");
         }
         // circulate
         if (last > rb.length - 1) {
@@ -77,7 +79,8 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         //       update first. Don't worry about throwing the RuntimeException until you
         //       get to task 4.
         if (isEmpty()) {
-            return null;
+            String e = "Ring Buffer underflow";
+            throw new RuntimeException(e);
         }
         // circulate
         if (first > rb.length - 1) {
@@ -99,6 +102,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         // TODO: Return the first item. None of your instance variables should
         //       change. Don't worry about throwing the RuntimeException until you
         //       get to task 4.
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer underflow");
+        }
         // circulate
         if (first > rb.length - 1) {
             first = 0;
@@ -107,6 +113,10 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         return returnVal;
     }
 
+
+
+    // TODO: When you get to part 4, implement the needed code to support
+    //       iteration and equals.
     /** ArrayRingBuffer Iterator class. */
     private class ARingBufferIterator implements Iterator<T> {
         private int idxPos;
@@ -146,7 +156,19 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         return new ARingBufferIterator();
     }
 
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArrayRingBuffer<?> that = (ArrayRingBuffer<?>) o;
+        return first == that.first && last == that.last && fillCount == that.fillCount && Arrays.equals(rb, that.rb);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(first, last, fillCount);
+        result = 31 * result + Arrays.hashCode(rb);
+        return result;
+    }
 }
     // TODO: Remove all comments that say TODO when you're done.
