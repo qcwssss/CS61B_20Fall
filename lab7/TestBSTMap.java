@@ -34,6 +34,16 @@ public class TestBSTMap {
         }
     }
 
+    @Test
+    public void testPrintInOrder() {
+	    BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+	    for (int i = 0; i < 30; i++) {
+		    b.put(i*2 -1, 1 + i);
+	    }
+	    b.printInOrder();
+	    // it worked
+    }
+
     // assumes put works
     @Test
     public void sanityContainsKeyTest() {
