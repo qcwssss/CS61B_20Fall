@@ -84,7 +84,7 @@ public class ULLMap<K, V>  implements Map61B<K, V> {
             if (k != null && k.equals(key)) {
                 return this;
             }
-            if (next == null) {
+            if (next == null) { // ?
                 return null;
             }
             return next.get(key);
