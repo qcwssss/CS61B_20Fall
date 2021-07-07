@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -18,7 +19,6 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 			key = k;
 			val = v;
 			size++;
-			//this.size = size; // ?
 		}
 	}
 
@@ -117,18 +117,154 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 
 	@Override
 	public Set keySet() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		Set<K> BSTSet = new HashSet<>();
+		traverseIn(root, BSTSet);
+		return BSTSet;
+	}
+
+	// Inorder traversal
+	private void traverseIn(Node x, Set s) {
+		Node temp = x; // temp tree node pointer
+		if (temp == null) {
+			return;
+		}
+		traverseIn(temp.left, s);
+		s.add(temp.key);
+		traverseIn(temp.right, s);
+
 	}
 
 	// Remove remain unfilled
+	/*
+	Deletion key has no children.
+	Deletion key has one child.
+	Deletion key has two children.
+	 */
+
+	/**
+	 * Remove node, case 1 key 1 value.
+	 * @param key key
+	 * @return value
+	 */
 	@Override
 	public Object remove(Object key) {
-		throw new UnsupportedOperationException();
+		// Deletion key doesn't exist
+		if (!containsKey(key)) {
+			throw new UnsupportedOperationException();
+		}
+		root = remove(root, (K) key);
+		return get(key);
+
 	}
 
+	/**
+	 * Get node with a given key, a helper method.
+	 * @param x node
+	 * @param k key
+	 * @return node
+	 */
+	private Node getNode(Node x, K k) {
+		if (k == null) {
+			throw new IllegalArgumentException("calls get() with a null key");
+		}
+		if (x == null) {
+			return null;
+		}
+		// binary search for key
+		int compare = k.compareTo(x.key);
+		if (compare < 0) {
+			return getNode(x.left, k);
+		}
+		else if (compare > 0) {
+			return getNode(x.right, k);
+		} else {
+			return x;
+		}
+	}
+
+	/**
+	 * Remove node, one key many values.
+	 * @param key key
+	 * @param value value
+	 * @return value
+	 */
 	@Override
 	public Object remove(Object key, Object value) {
-		throw new UnsupportedOperationException();
+		if (!containsKey(key)) {
+			throw new UnsupportedOperationException("can't remove() a null key");
+		}
+		if (!get(key).equals(value)) {
+			throw new UnsupportedOperationException("value given doesn't match key pairs");
+		}
+		root = remove(root, (K)key);
+		return value;
+	}
+
+	/**
+	 * Really works remove() method.
+	 * @param x x
+	 * @param key key
+	 * @return root
+	 */
+	private Node remove(Node x, K key) {
+		if (x == null || !containsKey(key)) {
+			return null;
+		}
+		Node temp = x;
+
+		int cmp = key.compareTo(x.key);
+		if (cmp < 0) { // key is smaller
+			temp.left = remove(temp.left, key);
+		}
+		if (cmp > 0) { // key is larger
+			temp.right = remove(temp.right, key);
+		} else { // find the key
+			//1. Deletion key has no children.
+			if (temp.left == null && temp.right == null) {
+				return null;
+			}
+			//2. Deletion key has one child.
+			if (temp.left == null) {
+				return temp.right;
+			}
+			if (temp.right == null) {
+				return temp.left;
+			}
+			//3. Deletion key has two child.
+			// find predecessor (or successor)
+			// save the link points to the predecessor
+			// delete predecessor, points the link to the left node of the predecessor
+			// set the root node as the predecessor
+
+			temp = predecessor(temp.left); // temp points to the predecessor
+			temp.left = deletePred(x.left);
+			temp.right = x.right;
+
+		}
+		temp.size = 1 + size(temp.left) + size(temp.right);
+		return temp;
+	}
+
+	/** Find predecessor node. */
+	private Node predecessor(Node x) { // input x = root.left
+		Node temp = x;
+		if (temp.right == null) {
+			return temp;
+		}
+		return predecessor(temp.right);
+	}
+
+	/** Delete predecessor node. */
+	private Node deletePred(Node x) { // x = root.left
+		Node temp = x;
+		if (temp.right == null) {
+			return temp.left;
+		}
+		temp.right = deletePred(temp.right);
+		temp.size = 1 + size(temp.right) + size(temp.left);
+		return temp;
+
 	}
 
 	@Override
@@ -168,7 +304,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 		printKey(root);
 	}
 
-	// inorder
+	// Inorder traversal
 	private void printKey(Node x) {
 		Node temp = x; // temp tree node pointer
 		if (temp == null) {
