@@ -34,7 +34,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 		if (key == null) {
 			throw new IllegalArgumentException("calls containsKey() with a null key");
 		}
-		return get((K) key) != null;
+		return get(key) != null;
 	}
 
 	@Override
@@ -84,10 +84,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 		if (key == null) {
 			throw new IllegalArgumentException("calls put() with a null key");
 		}
-		if (value == null) {
-			//delete(key);
-			return;
-		}
+
 		root = put(root, (K) key, (V) value);
 
 	}
@@ -103,7 +100,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 		else if (cmp > 0) {
 			x.right = put(x.right, key, val);
 		} else {
-			x.val = val;
+			x.val= val;
 		}
 		x.size = 1 + size(x.left) + size(x.right);
 		return x;
@@ -153,8 +150,9 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 		if (!containsKey(key)) {
 			throw new UnsupportedOperationException();
 		}
+		Object returnVal = get(key);
 		root = remove(root, (K) key);
-		return get(key);
+		return returnVal;
 
 	}
 
@@ -192,10 +190,12 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 	@Override
 	public Object remove(Object key, Object value) {
 		if (!containsKey(key)) {
-			throw new UnsupportedOperationException("can't remove() a null key");
+			//throw new UnsupportedOperationException("can't remove() a null key");
+			return null;
 		}
 		if (!get(key).equals(value)) {
-			throw new UnsupportedOperationException("value given doesn't match key pairs");
+			//throw new UnsupportedOperationException("value given doesn't match key pairs");
+			return null;
 		}
 		root = remove(root, (K)key);
 		return value;
@@ -212,12 +212,12 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 			return null;
 		}
 		Node temp = x;
-
 		int cmp = key.compareTo(x.key);
+
 		if (cmp < 0) { // key is smaller
 			temp.left = remove(temp.left, key);
 		}
-		if (cmp > 0) { // key is larger
+		else if (cmp > 0) { // key is larger
 			temp.right = remove(temp.right, key);
 		} else { // find the key
 			//1. Deletion key has no children.
