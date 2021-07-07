@@ -120,7 +120,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 		throw new UnsupportedOperationException();
 	}
 
-	// No need to implement
+	// Remove remain unfilled
 	@Override
 	public Object remove(Object key) {
 		throw new UnsupportedOperationException();
@@ -133,8 +133,7 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 
 	@Override
 	public Iterator iterator() {
-		throw new UnsupportedOperationException();
-
+		return new BSTMapIter();
 	}
 
 	private class BSTMapIter implements Iterator{
