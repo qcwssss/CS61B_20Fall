@@ -1,0 +1,107 @@
+This program inserts lexicographically increasing Strings into Maps as <String, Integer> pairs.
+
+Enter # strings to insert into the maps: 100
+class ULLMap: 0.01 sec
+class BSTMap: 0.01 sec
+Java's Built-in TreeMap: 0.00 sec
+Java's Built-in HashMap: 0.00 sec
+
+Would you like to try more timed-tests? (y/n): 1000
+
+Enter # strings to insert into the maps: 1000
+class ULLMap: 0.02 sec
+class BSTMap: 0.02 sec
+Java's Built-in TreeMap: 0.01 sec
+Java's Built-in HashMap: 0.00 sec
+
+Would you like to try more timed-tests? (y/n): 10000
+
+Enter # strings to insert into the maps: 10000
+class ULLMap: 0.97 sec
+class BSTMap: 1.88 sec
+Java's Built-in TreeMap: 0.01 sec
+Java's Built-in HashMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n): y
+
+Enter # strings to insert into the maps: 20000
+class ULLMap: 7.41 sec
+--Stack Overflow -- couldn't add 20000 strings.
+Java's Built-in TreeMap: 0.02 sec
+Java's Built-in HashMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n): y
+
+Enter # strings to insert into the maps: 30000
+class ULLMap: 17.60 sec
+--Stack Overflow -- couldn't add 30000 strings.
+Java's Built-in TreeMap: 0.04 sec
+Java's Built-in HashMap: 0.03 sec
+
+Would you like to try more timed-tests? (y/n): n
+
+Process finished with exit code 0
+
+============================================================
+This program inserts random Strings of length L
+into different types of maps as <String, Integer> pairs.
+
+Please enter desired length of each string: 10
+
+Enter # strings to insert into the maps: 100
+class ULLMap: 0.00 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.00 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 20
+class ULLMap: 0.00 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.00 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 1000
+class ULLMap: 0.01 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 30
+class ULLMap: 0.00 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.00 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 2000
+class ULLMap: 0.02 sec
+class BSTMap: 0.00 sec
+Java's Built-in TreeMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 10000
+class ULLMap: 0.49 sec
+class BSTMap: 0.01 sec
+Java's Built-in TreeMap: 0.00 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 20000
+class ULLMap: 2.37 sec
+class BSTMap: 0.02 sec
+Java's Built-in TreeMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n)y
+
+Enter # strings to insert into the maps: 30000
+class ULLMap: 7.73 sec
+class BSTMap: 0.03 sec
+Java's Built-in TreeMap: 0.04 sec
+
+Would you like to try more timed-tests? (y/n)n
+
+Process finished with exit code 0

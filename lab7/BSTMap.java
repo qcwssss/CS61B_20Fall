@@ -110,6 +110,11 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 
 	}
 
+	/**
+	 * Reference Solution:
+	 * @Source https://github.com/chenyuxiang0425/cs61b_sp19/blob/master/lab7/BSTMap.java
+	 */
+
 	@Override
 	public Set keySet() {
 		throw new UnsupportedOperationException();
@@ -132,10 +137,36 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B{
 
 	}
 
+	private class BSTMapIter implements Iterator{
+		private Node cur;
+
+		/** Create a new BSTMapIter by setting cur to the root node in the
+		 *  BSTree that stores the key-value pairs. */
+		public BSTMapIter() {
+			cur = root;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return cur != null;
+		}
+
+		@Override
+		public Object next() {
+			K next = cur.key;
+			if (cur.left != null) {
+				cur = cur.left;
+			}
+			else if (cur.right != null) {
+				cur = cur.right;
+			}
+			return next;
+		}
+	}
+
 	/** Prints out your BSTMap in order of increasing Key.*/
 	public void printInOrder() {
 		printKey(root);
-
 	}
 
 	// inorder
