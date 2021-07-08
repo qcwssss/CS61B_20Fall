@@ -15,8 +15,20 @@ public class ExperimentHelper {
      *  N = 8, OIPL: 13
      */
     public static int optimalIPL(int N) {
-        return 0;
+        // the sum of the lengths of the paths to every node.
+        int result = 0;
+        int i = 0;
+        while (i < Math.log(N) ) {
+            result += (Math.pow(2, i) * i);
+            i++;
+        }
+        //if N is not a power of 2 ?
+        if (Math.pow(2,i) > N) {
+            result += i*(N - Math.pow(2, i-1));
+        }
+        return result;
     }
+
 
     /** Returns the average depth for nodes in an optimal BST of
      *  size N.
