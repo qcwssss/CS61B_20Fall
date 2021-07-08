@@ -1,30 +1,39 @@
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExperimentHelperTest {
 
 	@Test
 	public void testOptimalIPL() {
-		// *  N = 1, OIPL: 0
-		// *  N = 2, OIPL: 1
-		// *  N = 3, OIPL: 2
-		// *  N = 4, OIPL: 4
-		//     *  N = 5, OIPL: 6
-		//     *  N = 6, OIPL: 8
-		//     *  N = 7, OIPL: 10
-		//     *  N = 8, OIPL: 13
-		Assert.assertEquals(0, ExperimentHelper.optimalIPL(1));
+
+		assertEquals(0, ExperimentHelper.optimalIPL(1));
 		//int actual1 = ExperimentHelper.optimalIPL(1);
-		Assert.assertEquals(1, ExperimentHelper.optimalIPL(2));
-		Assert.assertEquals(2, ExperimentHelper.optimalIPL(3));
-		Assert.assertEquals(4, ExperimentHelper.optimalIPL(4));
+		assertEquals(1, ExperimentHelper.optimalIPL(2));
+		assertEquals(2, ExperimentHelper.optimalIPL(3));
+		assertEquals(4, ExperimentHelper.optimalIPL(4));
+		assertEquals(6, ExperimentHelper.optimalIPL(5));
+		assertEquals(8, ExperimentHelper.optimalIPL(6));
+		int actual8 = ExperimentHelper.optimalIPL(8);
+		assertEquals(13, actual8);
 
 	}
 
 	@Test
-	public void optimalAverageDepth() {
+	public void testOptimalAverageDepth() {
+		// N = 1, OAD: 0
+		assertEquals(0, ExperimentHelper.optimalAverageDepth(1), 0.001);
+		// N = 5, OAD: 1.2
+		assertEquals(1.2, ExperimentHelper.optimalAverageDepth(5), 0.001);
+		// N = 8, OAD: 1.625
+		assertEquals(1.625, ExperimentHelper.optimalAverageDepth(8), 0.001);
+
 	}
 }

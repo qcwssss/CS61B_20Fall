@@ -16,17 +16,17 @@ public class ExperimentHelper {
      */
     public static int optimalIPL(int N) {
         // the sum of the lengths of the paths to every node.
-        int result = 0;
-        int i = 0;
-        while (i < Math.log(N) ) {
-            result += (Math.pow(2, i) * i);
-            i++;
+        int ipl = 0;
+        int depthMax = (int) Math.log(N);
+        int i; // the number of node
+        for(i = 0; i < N; i++) {
+            if (i != 0) {
+                ipl += Math.log(i) / Math.log(2); // log is in base 10
+            }
         }
-        //if N is not a power of 2 ?
-        if (Math.pow(2,i) > N) {
-            result += i*(N - Math.pow(2, i-1));
-        }
-        return result;
+        ipl += Math.log(i) / Math.log(2);
+        return ipl;
+
     }
 
 
@@ -39,6 +39,6 @@ public class ExperimentHelper {
      * @return
      */
     public static double optimalAverageDepth(int N) {
-        return 0;
+        return (double) optimalIPL(N) / N;
     }
 }
