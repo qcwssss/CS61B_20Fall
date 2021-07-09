@@ -42,12 +42,15 @@ public class ExperimentHelper {
         return (double) optimalIPL(N) / N;
     }
 
-    /** Randomly insert.*/
+    /** Randomly insert an item.*/
     public static void randomInsert(int numberOfItems, BST tree) {
         int count = 0;
         while (count < numberOfItems) {
-            int rI = RandomGenerator.getRandomInt(100);
-            tree.add(rI);
+            int rI = RandomGenerator.getRandomInt(10000);
+            if (!tree.contains(rI)) {
+                tree.add(rI);
+            }
+            count++;
         }
     }
 
@@ -55,6 +58,6 @@ public class ExperimentHelper {
      /** Delete an item from a tree. */
      public static void randomDelete(BST tree) {
          // delete an item randomly
-         tree.deleteTakingRandom(tree.getRandomKey());
+         tree.deleteTakingSuccessor(tree.getRandomKey());
      }
 }
