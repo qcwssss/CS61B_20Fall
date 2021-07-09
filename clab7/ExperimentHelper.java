@@ -41,4 +41,20 @@ public class ExperimentHelper {
     public static double optimalAverageDepth(int N) {
         return (double) optimalIPL(N) / N;
     }
+
+    /** Randomly insert.*/
+    public static void randomInsert(int numberOfItems, BST tree) {
+        int count = 0;
+        while (count < numberOfItems) {
+            int rI = RandomGenerator.getRandomInt(100);
+            tree.add(rI);
+        }
+    }
+
+
+     /** Delete an item from a tree. */
+     public static void randomDelete(BST tree) {
+         // delete an item randomly
+         tree.deleteTakingRandom(tree.getRandomKey());
+     }
 }

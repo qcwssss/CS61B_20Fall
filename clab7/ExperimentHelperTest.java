@@ -34,6 +34,6 @@ public class ExperimentHelperTest {
 		assertEquals(1.2, ExperimentHelper.optimalAverageDepth(5), 0.001);
 		// N = 8, OAD: 1.625
 		assertEquals(1.625, ExperimentHelper.optimalAverageDepth(8), 0.001);
-
 	}
+
 }
