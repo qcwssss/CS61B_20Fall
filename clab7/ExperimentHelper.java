@@ -43,21 +43,23 @@ public class ExperimentHelper {
     }
 
     /** Randomly insert an item.*/
-    public static void randomInsert(int numberOfItems, BST tree) {
-        int count = 0;
-        while (count < numberOfItems) {
-            int rI = RandomGenerator.getRandomInt(10000);
-            if (!tree.contains(rI)) {
-                tree.add(rI);
-            }
-            count++;
+    public static void randomInsert(int max, BST tree) {
+        int rI = RandomGenerator.getRandomInt(max);
+        while (tree.contains(rI)) {
+            rI = RandomGenerator.getRandomInt(max);
         }
+        tree.add(rI);
     }
 
 
      /** Delete an item from a tree. */
      public static void randomDelete(BST tree) {
          // delete an item randomly
-         tree.deleteTakingSuccessor(tree.getRandomKey());
+         tree.deleteTakingRandom(tree.getRandomKey());
      }
+
+     public static void randomDeleteSuccessor(BST x) {
+         x.deleteTakingSuccessor(x.getRandomKey());
+     }
+
 }

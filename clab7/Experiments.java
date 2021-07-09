@@ -40,26 +40,29 @@ public class Experiments {
 
     public static void experiment2() {
         BST tree = new BST();
-        //ExperimentHelper helper = new ExperimentHelper();
-        RandomGenerator generatorR = new RandomGenerator();
-        int M = 20000; //steps 2-4 a total of M times.
+        int M = 5000; // total of M times.
         // chart info
-        List<Integer> xVal = new ArrayList<>();
+        List<Integer> xVal =  new ArrayList<>();
         List<Double> yAvgDepth = new ArrayList<>();
 
         int x = 0; // steps
         // randomly inserting N items
-        ExperimentHelper.randomInsert(M, tree);
+        while (tree.size() < M) {
+            int rand = RandomGenerator.getRandomInt(2*M);
+            if (!tree.contains(rand)) {
+                tree.add(rand);
+            }
+        }
         yAvgDepth.add(tree.averageDepth());
         xVal.add(x);
 
-        while (x <= M) {
-            ExperimentHelper.randomDelete(tree);
-            ExperimentHelper.randomInsert(1, tree);
+        for (int i = 0; i < M; i++) {
+            ExperimentHelper.randomDeleteSuccessor(tree);
+            ExperimentHelper.randomInsert(2*M, tree);
             yAvgDepth.add(tree.averageDepth());
-            xVal.add(x + 1);
-            x++;
+            xVal.add(i + 1);
         }
+
         XYChart chart =
                 new XYChartBuilder().width(1000).height(600).xAxisTitle("x: operation").yAxisTitle("y: average depth").build();
         chart.addSeries("averageDepth", xVal, yAvgDepth);
