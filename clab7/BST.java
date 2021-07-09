@@ -66,6 +66,22 @@ public class BST<Key extends Comparable<Key>> {
         return getRandomNode(root).key;
     }
 
+    /** Return average depth. */
+    public double averageDepth() {
+        return totalDepth(root, 0) / size();
+    }
+
+    /* Recursive helper. */
+    private double totalDepth(Node n, int depth) {
+        if (n == null) {
+            return 0;
+        }
+        double added = totalDepth(n.left, depth + 1)
+                        + totalDepth(n.right, depth + 1) + depth;
+        return added;
+
+    }
+
 
     /** Private methods and variables follow. There's no need to read
      *  any of this.
