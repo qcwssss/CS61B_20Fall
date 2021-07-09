@@ -47,8 +47,9 @@ public class Experiments {
 
         int x = 0; // steps
         // randomly inserting N items
+        int randMax = 2*M;
         while (tree.size() < M) {
-            int rand = RandomGenerator.getRandomInt(2*M);
+            int rand = RandomGenerator.getRandomInt(randMax);
             if (!tree.contains(rand)) {
                 tree.add(rand);
             }
@@ -58,22 +59,53 @@ public class Experiments {
 
         for (int i = 0; i < M; i++) {
             ExperimentHelper.randomDeleteSuccessor(tree);
-            ExperimentHelper.randomInsert(2*M, tree);
+            ExperimentHelper.randomInsert(2*randMax, tree);
             yAvgDepth.add(tree.averageDepth());
             xVal.add(i + 1);
         }
 
         XYChart chart =
                 new XYChartBuilder().width(1000).height(600).xAxisTitle("x: operation").yAxisTitle("y: average depth").build();
-        chart.addSeries("averageDepth", xVal, yAvgDepth);
+        chart.addSeries("asymmetric deletion", xVal, yAvgDepth);
         new SwingWrapper<>(chart).displayChart();
+
     }
 
     public static void experiment3() {
+        BST tree = new BST();
+        int M = 5000; // total of M times.
+        // chart info
+        List<Integer> xVal =  new ArrayList<>();
+        List<Double> yAvgDepth = new ArrayList<>();
+
+        int x = 0; // steps
+        // randomly inserting N items
+        int randMax = 2*M;
+        while (tree.size() < M) {
+            int rand = RandomGenerator.getRandomInt(randMax);
+            if (!tree.contains(rand)) {
+                tree.add(rand);
+            }
+        }
+        yAvgDepth.add(tree.averageDepth());
+        xVal.add(x);
+
+        for (int i = 0; i < M; i++) {
+            ExperimentHelper.randomDelete(tree);
+            ExperimentHelper.randomInsert(randMax, tree);
+            yAvgDepth.add(tree.averageDepth());
+            xVal.add(i + 1);
+        }
+
+        XYChart chart =
+                new XYChartBuilder().width(1000).height(600).xAxisTitle("x: number of operations").yAxisTitle("y: average depth").build();
+        chart.addSeries("Symmetric Deletion", xVal, yAvgDepth);
+        new SwingWrapper<>(chart).displayChart();
     }
 
     public static void main(String[] args) {
         //experiment1();
         experiment2();
+        experiment3();
     }
 }

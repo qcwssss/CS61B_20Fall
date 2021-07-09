@@ -52,14 +52,14 @@ public class ExperimentHelper {
     }
 
 
-     /** Delete an item from a tree. */
-     public static void randomDelete(BST tree) {
-         // delete an item randomly
-         tree.deleteTakingRandom(tree.getRandomKey());
-     }
+    /** Delete an item from a tree. */
+    public static void randomDelete(BST tree) {
+        // delete an item randomly
+        tree.deleteTakingRandom(tree.getRandomKey());
+    }
 
-     public static void randomDeleteSuccessor(BST x) {
-         x.deleteTakingSuccessor(x.getRandomKey());
-     }
+    public static void randomDeleteSuccessor(BST x) {
+        x.deleteTakingSuccessor(x.getRandomKey());
+    }
 
 }
