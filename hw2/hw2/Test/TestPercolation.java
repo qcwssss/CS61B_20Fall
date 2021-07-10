@@ -97,7 +97,7 @@ public class TestPercolation {
 		p1.open(3,3);
 		p1.open(3,0);
 		assertEquals(4, p1.numberOfOpenSites());
-
-
 	}
+
+
 }

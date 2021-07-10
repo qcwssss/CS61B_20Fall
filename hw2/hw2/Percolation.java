@@ -2,9 +2,13 @@ package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-public class Percolation {
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Percolation extends WeightedQuickUnionUF {
 	private int[][] grid;
 	private int openSize;
+	private ArrayList<Integer> sitesOpen;
 
 
 	/**
@@ -13,6 +17,8 @@ public class Percolation {
 	 * @param N size of grid
 	 */
 	public Percolation(int N) {
+		super(N*N);
+
 		if (N <= 0) {
 			throw new IllegalArgumentException("N must > 0");
 		}
@@ -26,6 +32,13 @@ public class Percolation {
 					grid[i][j] = -1;
 				}
 			}
+		}
+		// initialize array sitesOpen to null
+		sitesOpen = new ArrayList<>(N*N);
+
+		Iterator<Integer> sitesItr = this.sitesOpen.iterator();
+		while(sitesItr.hasNext()) {
+			sitesOpen.add(null);
 		}
 	}
 
