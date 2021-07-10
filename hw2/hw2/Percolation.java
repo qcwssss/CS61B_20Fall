@@ -25,24 +25,44 @@ public class Percolation {
 		}
 	}
 
-	/* Convert a coordinate to an integer. */
+	/**
+	 *  Convert a coordinate to an integer.
+	 *  WeightedQuickUnion.union(int p, int q) only takes 2 INTEGERS!
+	 */
 	private int xyTo1D(int row, int col) {
 		return grid.length * row + col;
 	}
 
 	/* Check input range. */
 	private void checkRangeN(int row, int col) {
-		int pos = xyTo1D(row, col);
-		if (pos >= this.size || pos <= 0) {
-			throw new IndexOutOfBoundsException("Position out of range");
+		boolean inRange = row < grid.length && row >= 0 && col >= 0 && col < grid[0].length;
+		if (!inRange) {
+			throw new IndexOutOfBoundsException("Position out of range!");
 		}
+	}
+
+	/* Set cell to open, blocked, or full.	 */
+	private void setGrid(int row, int col, int state) {
+		grid[row][col] = state;
+	}
+
+	/* 	Get the cell status. */
+	public int getStatus(int row, int col) {
+		return grid[row][col];
 	}
 
 	// open the site (row, col) if it is not open already
 	public void open(int row, int col) {
+		checkRangeN(row, col);
+		setGrid(row, col, 0);
 
 	}
-	//   public boolean isOpen(int row, int col)  // is the site (row, col) open?
+
+	// is the site (row, col) open?
+	public boolean isOpen(int row, int col) {
+		return getStatus(row,col) == 0;
+	}
+
 	//   public boolean isFull(int row, int col)  // is the site (row, col) full?
 	//   public int numberOfOpenSites()           // number of open sites
 	//   public boolean percolates()              // does the system percolate?
