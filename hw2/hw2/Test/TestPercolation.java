@@ -42,6 +42,8 @@ public class TestPercolation {
 	public void testOpen() {
 		p1.open(0,2);
 		p1.open(0,1);
+		// row 0 can't be opened since full
+
 		p1.open(2,2);
 		p1.open(2,1);
 		p1.open(3,3); // valid
@@ -52,8 +54,9 @@ public class TestPercolation {
 
 		assertEquals(0, p1.getStatus(2, 1));
 		assertEquals(0, p1.getStatus(2, 2));
-		assertEquals(0, p1.getStatus(0, 2));
-		assertEquals(0, p1.getStatus(0, 1));
+		// full sites
+		assertEquals(1, p1.getStatus(0, 2));
+		assertEquals(1, p1.getStatus(0, 1));
 	}
 
 	@Test
@@ -64,12 +67,36 @@ public class TestPercolation {
 		p1.open(2,2);
 		p1.open(2,1);
 		p1.open(3,3); // valid
-		assertTrue(p1.isOpen(0,0));
-		assertTrue(p1.isOpen(0,2));
-		assertTrue(p1.isOpen(0,1));
+		assertFalse(p1.isOpen(0,0));
+		assertFalse(p1.isOpen(0,2));
+		assertFalse(p1.isOpen(0,1));
 		assertTrue(p1.isOpen(2,2));
 		assertTrue(p1.isOpen(2,1));
 		assertTrue(p1.isOpen(3,3));
+
+		assertFalse(p1.isOpen(3,2));
+		assertFalse(p1.isOpen(0,3));
+		assertFalse(p1.isOpen(2,0));
+
+	}
+
+	@Test
+	public void testIsFull() {
+		for (int i =0; i < 4; i++) {
+			assertTrue(p1.isFull(0, i));
+		}
+	}
+
+	@Test
+	public void testNumberOfOpen() {
+		assertEquals(0, p1.numberOfOpenSites());
+		p1.open(2,2);
+		p1.open(2,1);
+		assertEquals(2, p1.numberOfOpenSites());
+
+		p1.open(3,3);
+		p1.open(3,0);
+		assertEquals(4, p1.numberOfOpenSites());
 
 
 	}

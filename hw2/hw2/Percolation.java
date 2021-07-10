@@ -4,11 +4,11 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 	private int[][] grid;
-	private int size;
+	private int openSize;
 
 
 	/**
-	 * Create N-by-N grid, with all sites initially blocked.
+	 * Create N-by-N grid, with all sites initially blocked, except row 1.
 	 * blocked = -1; open = 0; full = 1;
 	 * @param N size of grid
 	 */
@@ -16,11 +16,15 @@ public class Percolation {
 		if (N <= 0) {
 			throw new IllegalArgumentException("N must > 0");
 		}
-		size = N*N;
+		openSize = 0;
 		grid = new int[N][N];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				grid[i][j] = -1;
+				if (i == 0) {
+					grid[i][j] = 1;
+				} else {
+					grid[i][j] = -1;
+				}
 			}
 		}
 	}
@@ -51,10 +55,23 @@ public class Percolation {
 		return grid[row][col];
 	}
 
-	// open the site (row, col) if it is not open already
+	/**
+	 * Open the site (row, col) if it is not open already.
+	 *
+	 */
 	public void open(int row, int col) {
 		checkRangeN(row, col);
+		//can't open a full site
+		if (isOpen(row, col) || isFull(row, col)) {
+			return;
+		}
+
 		setGrid(row, col, 0);
+		// connect
+		if (numberOfOpenSites() > 1) {
+
+		}
+		openSize++;
 
 	}
 
@@ -63,9 +80,20 @@ public class Percolation {
 		return getStatus(row,col) == 0;
 	}
 
-	//   public boolean isFull(int row, int col)  // is the site (row, col) full?
-	//   public int numberOfOpenSites()           // number of open sites
-	//   public boolean percolates()              // does the system percolate?
+	// is the site (row, col) full?
+	public boolean isFull(int row, int col)   {
+		return getStatus(row, col) == 1;
+	}
+
+	// number of open sites
+	public int numberOfOpenSites() {
+		return openSize;
+	}
+
+	// does the system percolate?
+	public boolean percolates() {
+		return false;
+	}
 	//   public static void main(String[] args)   // use for unit testing (not required, but keep this here for the autograder)
 
 }
