@@ -6,10 +6,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Percolation {
+	private int length;
+	private int numOfSites;
 	private int[][] grid;
 	private int openSize;
 	//private int[] sitesOpen;
+
 	private WeightedQuickUnionUF unionUF;
+	private int virtualTop;
+	private int virtualBottom;
+
 
 
 	/**
@@ -18,11 +24,15 @@ public class Percolation {
 	 * @param N size of grid
 	 */
 	public Percolation(int N) {
-		int numOfSites = N*N;
-		unionUF = new WeightedQuickUnionUF(numOfSites);
 		if (N <= 0) {
 			throw new IllegalArgumentException("N must > 0");
 		}
+		length = N;
+		numOfSites = N*N;
+
+		unionUF = new WeightedQuickUnionUF(numOfSites + 2);
+		virtualTop = numOfSites;
+		virtualBottom = numOfSites + 1;
 
 		openSize = 0;
 		grid = new int[N][N];
@@ -43,12 +53,22 @@ public class Percolation {
 	 *  WeightedQuickUnion.union(int p, int q) only takes 2 INTEGERS!
 	 */
 	public int xyTo1D(int row, int col) {
-		return grid.length * row + col;
+		return length * row + col;
+	}
+
+	public int[] OneDtoXY (int site) {
+		if (site < 0 || site > numOfSites - 1) {
+			throw new IllegalArgumentException("site out of range");
+		}
+		int row = site / length;
+		int col = site % length; // remainder
+		int[] coordinate = {row, col};
+		return coordinate;
 	}
 
 	/* Check input range. */
 	private void checkRangeN(int row, int col) {
-		boolean inRange = row < grid.length && row >= 0 && col >= 0 && col < grid[0].length;
+		boolean inRange = row < length && row >= 0 && col >= 0 && col < grid[0].length;
 		if (!inRange) {
 			throw new IndexOutOfBoundsException("Position out of range!");
 		}
@@ -61,6 +81,7 @@ public class Percolation {
 
 	/* 	Get the cell status. */
 	public int getStatus(int row, int col) {
+		checkRangeN(row, col);
 		return grid[row][col];
 	}
 
@@ -70,11 +91,10 @@ public class Percolation {
 	 */
 	public void open(int row, int col) {
 		checkRangeN(row, col);
-		//can't open a full site
+		//can't open a full/open site
 		if (isOpen(row, col) || isFull(row, col)) {
 			return;
 		}
-
 		setGrid(row, col, 0);
 
 		// connect
@@ -89,11 +109,30 @@ public class Percolation {
 			// see if adjacent 4 sites are open
 			// or full
 			int cur = xyTo1D(row, col);
-			int[] surrounded = {cur-1, cur + 1, cur - grid.length, cur + grid.length};
-			while ()
-			int diff = Math.abs(prev - cur) ;
-			if (diff == 1 || diff == grid.length) {
-				unionUF.union(prev, cur);
+
+			// union virtual head and tail
+			if (row == 0) {
+				unionUF.union(virtualTop, cur);
+			}
+			else if (row == length - 1) {
+				unionUF.union(virtualBottom, cur);
+			}
+
+			// left
+			if (!isOpen(row, col -1) && (col - 1 > 0)) {
+				unionUF.union(cur, xyTo1D(row, col -1));
+			}
+			// right
+			if (!isOpen(row, col + 1) && (col + 1 < length)) {
+				unionUF.union(cur, xyTo1D(row, col  + 1));
+			}
+			// up
+			if (!isOpen(row - 1, col) && (row -1 >= 0)) {
+				unionUF.union(cur, xyTo1D(row -1, col));
+			}
+			// down
+			if (!isOpen(row + 1, col) && (row + 1 < length)) {
+				unionUF.union(cur, xyTo1D(row + 1, col));
 			}
 		}
 	}
@@ -101,6 +140,11 @@ public class Percolation {
 	// is the site (row, col) open?
 	public boolean isOpen(int row, int col) {
 		return getStatus(row,col) == 0;
+	}
+
+	public boolean isOpen(int site) {
+		int[] siteXY = OneDtoXY(site);
+		return getStatus(siteXY[0], siteXY[1]) == 0;
 	}
 
 	// is the site (row, col) full?
