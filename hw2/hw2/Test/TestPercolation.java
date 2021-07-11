@@ -100,14 +100,34 @@ public class TestPercolation {
 	}
 
 	@Test
+	public void testXYTo1D() {
+		assertEquals(5, p1.xyTo1D(1,1));
+		assertEquals(13, p1.xyTo1D(3,1));
+		assertEquals(14, p1.xyTo1D(3,2));
+		assertEquals(15, p1.xyTo1D(3,3));
+
+	}
+
+	@Test
 	public void testConnectOpen() {
 		p1.open(1,1);
 		p1.open(2,1);
 		boolean actual5_10 = p1.isConnected(p1.xyTo1D(1,1), p1.xyTo1D(2,1) );
-
+		assertTrue(actual5_10);
 		p1.open(3,2);
 		p1.open(3,3);
 		assertTrue(p1.isConnected(p1.xyTo1D(3,2), p1.xyTo1D(3,3)) );
+
+		// connect all open sites
+		p1.open(3, 1);
+		assertTrue(p1.isConnected(5, 15)); // (1,1) and (3,3)
+		assertTrue(p1.isConnected(p1.xyTo1D(1,1), p1.xyTo1D(3,3)));
+		assertTrue(p1.isConnected(p1.xyTo1D(1,1), p1.xyTo1D(3,2)));
+		assertTrue(p1.isConnected(p1.xyTo1D(1,1), p1.xyTo1D(3,1)));
+
+		assertTrue(p1.isConnected(p1.xyTo1D(2,1), p1.xyTo1D(3,3)));
+		assertTrue(p1.isConnected(p1.xyTo1D(2,1), p1.xyTo1D(3,2)));
+		assertTrue(p1.isConnected(p1.xyTo1D(2,1), p1.xyTo1D(3,1)));
 
 	}
 

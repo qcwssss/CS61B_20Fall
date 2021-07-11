@@ -119,19 +119,19 @@ public class Percolation {
 			}
 
 			// left
-			if (!isOpen(row, col -1) && (col - 1 > 0)) {
+			if ( (col - 1 > 0) && isOpen(row, col -1)) {
 				unionUF.union(cur, xyTo1D(row, col -1));
 			}
 			// right
-			if (!isOpen(row, col + 1) && (col + 1 < length)) {
+			if ( (col + 1 < length) && isOpen(row, col + 1)) {
 				unionUF.union(cur, xyTo1D(row, col  + 1));
 			}
 			// up
-			if (!isOpen(row - 1, col) && (row -1 >= 0)) {
+			if ((row -1 >= 0) && isOpen(row - 1, col)) {
 				unionUF.union(cur, xyTo1D(row -1, col));
 			}
 			// down
-			if (!isOpen(row + 1, col) && (row + 1 < length)) {
+			if ((row + 1 < length) && isOpen(row + 1,col)) {
 				unionUF.union(cur, xyTo1D(row + 1, col));
 			}
 		}
