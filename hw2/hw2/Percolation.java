@@ -35,18 +35,17 @@ public class Percolation extends WeightedQuickUnionUF {
 		}
 		// initialize array sitesOpen to null
 		sitesOpen = new ArrayList<>(N*N);
-
-		Iterator<Integer> sitesItr = this.sitesOpen.iterator();
-		while(sitesItr.hasNext()) {
-			sitesOpen.add(null);
+		for (int i = 0; i < N*N; i++) {
+			sitesOpen.add(-1);
 		}
+
 	}
 
 	/**
 	 *  Convert a coordinate to an integer.
 	 *  WeightedQuickUnion.union(int p, int q) only takes 2 INTEGERS!
 	 */
-	private int xyTo1D(int row, int col) {
+	public int xyTo1D(int row, int col) {
 		return grid.length * row + col;
 	}
 
@@ -80,12 +79,29 @@ public class Percolation extends WeightedQuickUnionUF {
 		}
 
 		setGrid(row, col, 0);
-		// connect
-		if (numberOfOpenSites() > 1) {
 
+		// store opened sites
+		Iterator<Integer> sitesItr = this.sitesOpen.iterator();
+		while(sitesItr.hasNext()) {
+			sitesOpen.add(xyTo1D(row,col));
 		}
+		// connect
 		openSize++;
+		connectOpen();
 
+	}
+
+	/*	Connect 2 open sites. */
+	private void connectOpen() {
+		if (numberOfOpenSites() > 1) {
+			// see if adjacent
+			int prev = sitesOpen.get(openSize - 2);
+			int cur = sitesOpen.get(openSize - 1);
+			int diff = Math.abs(prev - cur) ;
+			if (diff == 1 || diff == grid.length) {
+				union(prev, cur);
+			}
+		}
 	}
 
 	// is the site (row, col) open?
