@@ -5,10 +5,11 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Percolation extends WeightedQuickUnionUF {
+public class Percolation {
 	private int[][] grid;
 	private int openSize;
-	private ArrayList<Integer> sitesOpen;
+	//private int[] sitesOpen;
+	private WeightedQuickUnionUF unionUF;
 
 
 	/**
@@ -17,11 +18,12 @@ public class Percolation extends WeightedQuickUnionUF {
 	 * @param N size of grid
 	 */
 	public Percolation(int N) {
-		super(N*N);
-
+		int numOfSites = N*N;
+		unionUF = new WeightedQuickUnionUF(numOfSites);
 		if (N <= 0) {
 			throw new IllegalArgumentException("N must > 0");
 		}
+
 		openSize = 0;
 		grid = new int[N][N];
 		for (int i = 0; i < N; i++) {
@@ -32,11 +34,6 @@ public class Percolation extends WeightedQuickUnionUF {
 					grid[i][j] = -1;
 				}
 			}
-		}
-		// initialize array sitesOpen to null
-		sitesOpen = new ArrayList<>(N*N);
-		for (int i = 0; i < N*N; i++) {
-			sitesOpen.add(-1);
 		}
 
 	}
@@ -80,26 +77,23 @@ public class Percolation extends WeightedQuickUnionUF {
 
 		setGrid(row, col, 0);
 
-		// store opened sites
-		Iterator<Integer> sitesItr = this.sitesOpen.iterator();
-		while(sitesItr.hasNext()) {
-			sitesOpen.add(xyTo1D(row,col));
-		}
 		// connect
 		openSize++;
-		connectOpen();
+		connectOpen(row, col);
 
 	}
 
 	/*	Connect 2 open sites. */
-	private void connectOpen() {
+	private void connectOpen(int row, int col) { // current site
 		if (numberOfOpenSites() > 1) {
-			// see if adjacent
-			int prev = sitesOpen.get(openSize - 2);
-			int cur = sitesOpen.get(openSize - 1);
+			// see if adjacent 4 sites are open
+			// or full
+			int cur = xyTo1D(row, col);
+			int[] surrounded = {cur-1, cur + 1, cur - grid.length, cur + grid.length};
+			while ()
 			int diff = Math.abs(prev - cur) ;
 			if (diff == 1 || diff == grid.length) {
-				union(prev, cur);
+				unionUF.union(prev, cur);
 			}
 		}
 	}
@@ -117,6 +111,11 @@ public class Percolation extends WeightedQuickUnionUF {
 	// number of open sites
 	public int numberOfOpenSites() {
 		return openSize;
+	}
+
+	/* Is two sites connected? */
+	public boolean isConnected(int p, int q) {
+		return this.unionUF.connected(p, q);
 	}
 
 	// does the system percolate?

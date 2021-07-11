@@ -103,11 +103,11 @@ public class TestPercolation {
 	public void testConnectOpen() {
 		p1.open(1,1);
 		p1.open(2,1);
-		boolean actual5_10 = p1.connected(p1.xyTo1D(1,1), p1.xyTo1D(2,1) );
+		boolean actual5_10 = p1.isConnected(p1.xyTo1D(1,1), p1.xyTo1D(2,1) );
 
 		p1.open(3,2);
 		p1.open(3,3);
-		assertTrue(p1.connected(p1.xyTo1D(3,2), p1.xyTo1D(3,3)) );
+		assertTrue(p1.isConnected(p1.xyTo1D(3,2), p1.xyTo1D(3,3)) );
 
 	}
 
