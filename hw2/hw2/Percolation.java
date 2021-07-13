@@ -114,7 +114,9 @@ public class Percolation {
 			unionUF.union(virtualTop, cur);
 		}
 		else if (row == length - 1) {
-			unionUF.union(virtualBottom, cur);
+			if (!this.percolates()) {
+				unionUF.union(virtualBottom, cur);
+			}
 		}
 
 		// left
