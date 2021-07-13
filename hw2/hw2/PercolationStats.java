@@ -71,8 +71,21 @@ public class PercolationStats {
 	// unit test
 	public static void main(String[] args) {
 		PercolationFactory pf = new PercolationFactory();
-		PercolationStats stats = new PercolationStats(10, 30, pf);
-		System.out.println(stats.mean());
+		int baseSize = 10;
+
+		System.out.println("mean: starts from N = 10 ,T_fixed = 30\n");
+		for (int i = 1; i < 10; i++) {
+			System.out.println("N:" + baseSize*i+ " T:" + baseSize*3 + "\n" +
+					new PercolationStats(baseSize*i, 3 * baseSize, pf).mean());
+		}
+
+		System.out.println("------------------------------------------");
+		System.out.println("mean: starts from N_fixed = 10, T = 30\n");
+		for (int i = 1; i < 10; i++) {
+			System.out.println("N:" + baseSize+ " T:" + baseSize*3*i + "\n" +
+					new PercolationStats(baseSize, 3 * baseSize, pf).mean());
+		}
+		//System.out.println(new PercolationStats(10, 30, pf).mean());
 	}
 
 

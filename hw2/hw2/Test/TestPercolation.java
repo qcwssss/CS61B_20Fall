@@ -67,9 +67,9 @@ public class TestPercolation {
 		p1.open(2,2);
 		p1.open(2,1);
 		p1.open(3,3); // valid
-		assertFalse(p1.isOpen(0,0));
-		assertFalse(p1.isOpen(0,2));
-		assertFalse(p1.isOpen(0,1));
+		assertTrue(p1.isOpen(0,0));
+		assertTrue(p1.isOpen(0,2));
+		assertTrue(p1.isOpen(0,1));
 		assertTrue(p1.isOpen(2,2));
 		assertTrue(p1.isOpen(2,1));
 		assertTrue(p1.isOpen(3,3));

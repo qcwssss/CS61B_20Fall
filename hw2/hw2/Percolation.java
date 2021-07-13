@@ -21,7 +21,9 @@ public class Percolation {
 
 	/**
 	 * Create N-by-N grid, with all sites initially blocked, except row 1.
-	 * blocked = -1; open = 0; full = 1;
+	 * blocked = -1; open = 0;
+	 * -------------------------------------
+	 *  --- full = 1; ---- no longer valid
 	 * @param N size of grid
 	 */
 	public Percolation(int N) {
@@ -102,40 +104,40 @@ public class Percolation {
 
 	/*	Connect 2 open sites. */
 	private void connectOpen(int row, int col) { // current site
-		if (numberOfOpenSites() > 1) {
-			// see if adjacent 4 sites are open
-			// or full
-			int cur = xyTo1D(row, col);
+		checkRangeN(row,col);
+		// see if adjacent 4 sites are open
+		// or full
+		int cur = xyTo1D(row, col);
 
-			// union virtual head and tail
-			if (row == 0) {
-				unionUF.union(virtualTop, cur);
-			}
-			else if (row == length - 1) {
-				unionUF.union(virtualBottom, cur);
-			}
+		// union virtual head and tail
+		if (row == 0) {
+			unionUF.union(virtualTop, cur);
+		}
+		else if (row == length - 1) {
+			unionUF.union(virtualBottom, cur);
+		}
 
-			// left
-			if ( (col - 1 > 0) && isOpen(row, col -1)) {
-				unionUF.union(cur, xyTo1D(row, col -1));
-			}
-			// right
-			if ( (col + 1 < length) && isOpen(row, col + 1)) {
-				unionUF.union(cur, xyTo1D(row, col  + 1));
-			}
-			// up
-			if ((row -1 >= 0) && isOpen(row - 1, col)) {
-				unionUF.union(cur, xyTo1D(row -1, col));
-			}
-			// down
-			if ((row + 1 < length) && isOpen(row + 1,col)) {
-				unionUF.union(cur, xyTo1D(row + 1, col));
-			}
+		// left
+		if ( (col - 1 > 0) && isOpen(row, col -1)) {
+			unionUF.union(cur, xyTo1D(row, col -1));
+		}
+		// right
+		if ( (col + 1 < length) && isOpen(row, col + 1)) {
+			unionUF.union(cur, xyTo1D(row, col  + 1));
+		}
+		// up
+		if ((row -1 >= 0) && isOpen(row - 1, col)) {
+			unionUF.union(cur, xyTo1D(row -1, col));
+		}
+		// down
+		if ((row + 1 < length) && isOpen(row + 1,col)) {
+			unionUF.union(cur, xyTo1D(row + 1, col));
 		}
 	}
 
 	// is the site (row, col) open?
 	public boolean isOpen(int row, int col) {
+		checkRangeN(row, col);
 		return getStatus(row,col) == 0;
 	}
 
@@ -145,8 +147,9 @@ public class Percolation {
 	}
 
 	// is the site (row, col) full?
-	public boolean isFull(int row, int col)   {
-		return getStatus(row, col) == 1;
+	public boolean isFull(int row, int col)  {
+		checkRangeN(row, col);
+		return unionUF.connected(xyTo1D(row, col), virtualTop);
 	}
 
 	// number of open sites
