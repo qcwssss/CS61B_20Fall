@@ -11,9 +11,10 @@ public class Percolation {
 	private int numOfSites;
 	private int[][] grid;
 	private int openSize;
-	//private int[] sitesOpen;
 
 	private WeightedQuickUnionUF unionUF;
+	private WeightedQuickUnionUF ufTopOnly; // this will fix backwash
+
 	private int virtualTop;
 	private int virtualBottom;
 
@@ -34,6 +35,8 @@ public class Percolation {
 		numOfSites = N*N;
 
 		unionUF = new WeightedQuickUnionUF(numOfSites + 2);
+		ufTopOnly = new WeightedQuickUnionUF(numOfSites + 2);
+
 		virtualTop = numOfSites;
 		virtualBottom = numOfSites + 1;
 
@@ -112,28 +115,33 @@ public class Percolation {
 		// union virtual head and tail
 		if (row == 0) {
 			unionUF.union(virtualTop, cur);
+			ufTopOnly.union(virtualTop, cur);
 		}
-		else if (row == length - 1) {
-			if (!this.percolates()) {
-				unionUF.union(virtualBottom, cur);
-			}
+		if (row == length - 1) {
+			unionUF.union(virtualBottom, cur);
 		}
 
 		// left
 		if ( (col - 1 > 0) && isOpen(row, col -1)) {
 			unionUF.union(cur, xyTo1D(row, col -1));
+			ufTopOnly.union(cur, xyTo1D(row, col -1));
+
 		}
 		// right
 		if ( (col + 1 < length) && isOpen(row, col + 1)) {
 			unionUF.union(cur, xyTo1D(row, col  + 1));
+			ufTopOnly.union(cur, xyTo1D(row, col  + 1));
 		}
 		// up
 		if ((row -1 >= 0) && isOpen(row - 1, col)) {
 			unionUF.union(cur, xyTo1D(row -1, col));
+			ufTopOnly.union(cur, xyTo1D(row -1, col));
+
 		}
 		// down
 		if ((row + 1 < length) && isOpen(row + 1,col)) {
 			unionUF.union(cur, xyTo1D(row + 1, col));
+			ufTopOnly.union(cur, xyTo1D(row + 1, col));
 		}
 	}
 
@@ -151,7 +159,7 @@ public class Percolation {
 	// is the site (row, col) full?
 	public boolean isFull(int row, int col)  {
 		checkRangeN(row, col);
-		return unionUF.connected(xyTo1D(row, col), virtualTop);
+		return ufTopOnly.connected(xyTo1D(row, col), virtualTop);
 	}
 
 	// number of open sites
