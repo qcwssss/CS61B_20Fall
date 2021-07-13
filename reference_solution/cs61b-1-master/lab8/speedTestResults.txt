@@ -1,0 +1,8 @@
+Enter # strings to insert into ULLMap: 10000
+class ULLMap: 0.49 sec
+
+Enter # strings to insert into your MyHashMap: 10000
+class MyHashMap: 0.03 sec
+
+Enter # strings to insert into Java's HashMap: 10000
+Java's Built-in HashMap: 0.01 sec

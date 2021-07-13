@@ -1,0 +1,95 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class MyTrieSet implements TrieSet61B {
+    private class Node {
+        private boolean isKey;
+        private HashMap<Character, Node> map;
+        Node(boolean b) {
+            this.isKey = b;
+            map = new HashMap<>();
+        }
+    }
+
+    private Node root;
+
+    public MyTrieSet() {
+        root = new Node(false);
+    }
+
+    /** Clears all items out of Trie */
+    @Override
+    public void clear() {
+        root = new Node(false);
+    }
+
+    private Node find(String key) {
+        Node curr = root;
+        for (int i = 0; i < key.length(); i++) {
+            char c = key.charAt(i);
+            if (!curr.map.containsKey(c)) {
+                return null;
+            }
+            curr = curr.map.get(c);
+        }
+        return curr;
+    }
+
+    /** Returns true if the Trie contains KEY, false otherwise */
+    @Override
+    public boolean contains(String key) {
+        if (key == null || key.length() < 1) {
+            throw new IllegalArgumentException();
+        }
+        Node n = find(key);
+        return n != null && n.isKey;
+    }
+
+    /** Inserts string KEY into Trie */
+    @Override
+    public void add(String key) {
+        if (key == null || key.length() < 1) {
+            return;
+        }
+        Node curr = root;
+        for (int i = 0, n = key.length(); i < n; i++) {
+            char c = key.charAt(i);
+            if (!curr.map.containsKey(c)) {
+                curr.map.put(c, new Node(false));
+            }
+            curr = curr.map.get(c);
+        }
+        curr.isKey = true;
+    }
+
+    private void collect(String s, List<String> x, Node n) {
+        if (n == null) {
+            return;
+        }
+        if (n.isKey) {
+            x.add(s);
+        }
+        for (char c : n.map.keySet()) {
+            collect(s + c, x, n.map.get(c));
+        }
+    }
+
+    /** Returns a list of all words that start with PREFIX */
+    @Override
+    public List<String> keysWithPrefix(String prefix) {
+        List<String> keys = new ArrayList<>();
+        Node n = find(prefix);
+        collect(prefix, keys, n);
+        return keys;
+    }
+
+    /** Returns the longest prefix of KEY that exists in the Trie
+     * Not required for Lab 9. If you don't implement this, throw an
+     * UnsupportedOperationException.
+     */
+    @Override
+    public String longestPrefixOf(String key) {
+        throw new UnsupportedOperationException();
+    }
+}
