@@ -55,8 +55,8 @@ public class TestPercolation {
 		assertEquals(0, p1.getStatus(2, 1));
 		assertEquals(0, p1.getStatus(2, 2));
 		// full sites
-		assertEquals(1, p1.getStatus(0, 2));
-		assertEquals(1, p1.getStatus(0, 1));
+		assertEquals(0, p1.getStatus(0, 2));
+		assertEquals(0, p1.getStatus(0, 1));
 	}
 
 	@Test
@@ -82,9 +82,8 @@ public class TestPercolation {
 
 	@Test
 	public void testIsFull() {
-		for (int i =0; i < 4; i++) {
-			assertTrue(p1.isFull(0, i));
-		}
+		p1.open(0,0);
+		assertTrue(p1.isFull(0, 0));
 	}
 
 	@Test

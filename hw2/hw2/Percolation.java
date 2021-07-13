@@ -1,5 +1,6 @@
 package hw2;
 
+import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.util.ArrayList;
@@ -38,11 +39,7 @@ public class Percolation {
 		grid = new int[N][N];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				if (i == 0) {
-					grid[i][j] = 1;
-				} else {
-					grid[i][j] = -1;
-				}
+				grid[i][j] = -1;
 			}
 		}
 
@@ -164,8 +161,20 @@ public class Percolation {
 
 	// does the system percolate?
 	public boolean percolates() {
-		return false;
+		return unionUF.connected(virtualBottom, virtualTop);
 	}
-	//   public static void main(String[] args)   // use for unit testing (not required, but keep this here for the autograder)
+
+	public static double runtime(int N, int T) {
+		Stopwatch stopwatch = new Stopwatch();
+		PercolationFactory pf = new PercolationFactory();
+		PercolationStats stats = new PercolationStats(N, T, pf);
+		return stopwatch.elapsedTime();
+	}
+
+	// use for unit testing (not required, but keep this here for the autograder)
+	public static void main(String[] args) {
+		double time1 = Percolation.runtime(5, 5);
+		System.out.println(time1);
+	}
 
 }
