@@ -1,7 +1,52 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
 public class MyHashMap<K, V> implements Map61B<K, V>{
+	private static int initialSize = 16;
+	private static double loadFactor = 0.75;
+	private ArrayList<BucketsList> arrayList;
+
+	public MyHashMap() {
+		arrayList = new ArrayList<>(initialSize);
+	}
+
+	public MyHashMap(int initialSize) {
+		this.initialSize = initialSize;
+		arrayList = new ArrayList<>(initialSize);
+
+	}
+
+	public MyHashMap(int initialSize, double loadFactor) {
+		this.initialSize = initialSize;
+		this.loadFactor = loadFactor;
+		arrayList = new ArrayList<>(initialSize);
+
+	}
+
+	//check size & resize
+
+	/**
+	 * Represents one box in the array list that stores the key-value pairs
+	 * in the dictionary.
+	 */
+	private class BucketsList {
+		K key;
+		V val;
+		BucketsList next;
+
+		/**
+		 * Stores KEY as the key in this key-value pair, VAL as the value, and
+		 * NEXT as the next node in the linked list.
+		 */
+		BucketsList(K k, V v, BucketsList n) {
+			key = k;
+			val = v;
+			next = n;
+		}
+
+	}
+
 	/**
 	 * Removes all of the mappings from this map.
 	 */
@@ -57,6 +102,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public Set<K> keySet() {
+		// create a HashSet instance variable that holds all keys.
 		return null;
 	}
 
@@ -69,7 +115,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V remove(K key) {
-		return null;
+		throw new UnsupportedOperationException("remove() is not supported in MyHashMap");
 	}
 
 	/**
@@ -82,7 +128,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V remove(K key, V value) {
-		return null;
+		throw new UnsupportedOperationException("remove() is not supported in MyHashMap");
 	}
 
 	/**
@@ -92,6 +138,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public Iterator<K> iterator() {
+		// create a HashSet instance variable that holds all keys.
 		return null;
 	}
 }
