@@ -1,55 +1,88 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class MyHashMap<K, V> implements Map61B<K, V>{
 	// initial factor
 	private static final int defaultSize = 16;
-	private static double defaultFactor = 0.75;
+	private static final double defaultFactor = 0.75;
 
-	private ArrayList<BucketsList> arrayList;
-	//private int size;
+	private ArrayList<BucketNode> arrayList;
 	private double loadFactor;
+	private int size = 0; // occupied box
 
 	/** Constructors. */
 	public MyHashMap() {
-		arrayList = new ArrayList<>(defaultSize);
-		loadFactor = defaultFactor;
+		this(defaultSize, defaultFactor);
 	}
 
 	public MyHashMap(int initialSize) {
-		arrayList = new ArrayList<>(initialSize);
-		//this.size = arrayList.size();
-		loadFactor = defaultFactor;
-
+		this(initialSize, defaultFactor);
 	}
 
 	public MyHashMap(int initialSize, double loadFactor) {
 		arrayList = new ArrayList<>(initialSize);
-		//this.size = initialSize;
 		this.loadFactor = loadFactor;
 
 	}
 
 	//check size & resize
+	private void checkSize() {
+		if (size / arrayList.size() > this.loadFactor) {
+			resize();
+		}
+	}
+
+	private void resize() {
+		List newArrlist = new ArrayList(arrayList.size() * 2);
+		// shuffle
+		BucketNode tempNode;
+		for (BucketNode node : arrayList) {
+			tempNode = node;
+			while (tempNode.next != null) {
+				int pos = hash(tempNode.key);
+				if (newArrlist.get(pos) == null) {
+					newArrlist.set(pos, tempNode.val);
+				} else {
+					Object t = newArrlist.get(pos);
+				}
+				tempNode = tempNode.next;
+			}
+		}
+	}
 
 	/**
 	 * Represents one box in the array list that stores the key-value pairs
 	 * in the dictionary.
 	 */
-	private class BucketsList {
+	private class BucketNode {
 		K key;
 		V val;
-		BucketsList next;
+		BucketNode next;
 
 		/**
 		 * Stores KEY as the key in this key-value pair, VAL as the value, and
 		 * NEXT as the next node in the linked list.
 		 */
-		BucketsList(K k, V v, BucketsList n) {
+		BucketNode(K k, V v, BucketNode n) {
 			key = k;
 			val = v;
 			next = n;
+		}
+
+		/**
+		 * Returns the BucketNode in this linked list of key-value pairs whose key
+		 * is equal to KEY, or null if no such BucketNode exists.
+		 */
+		BucketNode get(K k) {
+			// Base case: key is in this node
+			if (k != null && k.equals(this.key)) {
+				return this;
+			}
+			if (next == null) {
+				return null;
+			}
+			// recursive
+			return next.get(k);
+
 		}
 
 	}
@@ -59,7 +92,8 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public void clear() {
-
+		size = 0;
+		arrayList = null;
 	}
 
 	/**
@@ -69,6 +103,11 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public boolean containsKey(K key) {
+		for (BucketNode node : arrayList) {
+			if (node.get(key) != null) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -80,7 +119,18 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V get(K key) {
-		return null;
+		if (arrayList == null) {
+			return null;
+		}
+		BucketNode lookup;
+		V returnVal = null;
+		for (BucketNode node : arrayList) {
+			if (node.get(key) != null) {
+				lookup = node.get(key);
+				returnVal = lookup.val;
+			}
+		}
+		return returnVal;
 	}
 
 	/**
@@ -101,7 +151,21 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public void put(K key, V value) {
+		if (key == null) {
+			throw new IllegalArgumentException("first argument to put() is null");
+		}
 
+		checkSize();
+		int idx = hash(key);
+		// add new node
+		if (!this.containsKey(key)) {
+			arrayList.get(idx).next = new BucketNode(key, value, null);
+			size++;
+		} else {
+			// update value
+			BucketNode old = arrayList.get(idx).get(key);
+			old.val = value;
+		}
 	}
 
 	/**
@@ -147,5 +211,16 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	public Iterator<K> iterator() {
 		// create a HashSet instance variable that holds all keys.
 		return null;
+	}
+
+	/**
+	 * hash function for keys - returns value between 0 and array size -1.
+	 * @param key
+	 * @return hash value of key
+	 */
+	private int hash(K key) {
+		int h = key.hashCode();
+		h ^= (h >>> 20) ^ (h >>> 12) ^ (h >>> 7) ^ (h >>> 4);
+		return h & (arrayList.size() - 1);
 	}
 }
