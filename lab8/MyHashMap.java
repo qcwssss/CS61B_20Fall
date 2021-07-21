@@ -3,24 +3,31 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class MyHashMap<K, V> implements Map61B<K, V>{
-	private static int initialSize = 16;
-	private static double loadFactor = 0.75;
-	private ArrayList<BucketsList> arrayList;
+	// initial factor
+	private static final int defaultSize = 16;
+	private static double defaultFactor = 0.75;
 
+	private ArrayList<BucketsList> arrayList;
+	//private int size;
+	private double loadFactor;
+
+	/** Constructors. */
 	public MyHashMap() {
-		arrayList = new ArrayList<>(initialSize);
+		arrayList = new ArrayList<>(defaultSize);
+		loadFactor = defaultFactor;
 	}
 
 	public MyHashMap(int initialSize) {
-		this.initialSize = initialSize;
 		arrayList = new ArrayList<>(initialSize);
+		//this.size = arrayList.size();
+		loadFactor = defaultFactor;
 
 	}
 
 	public MyHashMap(int initialSize, double loadFactor) {
-		this.initialSize = initialSize;
-		this.loadFactor = loadFactor;
 		arrayList = new ArrayList<>(initialSize);
+		//this.size = initialSize;
+		this.loadFactor = loadFactor;
 
 	}
 
