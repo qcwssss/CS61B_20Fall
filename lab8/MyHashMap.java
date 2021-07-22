@@ -28,7 +28,8 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 
 	//check size & resize
 	private void checkSize() {
-		if (size / tableSize > this.loadFactor) {
+		double curFac = (double)size/tableSize;
+		if (curFac > this.loadFactor) {
 			resize();
 		}
 	}
@@ -51,6 +52,8 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 				tempNode = tempNode.next;
 			}
 		}
+		this.bucketsList = largerList;
+		this.tableSize = newSize;
 	}
 
 	/**
@@ -99,7 +102,8 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 				return node;
 			}
 			// recursive, add to the end
-			return addLast(node.next, k, v);
+			node.next = addLast(node.next, k, v);
+			return node;
 
 		}
 
@@ -111,7 +115,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	@Override
 	public void clear() {
 		size = 0;
-		bucketsList = null;
+		this.bucketsList = new BucketNode[defaultSize];
 	}
 
 	/**
@@ -121,12 +125,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public boolean containsKey(K key) {
-		for (BucketNode<K, V> node : bucketsList) {
-			if (node.get(key) != null) {
-				return true;
-			}
-		}
-		return false;
+		return get(key) != null;
 	}
 
 	/**
@@ -137,18 +136,13 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V get(K key) {
-		if (bucketsList == null) {
-			return null;
-		}
-		BucketNode<K, V> lookup;
-		V returnVal = null;
-		for (BucketNode<K, V> node : bucketsList) {
-			if (node.get(key) != null) {
-				lookup = node.get(key);
-				returnVal = lookup.val;
+		int pos = hash(key);
+		if (bucketsList[pos] != null) {
+			if (bucketsList[pos].get(key) != null) {
+				return bucketsList[pos].get(key).val;
 			}
 		}
-		return returnVal;
+		return null;
 	}
 
 	/**
@@ -156,7 +150,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public int size() {
-		return 0;
+		return size;
 	}
 
 	/**
@@ -173,17 +167,34 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 			throw new IllegalArgumentException("first argument to put() is null");
 		}
 
-		checkSize();
 		int idx = hash(key, tableSize);
 		// add new node
 		if (!this.containsKey(key)) {
-			bucketsList[idx].next = new BucketNode<K, V>(key, value, null);
 			size++;
-		} else {
-			// update value
-			BucketNode<K, V> old = bucketsList[idx].get(key);
-			old.val = value;
 		}
+		if (bucketsList[idx] == null) {
+			bucketsList[idx] = new BucketNode<>(key, value, null);
+		} else {
+			// add new pairs to the node, whether update or addLast
+			bucketsList[idx].addLast(bucketsList[idx], key, value);
+		}
+		checkSize();
+	}
+
+	/**
+	 * hash function for keys - returns value between 0 and array size -1.
+	 * @param key
+	 * @return hash value of key
+	 */
+	private int hash(K key, int capacity) {
+		return (key.hashCode() & 0x7fffffff) % capacity;
+	}
+
+	private int hash(K key) {
+		//return key.hashCode() & 0x7fffffff % bucketsList.length;
+		int l = bucketsList.length;
+		return hash(key, l);
+
 	}
 
 	/**
@@ -231,12 +242,5 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 		return null;
 	}
 
-	/**
-	 * hash function for keys - returns value between 0 and array size -1.
-	 * @param key
-	 * @return hash value of key
-	 */
-	private int hash(K key, int capacity) {
-		return (key.hashCode() & 0x7fffffff) % capacity;
-	}
+
 }

@@ -1,0 +1,77 @@
+This program inserts lexicographically increasing Stringsinto Maps as <String, Integer> pairs.
+
+Enter # strings to insert into ULLMap: 10
+class ULLMap: 0.00 sec
+
+Enter # strings to insert into MyHashMap: 100
+class MyHashMap: 0.00 sec
+
+Enter # strings to insert into Java's HashMap: 1000
+Java's Built-in HashMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n): 10000
+
+Enter # strings to insert into ULLMap: 10000
+class ULLMap: 1.10 sec
+
+Enter # strings to insert into MyHashMap: 100000
+class MyHashMap: 0.16 sec
+
+Enter # strings to insert into Java's HashMap: 100000
+Java's Built-in HashMap: 0.11 sec
+
+Would you like to try more timed-tests? (y/n): y
+
+Enter # strings to insert into ULLMap: 20000
+class ULLMap: 11.43 sec
+
+Enter # strings to insert into MyHashMap: 20000
+class MyHashMap: 0.04 sec
+
+Enter # strings to insert into Java's HashMap: 20000
+Java's Built-in HashMap: 0.03 sec
+
+Would you like to try more timed-tests? (y/n): y
+
+Enter # strings to insert into ULLMap: 200000
+--Stack Overflow -- couldn't add 200000 strings.
+
+Enter # strings to insert into MyHashMap: 200000
+class MyHashMap: 0.17 sec
+
+Enter # strings to insert into Java's HashMap: 200000
+Java's Built-in HashMap: 0.16 sec
+
+Would you like to try more timed-tests? (y/n): n
+
+Process finished with exit code 0
+
+
+ This program inserts lexicographically increasing Stringsinto Maps as <String, Integer> pairs.
+
+Enter # strings to insert into ULLMap: 10000
+class ULLMap: 1.48 sec
+
+Enter # strings to insert into MyHashMap: 10000
+class MyHashMap: 0.02 sec
+
+Enter # strings to insert into Java's HashMap: 10000
+Java's Built-in HashMap: 0.01 sec
+
+Would you like to try more timed-tests? (y/n): y
+
+Enter # strings to insert into ULLMap: 20000
+class ULLMap: 11.29 sec
+
+Enter # strings to insert into MyHashMap: 20000
+class MyHashMap: 0.03 sec
+
+Enter # strings to insert into Java's HashMap: 20000
+Java's Built-in HashMap: 0.02 sec
+
+Would you like to try more timed-tests? (y/n): n
+
+Process finished with exit code 0
+
+When would it be better to use a BSTMap/TreeMap instead of a HashMap? 
+I think it's better to use BSTMap/TreeMap when we want to store data in order, or sort them.

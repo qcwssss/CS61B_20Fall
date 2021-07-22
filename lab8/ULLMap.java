@@ -47,7 +47,7 @@ public class ULLMap<K, V>  implements Map61B<K, V> {
             } else {
                 lookup.val = val;
             }
-        } else {
+        } else { // list is null
             list = new Entry(key, val, list);
             size = size + 1;
         }
