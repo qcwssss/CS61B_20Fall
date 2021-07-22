@@ -5,8 +5,9 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	private static final int defaultSize = 16;
 	private static final double defaultFactor = 0.75;
 
-	private ArrayList<BucketNode> arrayList;
+	private BucketNode<K, V>[] bucketsList;
 	private double loadFactor;
+	private int tableSize;
 	private int size = 0; // occupied box
 
 	/** Constructors. */
@@ -19,30 +20,33 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	}
 
 	public MyHashMap(int initialSize, double loadFactor) {
-		arrayList = new ArrayList<>(initialSize);
+		bucketsList = new BucketNode[initialSize];
 		this.loadFactor = loadFactor;
+		tableSize = initialSize;
 
 	}
 
 	//check size & resize
 	private void checkSize() {
-		if (size / arrayList.size() > this.loadFactor) {
+		if (size / tableSize > this.loadFactor) {
 			resize();
 		}
 	}
 
 	private void resize() {
-		List newArrlist = new ArrayList(arrayList.size() * 2);
+		int newSize = tableSize * 2;// scale
+		BucketNode<K, V>[] largerList = new BucketNode[newSize];
 		// shuffle
-		BucketNode tempNode;
-		for (BucketNode node : arrayList) {
+		BucketNode<K, V> tempNode;
+		for (BucketNode<K, V> node : bucketsList) {
 			tempNode = node;
-			while (tempNode.next != null) {
-				int pos = hash(tempNode.key);
-				if (newArrlist.get(pos) == null) {
-					newArrlist.set(pos, tempNode.val);
+			while (tempNode!= null) {
+				int pos = hash(tempNode.key, newSize );
+				if (largerList[pos] == null) {
+					largerList[pos] = new BucketNode(tempNode.key, tempNode.val, null);
 				} else {
-					Object t = newArrlist.get(pos);
+					// add to the end of Linked Lis
+					largerList[pos].addLast(largerList[pos], tempNode.key, tempNode.val);
 				}
 				tempNode = tempNode.next;
 			}
@@ -53,16 +57,16 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 * Represents one box in the array list that stores the key-value pairs
 	 * in the dictionary.
 	 */
-	private class BucketNode {
+	private class BucketNode<K, V> {
 		K key;
 		V val;
-		BucketNode next;
+		BucketNode<K, V> next;
 
 		/**
 		 * Stores KEY as the key in this key-value pair, VAL as the value, and
 		 * NEXT as the next node in the linked list.
 		 */
-		BucketNode(K k, V v, BucketNode n) {
+		BucketNode(K k, V v, BucketNode<K, V> n) {
 			key = k;
 			val = v;
 			next = n;
@@ -72,7 +76,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 		 * Returns the BucketNode in this linked list of key-value pairs whose key
 		 * is equal to KEY, or null if no such BucketNode exists.
 		 */
-		BucketNode get(K k) {
+		BucketNode<K, V> get(K k) {
 			// Base case: key is in this node
 			if (k != null && k.equals(this.key)) {
 				return this;
@@ -82,6 +86,20 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 			}
 			// recursive
 			return next.get(k);
+		}
+
+		BucketNode<K, V> addLast(BucketNode node, K k, V v) {
+			// 2 base case
+			if (node == null) {
+				return new BucketNode<>(k, v, null);
+			}
+			// update the value of the same key
+			if (node.key.equals(k)) {
+				node.val = v;
+				return node;
+			}
+			// recursive, add to the end
+			return addLast(node.next, k, v);
 
 		}
 
@@ -93,7 +111,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	@Override
 	public void clear() {
 		size = 0;
-		arrayList = null;
+		bucketsList = null;
 	}
 
 	/**
@@ -103,7 +121,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public boolean containsKey(K key) {
-		for (BucketNode node : arrayList) {
+		for (BucketNode<K, V> node : bucketsList) {
 			if (node.get(key) != null) {
 				return true;
 			}
@@ -119,12 +137,12 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V get(K key) {
-		if (arrayList == null) {
+		if (bucketsList == null) {
 			return null;
 		}
-		BucketNode lookup;
+		BucketNode<K, V> lookup;
 		V returnVal = null;
-		for (BucketNode node : arrayList) {
+		for (BucketNode<K, V> node : bucketsList) {
 			if (node.get(key) != null) {
 				lookup = node.get(key);
 				returnVal = lookup.val;
@@ -156,14 +174,14 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 		}
 
 		checkSize();
-		int idx = hash(key);
+		int idx = hash(key, tableSize);
 		// add new node
 		if (!this.containsKey(key)) {
-			arrayList.get(idx).next = new BucketNode(key, value, null);
+			bucketsList[idx].next = new BucketNode<K, V>(key, value, null);
 			size++;
 		} else {
 			// update value
-			BucketNode old = arrayList.get(idx).get(key);
+			BucketNode<K, V> old = bucketsList[idx].get(key);
 			old.val = value;
 		}
 	}
@@ -218,9 +236,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 * @param key
 	 * @return hash value of key
 	 */
-	private int hash(K key) {
-		int h = key.hashCode();
-		h ^= (h >>> 20) ^ (h >>> 12) ^ (h >>> 7) ^ (h >>> 4);
-		return h & (arrayList.size() - 1);
+	private int hash(K key, int capacity) {
+		return (key.hashCode() & 0x7fffffff) % capacity;
 	}
 }
