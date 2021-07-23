@@ -223,40 +223,8 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V remove(K key) {
-		if (this.get(key) == null) {
-			throw new IllegalArgumentException("can't remove a null key");
-		}
-		int idx = hash(key);
-		BucketNode<K, V> dest = bucketsList[idx].get(key);
-		V rmVal = dest.val;
-		//Iterator<K> hashItr = this.iterator();
-		removeNode(bucketsList[idx], key );
+		return remove(key, get(key));
 
-		return rmVal;
-
-	}
-
-	private void removeNode(BucketNode node, K k) {
-		if (node == null) {
-			return;
-		}
-
-		if (node.key == k) {
-			// end
-			if (node.next == null){
-				
-				node = null;
-				size--;
-				return;
-			} else {
-				BucketNode newNext = node.next;
-				node.next = null;
-				node = newNext;
-				size--;
-				return;
-			}
-		}
-		removeNode(node.next, k);
 
 	}
 
@@ -270,7 +238,45 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V remove(K key, V value) {
-		throw new UnsupportedOperationException("remove() is not supported in MyHashMap");
+		if (key == null) {
+			throw new IllegalArgumentException("can't remove a null key");
+		}
+		V returnVal = this.get(key);
+		// no key, or no such value with the given key
+		if (returnVal != value || returnVal == null) {
+			return null;
+		}
+		// find bucket
+		int idx = hash(key);
+		BucketNode<K, V> bucket = bucketsList[idx];
+		if (bucket == null) {
+			throw new IllegalArgumentException("value of node doesn't match");
+		}
+
+		// only one node in the bucket
+		if (bucket.next == null) {
+			if (bucket.key == key && bucket.val == value) {
+				bucketsList[idx] = null;
+				size--;
+			}
+		} else {
+			BucketNode temp = bucketsList[idx];
+			while (temp != null) {
+				// middle
+				if (temp.next != null){
+					if (temp.key == key && temp.val == value) {
+						BucketNode deleted = temp.next;
+						temp.next = deleted.next;
+						deleted.next = null;
+						size--;
+						break;
+					}
+				}
+				temp = temp.next;
+			}
+		}
+		return returnVal;
+
 	}
 
 	/**
