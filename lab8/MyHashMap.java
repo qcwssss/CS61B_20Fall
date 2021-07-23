@@ -203,7 +203,15 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	@Override
 	public Set<K> keySet() {
 		// create a HashSet instance variable that holds all keys.
-		return null;
+		HashSet<K> allKeys = new HashSet<>(this.tableSize);
+		for (BucketNode n : bucketsList) {
+			BucketNode temp = n;
+			while (temp != null) {
+				allKeys.add((K) temp.key);
+				temp = temp.next;
+			}
+		}
+		return allKeys;
 	}
 
 	/**
@@ -215,7 +223,33 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	 */
 	@Override
 	public V remove(K key) {
-		throw new UnsupportedOperationException("remove() is not supported in MyHashMap");
+		if (this.get(key) == null) {
+			throw new IllegalArgumentException("can't remove a null key");
+		}
+		int idx = hash(key);
+		BucketNode<K, V> dest = bucketsList[idx].get(key);
+		V rmVal = dest.val;
+		//Iterator<K> hashItr = this.iterator();
+		removeNode(bucketsList[idx], key );
+
+		return rmVal;
+
+	}
+
+	private void removeNode(BucketNode node, K k) {
+		if (node == null) {
+			return;
+		}
+		// middle
+		if (node.next.key == k) {
+			BucketNode newNext = node.next.next;
+			node.next.next = null;
+			node.next = newNext;
+
+		}
+		// end
+		if ()
+
 	}
 
 	/**
@@ -239,7 +273,7 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 	@Override
 	public Iterator<K> iterator() {
 		// create a HashSet instance variable that holds all keys.
-		return null;
+		return keySet().iterator();
 	}
 
 
