@@ -240,15 +240,23 @@ public class MyHashMap<K, V> implements Map61B<K, V>{
 		if (node == null) {
 			return;
 		}
-		// middle
-		if (node.next.key == k) {
-			BucketNode newNext = node.next.next;
-			node.next.next = null;
-			node.next = newNext;
 
+		if (node.key == k) {
+			// end
+			if (node.next == null){
+				
+				node = null;
+				size--;
+				return;
+			} else {
+				BucketNode newNext = node.next;
+				node.next = null;
+				node = newNext;
+				size--;
+				return;
+			}
 		}
-		// end
-		if ()
+		removeNode(node.next, k);
 
 	}
 
