@@ -15,9 +15,7 @@ public class OomageTestUtility {
         int N = oomages.size();
         int[] buckets = new int[M];
         // set initial num of buckets all 0
-        for (int i : buckets) {
-            buckets[i] = 0;
-        }
+
         // count
         for (Oomage o : oomages) {
             int bucketNum = (o.hashCode() & 0x7FFFFFFF) % M;

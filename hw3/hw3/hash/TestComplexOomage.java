@@ -42,19 +42,21 @@ public class TestComplexOomage {
 
         // Your code here.
         int N = 256;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < N; k++) {
-                    List<Integer> params = new ArrayList<>();
-                    params.add(i);
-                    params.add(j);
-                    params.add(k);
+        for (int i = 0; i < 10; i++) {
+            ArrayList<Integer> params = new ArrayList<>();
+            params.add(i);
 
-                    deadlyList.add(new ComplexOomage(params));
-                }
+            // according to Hint Class, after 3 power of 256,
+            // the number will overflow to 0.
+            /*** See ComplexOomage.hashCode() ***/
+            // So in this situation, all these hashCodes are 0.
+            for (int j = 0; j < 4; j += 1) {
+                params.add(1);
             }
+            ComplexOomage com = new ComplexOomage(params);
+            deadlyList.add(com);
         }
-
+        //int t = deadlyList.get(98).hashCode();
 
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
     }
