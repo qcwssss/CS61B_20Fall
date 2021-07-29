@@ -13,10 +13,11 @@ public class FlightSolver {
 
   /**
    * Constructor, create a FlightSolver.
+   *
    * @param flights
    */
   public FlightSolver(ArrayList<Flight> flights) {
-    // sweep line
+    /** sweep line */
     /*
     ArrayList<int[]> weights = new ArrayList<>(flights.size() * 2);
     for (Flight f : flights) {
@@ -33,31 +34,36 @@ public class FlightSolver {
     }
     maxPassengers = res;
     */
-    Collections.sort(flights, (f1, f2) -> (f1.startTime - f2.startTime));
-    PriorityQueue<Flight> pq = new PriorityQueue<>( (a, b)->(a.endTime - b.endTime) );
-    pq.add(flights.get(0));
-    for (int i = 1; i < flights.size(); i++) {
-      Flight cur = pq.poll();
-      Flight ptr = flights.get(i);
-      if (ptr.startTime < cur.endTime) {
-        pq.add(ptr);
+
+    /** Priority Queue */
+    PriorityQueue<Flight> startMinPQ = new PriorityQueue<>((a, b) -> (a.startTime - b.startTime));
+    PriorityQueue<Flight> endMinPQ = new PriorityQueue<>((a, b) -> (a.endTime - b.endTime) );
+
+    startMinPQ.addAll(flights);
+    endMinPQ.addAll(flights);
+    // print pq
+    System.out.println("startMinPQ: " + startMinPQ);
+    for (Flight f : startMinPQ) {
+      System.out.print(f.startTime + " ");
+    }
+    System.out.println("\nendMinPQ: " + endMinPQ);
+    for (Flight f : endMinPQ) {
+      System.out.print(f.endTime + " ");
+    }
+    System.out.println("\n-----------------------\n");
+
+    int nowPassengers = 0; // To store current timestamp passenger number
+    while (startMinPQ.peek() != null) {
+      // compare the smallest startTime with the smallest endTime
+      if (startMinPQ.peek().startTime <= endMinPQ.peek().endTime) {
+        nowPassengers += startMinPQ.poll().passengers;
+        if (nowPassengers > maxPassengers) maxPassengers = nowPassengers; // maintain the max value
       } else {
-        if (ptr.passengers > cur.passengers) {
-          cur.passengers = ptr.passengers;
-        }
+        // endTime < start time, a plane landed
+        nowPassengers -= endMinPQ.poll().passengers;
       }
-
-      pq.add(cur);
     }
-    int countPassengers = 0;
-    for (Flight f : pq) {
-      countPassengers += f.passengers;
-    }
-    maxPassengers = countPassengers;
-
   }
-
-
 
   public int solve() {
     return maxPassengers;
