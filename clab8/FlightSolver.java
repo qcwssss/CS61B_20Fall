@@ -9,11 +9,15 @@ import java.util.PriorityQueue;
  * time, they are considered to be in the air at the same time.
  */
 public class FlightSolver {
-  // private PriorityQueue<Flight> pq;
   private int maxPassengers;
 
+  /**
+   * Constructor, create a FlightSolver.
+   * @param flights
+   */
   public FlightSolver(ArrayList<Flight> flights) {
     // sweep line
+    /*
     ArrayList<int[]> weights = new ArrayList<>(flights.size() * 2);
     for (Flight f : flights) {
       weights.add(new int[] {f.startTime, f.passengers});
@@ -28,7 +32,32 @@ public class FlightSolver {
       res = Math.max(res, count);
     }
     maxPassengers = res;
+    */
+    Collections.sort(flights, (f1, f2) -> (f1.startTime - f2.startTime));
+    PriorityQueue<Flight> pq = new PriorityQueue<>( (a, b)->(a.endTime - b.endTime) );
+    pq.add(flights.get(0));
+    for (int i = 1; i < flights.size(); i++) {
+      Flight cur = pq.poll();
+      Flight ptr = flights.get(i);
+      if (ptr.startTime < cur.endTime) {
+        pq.add(ptr);
+      } else {
+        if (ptr.passengers > cur.passengers) {
+          cur.passengers = ptr.passengers;
+        }
+      }
+
+      pq.add(cur);
+    }
+    int countPassengers = 0;
+    for (Flight f : pq) {
+      countPassengers += f.passengers;
+    }
+    maxPassengers = countPassengers;
+
   }
+
+
 
   public int solve() {
     return maxPassengers;
