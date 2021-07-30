@@ -1,6 +1,32 @@
+
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 public class MyTrieSet implements TrieSet61B{
+	private Node root;
+	private int numOfKeys;
+
+
+	private class Node {
+		private boolean isKey;
+		private Hashtable<Character, Node> table;
+		private Node next;
+
+		/*** Node constructor. */
+		public Node() {
+			this.isKey = false;
+			table = new Hashtable<>();
+		}
+	}
+
+	/*** Create a MyTrieSet. */
+	public MyTrieSet() {
+		numOfKeys = 0;
+		//root = new Node();
+	}
+
+
 	/**
 	 * Clears all items out of Trie
 	 */
@@ -16,8 +42,20 @@ public class MyTrieSet implements TrieSet61B{
 	 */
 	@Override
 	public boolean contains(String key) {
+		// recursive
+		if (root.table.contains(key) ) {
+			return true;
+		}
+		for (Character c : root.table.keySet()) {
+			if (root.table.get(c).next.table.contains(key)) {
+				return true;
+			} else {
+
+			}
+		}
 		return false;
 	}
+
 
 	/**
 	 * Inserts string KEY into Trie
@@ -26,7 +64,17 @@ public class MyTrieSet implements TrieSet61B{
 	 */
 	@Override
 	public void add(String key) {
+		if (key == null) {
+			throw new IllegalArgumentException("first argument to add() is null");
+		} else {
+			root = addHelper(root, key);
+		}
+		numOfKeys++;
 
+	}
+
+	private Node addHelper(Node x, String k) {
+		if (x == null) root = new Node();
 	}
 
 	/**
