@@ -10,13 +10,13 @@ public class MyTrieSet implements TrieSet61B{
 
 	private class Node {
 		private boolean isKey;
-		private Hashtable<Character, Node> table;
+		private Hashtable<Character, Node> hashTb;
 		private Node next;
 
 		/*** Node constructor. */
-		public Node() {
-			this.isKey = false;
-			table = new Hashtable<>();
+		public Node(boolean b) {
+			this.isKey = b;
+			hashTb = new Hashtable<>();
 		}
 	}
 
@@ -66,15 +66,38 @@ public class MyTrieSet implements TrieSet61B{
 	public void add(String key) {
 		if (key == null) {
 			throw new IllegalArgumentException("first argument to add() is null");
-		} else {
-			root = addHelper(root, key);
 		}
-		numOfKeys++;
-
+		root = addHelper(root, key);
 	}
 
 	private Node addHelper(Node x, String k) {
-		if (x == null) root = new Node();
+		if (x == null) root = new Node(false);
+		Node cur = root;
+		for (int i = 0; i < k.length(); i++) {
+			char c = k.charAt(i);
+			if (!cur.hashTb.contains(c)) {
+				root.hashTb.put(c, new Node(false));
+			}
+
+			// move ptr to cur node
+			cur = cur.hashTb.get(c);
+		}
+		cur.isKey = true; // mark the key
+		numOfKeys++;
+
+		return root;
+	}
+
+	private Node addHelperRecur(Node x, String k, int diff) {
+		// base case 1
+		if (x == null) x = new Node(false);
+		// base case 2
+		if (diff == k.length()) {
+			x.hashTb.put(k.charAt(diff), new Node(true));
+		}
+
+		char c = k.charAt(diff);
+		x.next = addHelperRecur(x.next.)
 	}
 
 	/**
