@@ -32,6 +32,8 @@ public class MyTrieSet implements TrieSet61B{
 	 */
 	@Override
 	public void clear() {
+		root = null;
+		numOfKeys = 0;
 
 	}
 
@@ -43,17 +45,18 @@ public class MyTrieSet implements TrieSet61B{
 	@Override
 	public boolean contains(String key) {
 		// recursive
-		if (root.table.contains(key) ) {
+		if (root.hashTb.contains(key)) {
 			return true;
 		}
-		for (Character c : root.table.keySet()) {
-			if (root.table.get(c).next.table.contains(key)) {
-				return true;
-			} else {
+		return get(root, key,0) != null;
 
-			}
-		}
-		return false;
+	}
+
+	private Node get(Node x, String key, int d) {
+		if (x == null) return null;
+		if (d == key.length()) return x;
+		char c = key.charAt(d);
+		return get(x.next, key, d + 1);
 	}
 
 
@@ -68,6 +71,7 @@ public class MyTrieSet implements TrieSet61B{
 			throw new IllegalArgumentException("first argument to add() is null");
 		}
 		root = addHelper(root, key);
+		//root = addHelperRecur(root,key,0);
 	}
 
 	private Node addHelper(Node x, String k) {
@@ -76,7 +80,8 @@ public class MyTrieSet implements TrieSet61B{
 		for (int i = 0; i < k.length(); i++) {
 			char c = k.charAt(i);
 			if (!cur.hashTb.contains(c)) {
-				root.hashTb.put(c, new Node(false));
+				cur.next = new Node()
+				cur.hashTb.put(c, new Node(false));
 			}
 
 			// move ptr to cur node
@@ -92,12 +97,17 @@ public class MyTrieSet implements TrieSet61B{
 		// base case 1
 		if (x == null) x = new Node(false);
 		// base case 2
+		char c = k.charAt(diff);
 		if (diff == k.length()) {
-			x.hashTb.put(k.charAt(diff), new Node(true));
+			if (x.hashTb == null) {
+				x.hashTb = new Hashtable<>();
+				numOfKeys ++;
+			}
+			x.hashTb.put(c, new Node(true));
 		}
 
-		char c = k.charAt(diff);
-		x.next = addHelperRecur(x.next.)
+		x.next = addHelperRecur(x.next, k, diff + 1);
+		return x;
 	}
 
 	/**
