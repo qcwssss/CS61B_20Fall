@@ -1,4 +1,5 @@
 
+import java.sql.Struct;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -11,9 +12,14 @@ public class MyTrieSet implements TrieSet61B{
 	private class Node {
 		private boolean isKey;
 		private Hashtable<Character, Node> hashTb;
-		private Node next;
+		//private Node next;
 
 		/*** Node constructor. */
+		public Node() {
+			this.isKey = false;
+			hashTb = new Hashtable<>();
+		}
+
 		public Node(boolean b) {
 			this.isKey = b;
 			hashTb = new Hashtable<>();
@@ -45,9 +51,6 @@ public class MyTrieSet implements TrieSet61B{
 	@Override
 	public boolean contains(String key) {
 		// recursive
-		if (root.hashTb.contains(key)) {
-			return true;
-		}
 		return get(root, key,0) != null;
 
 	}
@@ -56,7 +59,7 @@ public class MyTrieSet implements TrieSet61B{
 		if (x == null) return null;
 		if (d == key.length()) return x;
 		char c = key.charAt(d);
-		return get(x.next, key, d + 1);
+		return get(x.hashTb.get(c), key, d + 1);
 	}
 
 
@@ -75,13 +78,12 @@ public class MyTrieSet implements TrieSet61B{
 	}
 
 	private Node addHelper(Node x, String k) {
-		if (x == null) root = new Node(false);
+		if (x == null) root = new Node();
 		Node cur = root;
 		for (int i = 0; i < k.length(); i++) {
 			char c = k.charAt(i);
 			if (!cur.hashTb.contains(c)) {
-				cur.next = new Node()
-				cur.hashTb.put(c, new Node(false));
+				cur.hashTb.put(c, new Node());
 			}
 
 			// move ptr to cur node
@@ -95,7 +97,7 @@ public class MyTrieSet implements TrieSet61B{
 
 	private Node addHelperRecur(Node x, String k, int diff) {
 		// base case 1
-		if (x == null) x = new Node(false);
+		if (x == null) x = new Node();
 		// base case 2
 		char c = k.charAt(diff);
 		if (diff == k.length()) {
@@ -106,7 +108,7 @@ public class MyTrieSet implements TrieSet61B{
 			x.hashTb.put(c, new Node(true));
 		}
 
-		x.next = addHelperRecur(x.next, k, diff + 1);
+		x = addHelperRecur(x, k, diff + 1);
 		return x;
 	}
 
