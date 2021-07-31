@@ -132,6 +132,6 @@ public class MyTrieSet implements TrieSet61B{
 	 */
 	@Override
 	public String longestPrefixOf(String key) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 }
