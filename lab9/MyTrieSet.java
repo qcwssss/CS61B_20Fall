@@ -1,8 +1,6 @@
 
 import java.sql.Struct;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 public class MyTrieSet implements TrieSet61B{
 	private Node root;
@@ -29,7 +27,6 @@ public class MyTrieSet implements TrieSet61B{
 	/*** Create a MyTrieSet. */
 	public MyTrieSet() {
 		numOfKeys = 0;
-		//root = new Node();
 	}
 
 
@@ -74,7 +71,6 @@ public class MyTrieSet implements TrieSet61B{
 			throw new IllegalArgumentException("first argument to add() is null");
 		}
 		root = addHelper(root, key);
-		//root = addHelperRecur(root,key,0);
 	}
 
 	private Node addHelper(Node x, String k) {
@@ -82,7 +78,7 @@ public class MyTrieSet implements TrieSet61B{
 		Node cur = root;
 		for (int i = 0; i < k.length(); i++) {
 			char c = k.charAt(i);
-			if (!cur.hashTb.contains(c)) {
+			if (!cur.hashTb.containsKey(c)) {
 				cur.hashTb.put(c, new Node());
 			}
 
@@ -95,23 +91,6 @@ public class MyTrieSet implements TrieSet61B{
 		return root;
 	}
 
-	private Node addHelperRecur(Node x, String k, int diff) {
-		// base case 1
-		if (x == null) x = new Node();
-		// base case 2
-		char c = k.charAt(diff);
-		if (diff == k.length()) {
-			if (x.hashTb == null) {
-				x.hashTb = new Hashtable<>();
-				numOfKeys ++;
-			}
-			x.hashTb.put(c, new Node(true));
-		}
-
-		x = addHelperRecur(x, k, diff + 1);
-		return x;
-	}
-
 	/**
 	 * Returns a list of all words that start with PREFIX
 	 *
@@ -119,7 +98,41 @@ public class MyTrieSet implements TrieSet61B{
 	 */
 	@Override
 	public List<String> keysWithPrefix(String prefix) {
-		return null;
+		if (!this.contains(prefix)) {
+			throw new IllegalArgumentException("prefix doesn't exist in this Trie");
+		}
+
+		int preLength = prefix.length();
+		Node cur = root.hashTb.get(prefix.charAt(0));
+
+		List<String> result = new LinkedList<>();
+		for (int i = 1; i < preLength ; i++) {
+			char c = prefix.charAt(i);
+			cur = cur.hashTb.get(prefix.charAt(i));
+		}
+		String suffix = "";
+		for (char c : cur.hashTb.keySet()) {
+			if (cur.hashTb.get(c).isKey) {
+				if (!cur.hashTb.get(c).hashTb.isEmpty()) {
+
+				}
+				result.add(prefix + c);
+			}
+		}
+		return result;
+	}
+
+	private String colHelper(Node x, char c) {
+		String infix = "";
+		if (x.hashTb.isEmpty()) {
+			return infix + c;
+		}
+
+		for (char d: x.hashTb.keySet()) {
+			infix += d;
+			colHelper(x.hashTb.get(d), c);
+			if (x.isKey) return infix;
+		}
 	}
 
 	/**
