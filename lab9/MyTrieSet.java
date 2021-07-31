@@ -107,31 +107,19 @@ public class MyTrieSet implements TrieSet61B{
 
 		List<String> result = new LinkedList<>();
 		for (int i = 1; i < preLength ; i++) {
-			char c = prefix.charAt(i);
 			cur = cur.hashTb.get(prefix.charAt(i));
 		}
-		String suffix = "";
-		for (char c : cur.hashTb.keySet()) {
-			if (cur.hashTb.get(c).isKey) {
-				if (!cur.hashTb.get(c).hashTb.isEmpty()) {
 
-				}
-				result.add(prefix + c);
-			}
-		}
+		colHelper(result, cur, prefix);
 		return result;
 	}
 
-	private String colHelper(Node x, char c) {
-		String infix = "";
-		if (x.hashTb.isEmpty()) {
-			return infix + c;
+	private void colHelper(List<String> res, Node x, String infix) {
+		if (x.isKey) {
+			res.add(infix);
 		}
-
 		for (char d: x.hashTb.keySet()) {
-			infix += d;
-			colHelper(x.hashTb.get(d), c);
-			if (x.isKey) return infix;
+			colHelper(res, x.hashTb.get(d), infix + d);
 		}
 	}
 
