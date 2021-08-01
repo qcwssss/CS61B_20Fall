@@ -25,16 +25,23 @@ public class KDTree {
 			p = point;
 		}
 
-		private int compareTo(Node n1, Node n2) {
-			
+		private double compareTo(Point o) {
+			if (this.orient == Orientation.HORIZONTAL) {
+				return this.p.getX() - o.getX();
+			}
+			return this.p.getY() - o.getY();
 		}
+
 	}
 
 	public KDTree(List<Point> points) {
 		//listOfPoints = points;
+		for (Point p : points) {
+			put(p);
+		}
 	}
 
-	public void put(Point p) {
+	private void put(Point p) {
 		if (p == null) {
 			throw new IllegalArgumentException("calls put() with a null point");
 		}
@@ -46,9 +53,13 @@ public class KDTree {
 			return new Node(point);
 		}
 
-		if (x.orient == Orientation.HORIZONTAL) {
-
+		if (x.compareTo(point) > 0) {
+			// x.point > point, add left
+			x.left = put(x.left, point);
+		} else {
+			x.right = put(x.right, point);
 		}
+		return x;
 	}
 
 	// Returns the closest point to the inputted coordinates.
@@ -59,16 +70,22 @@ public class KDTree {
 
 
 	public static void main(String[] args) {
-		Point p1 = new Point(1.1, 2.2); // constructs a Point with x = 1.1, y = 2.2
-		Point p2 = new Point(3.3, 4.4);
-		Point p3 = new Point(-2.9, 4.2);
+		Point a = new Point(2, 3); // constructs a Point with x = 1.1, y = 2.2
+		Point b = new Point(4, 2);
+		Point c = new Point(4, 5);
+		Point d = new Point(3, 3);
+		Point e = new Point(1, 5);
+		Point f = new Point(4, 4);
 
-		KDTree kd = new KDTree(List.of(p1, p2, p3));
+		KDTree kd = new KDTree(List.of(a, b, c, d, e, f));
+		/*
 		Point ret = kd.nearest(3.0, 4.0); // returns p2
 		double actual1 = ret.getX(); // evaluates to 3.3
 		double actual2 = ret.getY(); // evaluates to 4.4
 		assertEquals(p2, ret);
 		assertEquals(3.3, actual1, 0.01);
 		assertEquals(4.4, actual2, 0.01);
+
+		 */
 	}
 }
