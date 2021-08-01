@@ -12,8 +12,8 @@ public class KDTree {
 	//private List<Point> listOfPoints;
 
 	private class Node {
-		private Node left;
-		private Node right;
+		private Node left; // also refers to down child
+		private Node right; // also refers to up child
 		private Point p;
 		private Orientation orient;
 
@@ -21,43 +21,41 @@ public class KDTree {
 			p = new Point(x, y);
 		}
 
-		private Node(Point point) {
+		private Node(Point point, Orientation to) {
 			p = point;
-		}
-
-		private double compareTo(Point o) {
-			if (this.orient == Orientation.HORIZONTAL) {
-				return this.p.getX() - o.getX();
-			}
-			return this.p.getY() - o.getY();
+			orient = to;
 		}
 
 	}
 
 	public KDTree(List<Point> points) {
-		//listOfPoints = points;
 		for (Point p : points) {
-			put(p);
+			if (root == null) {
+				root = put(root, p, Orientation.VERTICAL);
+			} else {
+				put(root, p, root.orient.opposite());
+			}
 		}
 	}
 
-	private void put(Point p) {
-		if (p == null) {
-			throw new IllegalArgumentException("calls put() with a null point");
-		}
-		root = put(root, p);
-	}
-
-	private Node put(Node x, Point point) {
-		if (x == null) {
-			return new Node(point);
-		}
-
-		if (x.compareTo(point) > 0) {
-			// x.point > point, add left
-			x.left = put(x.left, point);
+	private int comparePoint(Point a, Point b, Orientation orient) {
+		if (orient == Orientation.HORIZONTAL) {
+			return Double.compare(a.getX(), b.getX());
 		} else {
-			x.right = put(x.right, point);
+			return Double.compare(a.getY(), b.getY());
+		}
+	}
+
+	private Node put(Node x, Point point, Orientation direct) {
+		if (x == null) {
+			return new Node(point, direct.opposite());
+		}
+
+		if (comparePoint(x.p, point, x.orient) > 0) {
+			// x.point > point, add left
+			x.left = put(x.left, point, x.orient);
+		} else {
+			x.right = put(x.right, point, x.orient);
 		}
 		return x;
 	}
