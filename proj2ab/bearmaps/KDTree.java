@@ -30,7 +30,7 @@ public class KDTree {
 
 	public KDTree(List<Point> points) {
 		for (Point p : points) {
-			if (root == null) {
+			if (root == null) { // create root
 				root = put(root, p, Orientation.VERTICAL);
 			} else {
 				put(root, p, root.orient.opposite());
@@ -51,6 +51,11 @@ public class KDTree {
 			return new Node(point, direct.opposite());
 		}
 
+		/** Prevent duplicate node. */
+		if (point.equals(x.p)) {
+			return x;
+		}
+
 		if (comparePoint(x.p, point, x.orient) > 0) {
 			// x.point > point, add left
 			x.left = put(x.left, point, x.orient);
@@ -66,24 +71,34 @@ public class KDTree {
 		return null;
 	}
 
-
-	public static void main(String[] args) {
-		Point a = new Point(2, 3); // constructs a Point with x = 1.1, y = 2.2
+	/** KDTree test method. */
+	public static void buildLectureTree() {
+		Point a = new Point(2, 3);
 		Point b = new Point(4, 2);
 		Point c = new Point(4, 5);
 		Point d = new Point(3, 3);
 		Point e = new Point(1, 5);
 		Point f = new Point(4, 4);
 
-		KDTree kd = new KDTree(List.of(a, b, c, d, e, f));
-		/*
-		Point ret = kd.nearest(3.0, 4.0); // returns p2
-		double actual1 = ret.getX(); // evaluates to 3.3
-		double actual2 = ret.getY(); // evaluates to 4.4
-		assertEquals(p2, ret);
-		assertEquals(3.3, actual1, 0.01);
-		assertEquals(4.4, actual2, 0.01);
 
-		 */
+		KDTree kd = new KDTree(List.of(a, b, c, d, e, f, a));
+	}
+
+	public static void buildDuplicateNode() {
+		Point a = new Point(2, 3);
+		Point b = new Point(4, 2);
+		Point c = new Point(2, 3);
+
+		KDTree kd = new KDTree(List.of(a, b, c));
+		//KDTree kd = new KDTree(List.of(a, c));
+
+	}
+
+
+	public static void main(String[] args) {
+		//buildDuplicateNode();
+		buildLectureTree();
+
+
 	}
 }
