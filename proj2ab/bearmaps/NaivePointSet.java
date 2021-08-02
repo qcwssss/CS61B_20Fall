@@ -14,23 +14,20 @@ public class NaivePointSet implements PointSet{
 		return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
 	}
 
-	/**
-	 * Returns the closest point to the inputted coordinates.
-	 * @param x
-	 * @param y
-	 * @return nearest point
-	 */
+	/** Returns the closest point to the inputted coordinates. */
 	@Override
 	public Point nearest(double x, double y) {
-		double minDist = Integer.MAX_VALUE;
-		Point thispoint = null;
-		for (Point point : listOfPoints) {
-			double currDist = NaivePointSet.distance(x, point.getX(), y, point.getY());
-			if (currDist < minDist) {
-				minDist = currDist;
-				thispoint = point;
+		Point goal = new Point(x, y);
+		Point min = null;
+		double minSqr = Double.MAX_VALUE;
+
+		for (Point p : listOfPoints) {
+			double currDist = distance(p.getX(), goal.getX(), p.getY(), goal.getY());
+			if (currDist < minSqr) {
+				min = p;
+				minSqr = currDist;
 			}
 		}
-		return thispoint;
+		return min;
 	}
 }
