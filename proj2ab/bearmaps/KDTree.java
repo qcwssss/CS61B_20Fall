@@ -5,6 +5,7 @@ import org.junit.platform.engine.support.hierarchical.Node;
 import java.util.Comparator;
 import java.util.List;
 
+import static bearmaps.Point.distance;
 import static org.junit.Assert.assertEquals;
 
 public class KDTree {
@@ -71,6 +72,27 @@ public class KDTree {
 		return null;
 	}
 
+	// stage 1: brute force
+	public Point nearestBrute(double x, double y) {
+		Point goal = new Point(x, y);
+		double curDistSqr = distance(goal, root.p); // ^2
+		return null;
+	}
+
+	private Double nearestBrute(Node x, Point target, double dMin) {
+		dMin = Math.min(distance(target, x.p), dMin);
+		if (x.right != null || x.left != null) {
+			if (x.left != null) {
+				dMin = nearestBrute(x.left, target, dMin);
+			}
+			if (x.right != null) {
+				dMin = nearestBrute(x.right, target, dMin);
+			}
+		}
+		return dMin;
+
+	}
+
 	/** KDTree test method. */
 	public static void buildLectureTree() {
 		Point a = new Point(2, 3);
@@ -79,7 +101,6 @@ public class KDTree {
 		Point d = new Point(3, 3);
 		Point e = new Point(1, 5);
 		Point f = new Point(4, 4);
-
 
 		KDTree kd = new KDTree(List.of(a, b, c, d, e, f, a));
 	}

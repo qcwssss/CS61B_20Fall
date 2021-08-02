@@ -42,7 +42,23 @@ public class KDTreeTest {
 	}
 
 	@Test
-	public void TestRandomNearest() {
+	public void testNearestDemoSlide() {
+		Point a = new Point(2, 3);
+		Point b = new Point(4, 2);
+		Point c = new Point(4, 5);
+		Point d = new Point(3, 3);
+		Point e = new Point(1, 5);
+		Point f = new Point(4, 4);
+
+		KDTree kd = new KDTree(List.of(a, b, c, d, e, f, a));
+		Point nnE = kd.nearest(e.getX(), e.getY());
+		assertEquals(nnE, a);
+		assertEquals(nnE.toString(), a.toString());
+
+	}
+
+	@Test
+	public void testRandomNearest() {
 		Random random = new Random();
 		int max = 2000;
 		LinkedList<Point> randPoints = new LinkedList<>();
@@ -51,20 +67,18 @@ public class KDTreeTest {
 			randPoints.add(p);
 		}
 
-		Point first = randPoints.getFirst();
-		Point third = randPoints.get(2);
-
 		NaivePointSet naiveST = new NaivePointSet(randPoints);
 		KDTree kdTree = new KDTree(randPoints);
 
-		Point nSet1 = naiveST.nearest(first.getX(), first.getY());
-		Point nKD1 = kdTree.nearest(first.getX(), first.getY());
+		// random nearest
+		for (int i = 0; i < max/5; i++) {
+			Point randPnt = randPoints.get(random.nextInt( randPoints.size() ) );
 
-		Point nSet3 = naiveST.nearest(third.getX(), third.getY());
-		Point nKD3 = kdTree.nearest(third.getX(), third.getY());
+			Point nSet = naiveST.nearest(randPnt.getX(), randPnt.getY());
+			Point nKD = kdTree.nearest(randPnt.getX(), randPnt.getY());
 
-		assertEquals(nSet1.toString(), nKD1.toString());
-		assertEquals(nSet3.toString(), nKD3.toString());
+			assertEquals(nSet.toString(), nKD.toString());
+		}
 
 	}
 }
