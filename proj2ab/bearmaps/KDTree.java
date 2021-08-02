@@ -69,11 +69,12 @@ public class KDTree {
 	// Returns the closest point to the inputted coordinates.
 	// This should take \(O(\log N)\) time on average, where \(N\) is the number of points.
 	public Point nearest(double x, double y) {
-		return null;
+		Node nn = nearestBrute(root, new Point(x, y), root);
+		return nn.p;
 	}
 
 	// stage 1: brute force
-	public Node nearestBrute(Node n, Point target, Node best) {
+	private Node nearestBrute(Node n, Point target, Node best) {
 		// base case
 		if (n == null) {
 			return best;
@@ -87,10 +88,28 @@ public class KDTree {
 		best = nearestBrute(n.left, target, best);
 		best = nearestBrute(n.right, target, best);
 		return best;
-
 	}
 
-	/** KDTree test method. */
+	// stage 2: implement efficient find nearest
+	private Node nearestFast(Node n, Point target, Node best) {
+		if (n == null) {
+			return best;
+		}
+		// compare current node point with best
+		if (distance(n.p, target) < distance(best.p, target)) {
+				best = n; // update best
+		}
+		// recursive
+		// goal.y - d.y)^2.
+		// consider the correct child first!
+
+		best = nearestBrute(n.left, target, best);
+		best = nearestBrute(n.right, target, best);
+		return best;
+	}
+
+
+		/** KDTree test method. */
 	public static void buildLectureTree() {
 		Point a = new Point(2, 3);
 		Point b = new Point(4, 2);

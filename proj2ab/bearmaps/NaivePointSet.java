@@ -10,6 +10,10 @@ public class NaivePointSet implements PointSet{
 		listOfPoints = points;
 	}
 
+	private static double distance(double x1, double x2, double y1, double y2) {
+		return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
+	}
+
 	/**
 	 * Returns the closest point to the inputted coordinates.
 	 * @param x
@@ -18,13 +22,15 @@ public class NaivePointSet implements PointSet{
 	 */
 	@Override
 	public Point nearest(double x, double y) {
-		Point curMin = new Point(x, y); // pointer
-		double minSqr = Point.distance(listOfPoints.get(0), curMin);
-		for (Point p : listOfPoints) {
-			if (Point.distance(p, curMin) < minSqr) {
-				curMin = p;
+		double minDist = Integer.MAX_VALUE;
+		Point thispoint = null;
+		for (Point point : listOfPoints) {
+			double currDist = NaivePointSet.distance(x, point.getX(), y, point.getY());
+			if (currDist < minDist) {
+				minDist = currDist;
+				thispoint = point;
 			}
 		}
-		return curMin;
+		return thispoint;
 	}
 }
