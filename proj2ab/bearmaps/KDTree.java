@@ -73,23 +73,20 @@ public class KDTree {
 	}
 
 	// stage 1: brute force
-	public Point nearestBrute(double x, double y) {
-		Point goal = new Point(x, y);
-		double curDistSqr = distance(goal, root.p); // ^2
-		return null;
-	}
-
-	private Double nearestBrute(Node x, Point target, double dMin) {
-		dMin = Math.min(distance(target, x.p), dMin);
-		if (x.right != null || x.left != null) {
-			if (x.left != null) {
-				dMin = nearestBrute(x.left, target, dMin);
-			}
-			if (x.right != null) {
-				dMin = nearestBrute(x.right, target, dMin);
-			}
+	public Node nearestBrute(Node n, Point target, Node best) {
+		// base case
+		if (n == null) {
+			return best;
 		}
-		return dMin;
+
+		// compare current node point with best
+		if (distance(n.p, target) < distance(best.p, target)) {
+			best = n; // update best
+		}
+		// recursive
+		best = nearestBrute(n.left, target, best);
+		best = nearestBrute(n.right, target, best);
+		return best;
 
 	}
 
