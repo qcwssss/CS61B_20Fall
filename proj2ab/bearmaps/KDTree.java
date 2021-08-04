@@ -27,6 +27,17 @@ public class KDTree {
 			orient = to;
 		}
 
+		// compare Node in ascending order
+		Comparator<Node> compareTo = (n1, n2) -> {
+			double diff;
+			if (n1.orient == Orientation.HORIZONTAL) {
+				diff = n1.p.getX() - n2.p.getX();
+			} else {
+				diff = n1.p.getY() - n2.p.getY();
+			}
+			return (int) diff;
+		};
+
 	}
 
 	public KDTree(List<Point> points) {
@@ -102,6 +113,13 @@ public class KDTree {
 		// recursive
 		// goal.y - d.y)^2.
 		// consider the correct child first!
+
+
+		Node tNode = new Node(target, null);
+		if (tNode < n) {
+
+		}
+
 
 		best = nearestBrute(n.left, target, best);
 		best = nearestBrute(n.right, target, best);
