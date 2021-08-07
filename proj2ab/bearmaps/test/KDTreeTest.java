@@ -15,10 +15,6 @@ import static org.junit.Assert.assertTrue;
 public class KDTreeTest {
 	private final Random r = new Random(500);
 
-	@Test
-	public void testKDTree() {
-
-	}
 
 	@Test
 	public void testSimpleKDT() {
@@ -70,6 +66,11 @@ public class KDTreeTest {
 		return listOfPoints;
 	}
 
+	/**
+	 * Nearest test helper.
+	 * @param pointsCount
+	 * @param queryCount
+	 */
 	private void testWithNPointsAndQQueries(int pointsCount, int queryCount) {
 		List<Point> points1000 = pointsList(pointsCount);
 		List<Point> query200 = pointsList(queryCount);

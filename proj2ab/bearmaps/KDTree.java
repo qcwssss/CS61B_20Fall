@@ -28,7 +28,7 @@ public class KDTree {
 		}
 
 		// compare Node in ascending order
-		Comparator<Node> compareTo = (n1, n2) -> {
+		Comparator<Node> nodeCmp = (n1, n2) -> {
 			double diff;
 			if (n1.orient == Orientation.HORIZONTAL) {
 				diff = n1.p.getX() - n2.p.getX();
@@ -77,10 +77,18 @@ public class KDTree {
 		return x;
 	}
 
-	// Returns the closest point to the inputted coordinates.
-	// This should take \(O(\log N)\) time on average, where \(N\) is the number of points.
-	public Point nearest(double x, double y) {
-		Node nn = nearestBrute(root, new Point(x, y), root);
+  // This should take \(O(\log N)\) time on average, where \(N\) is the number of points.
+
+  /**
+   * Returns the closest point to the inputted coordinates.
+   * @param x
+   * @param y
+   * @return
+   */
+  public Point nearest(double x, double y) {
+		//Node nn = nearestBrute(root, new Point(x, y), root);
+		Node nn = nearestFast(root, new Point(x, y), root);
+
 		return nn.p;
 	}
 
@@ -98,32 +106,50 @@ public class KDTree {
 		// recursive
 		best = nearestBrute(n.left, target, best);
 		best = nearestBrute(n.right, target, best);
+
 		return best;
 	}
 
-	// stage 2: implement efficient find nearest
+	/** stage 2: implement efficient find nearest. */
 	private Node nearestFast(Node n, Point target, Node best) {
 		if (n == null) {
 			return best;
 		}
 		// compare current node point with best
-		if (distance(n.p, target) < distance(best.p, target)) {
+		double curDist = distance(n.p, target);
+		if (curDist < distance(best.p, target)) {
 				best = n; // update best
 		}
+
 		// recursive
-		// goal.y - d.y)^2.
+		Node goodSide, badSide;
+		if (comparePoint(n.p, target, n.orient) > 0) {
+			// n.p > target, left child is good
+			goodSide = n.left;
+			badSide = n.right;
+		} else {
+			goodSide = n.right;
+			badSide = n.left;
+		}
 		// consider the correct child first!
-
-
-		Node tNode = new Node(target, null);
-		if (tNode < n) {
-
+		best = nearestFast(goodSide, target, best);
+		// if bad side could have sth useful
+		if (isWorthLook(n, target, curDist)) {
+			best = nearestFast(badSide, target, best);
 		}
 
-
-		best = nearestBrute(n.left, target, best);
-		best = nearestBrute(n.right, target, best);
 		return best;
+	}
+
+
+	private boolean isWorthLook(Node n, Point target, double curBest) {
+		// if best dist possible < curBest: -> the line separates bad&good side
+		if (n.orient == Orientation.HORIZONTAL) { // compare Y
+			// goal.y - d.y)^2.
+			return Math.abs(n.p.getY() - target.getY()) < Math.sqrt(curBest);
+		} else {
+			return Math.abs(n.p.getX() - target.getX()) < Math.sqrt(curBest);
+		}
 	}
 
 
