@@ -117,6 +117,7 @@ public class KDTreeTest {
 		}
 	}
 
+	@Test
 	public void timeKDTreeConstruction() {
 		// constant
 		int base = 31250;
@@ -164,7 +165,8 @@ public class KDTreeTest {
 		ArrayList<Double> time = new ArrayList<>();
 		List<Integer> opsList = new ArrayList<>();
 
-		int max = 100000;
+		int max = 10000;
+
 		// a list of size
 		for (int i = 0; i < exponent; i++) {
 			dataSize.add(base * (int)Math.pow(2, i));
@@ -180,7 +182,6 @@ public class KDTreeTest {
 		System.out.println(tableTitle);
 
 		List<Point> queries = pointsList(max);
-
 		for (Integer num : dataSize) {
 			List<Point> pList = pointsList(num);
 
@@ -197,20 +198,45 @@ public class KDTreeTest {
 				}
 			}
 
-		// a list of size
-		for (int i = 0; i < exponent; i++) {
-			dataSize.add(base * (int)Math.pow(2, i));
+			time.add(sw.elapsedTime());
 		}
-		System.out.println("\n\nTiming table for NaivePointSet Construction");
+
+		printTimingTable(dataSize, time, opsList);
 
 
+	}
 
-		printTimingTable(dataSize, time, dataSize);
+	@Test
+	public void testKDTreeTimingTable() {
+		//timeKDTreeConstruction();
+		//timeNPSetConstruction();
+		timeTableNearest(true);
+		//timeTableNearest(false);
 
+	}
+
+	@Test
+	public void compareTimingOfNaiveVsKDTreeLikeTheSpec() {
+		List<Point> randomPoints = pointsList(100000);
+		KDTree kd = new KDTree(randomPoints);
+		NaivePointSet nps = new NaivePointSet(randomPoints);
+		List<Point> queryPoints = pointsList(10000);
+
+		Stopwatch sw = new Stopwatch();
+		for (Point p : queryPoints) {
+			nps.nearest(p.getX(), p.getY());
+		}
+		double time = sw.elapsedTime();
+		System.out.println("Naive 10000 queries on 100000 points: " + time);
+
+		sw = new Stopwatch();
+		for (Point p : queryPoints) {
+			kd.nearest(p.getX(), p.getY());
+		}
+		time = sw.elapsedTime();
+		System.out.println("KDTree 10000 queries on 100000 points: " + time);
 	}
 
 
 
-
-}
 }
