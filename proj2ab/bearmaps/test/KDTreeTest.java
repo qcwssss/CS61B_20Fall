@@ -150,33 +150,6 @@ public class KDTreeTest {
 
 	}
 
-	public void timeNPSetNearest() {
-		// constant
-		int base = 125;
-		int exponent = 4;
-
-		Stopwatch sw = new Stopwatch();
-		// store N , time (s) numbers
-		List<Integer> dataSize = new ArrayList<>();
-		ArrayList<Double> time = new ArrayList<>();
-
-		// a list of size
-		for (int i = 0; i < exponent; i++) {
-			dataSize.add(base * (int)Math.pow(2, i));
-		}
-		System.out.println("\n\nTiming table for NaivePointSet Construction");
-
-		for (Integer num : dataSize) {
-			List<Point> pList = pointsList(1000000);
-			NaivePointSet nps = new NaivePointSet(pList);
-
-			time.add(sw.elapsedTime());
-		}
-
-		printTimingTable(dataSize, time, dataSize);
-
-	}
-
 	private void timeTableNearest(Boolean isKDTree) {
 		// constant
 		int base, exponent;
@@ -244,26 +217,25 @@ public class KDTreeTest {
 	}
 
 	@Test
-	public void timeTestFromChen() {
+	public void compareTimingOfNaiveVsKDTreeLikeTheSpec() {
 		List<Point> randomPoints = pointsList(100000);
 		KDTree kd = new KDTree(randomPoints);
 		NaivePointSet nps = new NaivePointSet(randomPoints);
 		List<Point> queryPoints = pointsList(10000);
 
-		long start = System.currentTimeMillis();
-		/*
-		for (Point point: queryPoints) {
-			nps.nearest(point.getX(),point.getY());
+		Stopwatch sw = new Stopwatch();
+		for (Point p : queryPoints) {
+			nps.nearest(p.getX(), p.getY());
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("After 10000 queries, NaivePointSet spends " + (end - start) +" time.");
-*/
-		start = System.currentTimeMillis();
-		for (Point point: queryPoints) {
-			kd.nearest(point.getX(),point.getY());
-		}
-		long end = System.currentTimeMillis();
-		System.out.println("After 10000 queries, KD-Tree spends " + (end - start) +" time.");
+		double time = sw.elapsedTime();
+		System.out.println("Naive 10000 queries on 100000 points: " + time);
 
+		sw = new Stopwatch();
+		for (Point p : queryPoints) {
+			kd.nearest(p.getX(), p.getY());
+		}
+		time = sw.elapsedTime();
+		System.out.println("KDTree 10000 queries on 100000 points: " + time);
 	}
+
 }

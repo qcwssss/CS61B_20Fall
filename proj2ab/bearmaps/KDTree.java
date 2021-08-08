@@ -16,20 +16,18 @@ public class KDTree {
 
 
 		private Node(Point point, Orientation to) {
-			p = point;
-			orient = to;
+			this.p = point;
+			this.orient = to;
 		}
 	}
 
 	public KDTree(List<Point> points) {
-		Orientation orient;
 		for (Point p : points) {
-			if (root == null) {
-				orient = Orientation.HORIZONTAL;
+			if (root == null) { // create root
+				root = put(root, p, Orientation.VERTICAL);
 			} else {
-				orient = root.orient.opposite();
+				put(root, p, root.orient.opposite());
 			}
-				put(root, p, orient);
 		}
 	}
 

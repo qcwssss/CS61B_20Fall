@@ -1,5 +1,6 @@
 package bearmaps;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NaivePointSet implements PointSet{
@@ -7,7 +8,8 @@ public class NaivePointSet implements PointSet{
 
 	// assume points has at least size 1.
 	public NaivePointSet(List<Point> points) {
-		listOfPoints = points;
+		listOfPoints = new ArrayList<>();
+		listOfPoints.addAll(points);
 	}
 
 	private static double distance(double x1, double x2, double y1, double y2) {
