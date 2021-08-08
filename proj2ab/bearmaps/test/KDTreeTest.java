@@ -117,6 +117,9 @@ public class KDTreeTest {
 		}
 	}
 
+	/**
+	 * Print KD-Tree Construction Timing table.
+	 */
 	public void timeKDTreeConstruction() {
 		// constant
 		int base = 31250;
@@ -147,7 +150,7 @@ public class KDTreeTest {
 
 	}
 
-	public void timeNPSetConstruction() {
+	public void timeNPSetNearest() {
 		// constant
 		int base = 125;
 		int exponent = 4;
@@ -164,7 +167,7 @@ public class KDTreeTest {
 		System.out.println("\n\nTiming table for NaivePointSet Construction");
 
 		for (Integer num : dataSize) {
-			List<Point> pList = pointsList(num);
+			List<Point> pList = pointsList(1000000);
 			NaivePointSet nps = new NaivePointSet(pList);
 
 			time.add(sw.elapsedTime());
@@ -174,9 +177,91 @@ public class KDTreeTest {
 
 	}
 
+	private void timeTableNearest(Boolean isKDTree) {
+		// constant
+		int base, exponent;
+		if (isKDTree) {
+			base = 31250;
+			exponent = 7;
+		} else {
+			base = 125;
+			exponent = 4;
+		}
+
+		Stopwatch sw = new Stopwatch();
+		// store N , time (s) numbers
+		List<Integer> dataSize = new ArrayList<>();
+		ArrayList<Double> time = new ArrayList<>();
+		List<Integer> opsList = new ArrayList<>();
+
+		int max = 1000000;
+		// a list of size
+		for (int i = 0; i < exponent; i++) {
+			dataSize.add(base * (int)Math.pow(2, i));
+			opsList.add(max);
+		}
+
+		String tableTitle;
+		if (isKDTree) {
+			tableTitle = "Timing table for KD-Tree Nearest";
+		} else {
+			tableTitle = "Timing table for NaivePointSet Nearest";
+		}
+		System.out.println(tableTitle);
+
+		List<Point> queries = pointsList(max);
+		for (Integer num : dataSize) {
+			List<Point> pList = pointsList(num);
+
+
+			if (isKDTree) {
+				KDTree KD = new KDTree(pList);
+				for (Point p : queries) {
+					Point nrst = KD.nearest(p.getX(), p.getY());
+				}
+			} else {
+				NaivePointSet nps = new NaivePointSet(pList);
+				for (Point p : queries) {
+					Point nrst = nps.nearest(p.getX(), p.getY());
+				}
+			}
+
+			time.add(sw.elapsedTime());
+		}
+
+		printTimingTable(dataSize, time, opsList);
+
+	}
+
 	@Test
 	public void testKDTreeTimingTable() {
-		timeKDTreeConstruction();
-		timeNPSetConstruction();
+		//timeKDTreeConstruction();
+		//timeNPSetConstruction();
+		timeTableNearest(true);
+		//timeTableNearest(false);
+
+	}
+
+	@Test
+	public void timeTest() {
+		List<Point> randomPoints = pointsList(100000);
+		KDTree kd = new KDTree(randomPoints);
+		NaivePointSet nps = new NaivePointSet(randomPoints);
+		List<Point> queryPoints = pointsList(10000);
+
+		long start = System.currentTimeMillis();
+		for (Point point: queryPoints) {
+			nps.nearest(point.getX(),point.getY());
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("After 10000 queries, NaivePointSet spends " + (end - start) +" time.");
+
+		start = System.currentTimeMillis();
+		for (Point point: queryPoints) {
+			kd.nearest(point.getX(),point.getY());
+		}
+		end = System.currentTimeMillis();
+		System.out.println("After 10000 queries, NaivePointSet spends " + (end - start) +" time.");
+
 	}
 }

@@ -1,16 +1,12 @@
 package bearmaps;
 
-import org.junit.platform.engine.support.hierarchical.Node;
-
 import java.util.Comparator;
 import java.util.List;
 
 import static bearmaps.Point.distance;
-import static org.junit.Assert.assertEquals;
 
 public class KDTree {
 	private Node root;
-	//private List<Point> listOfPoints;
 
 	private class Node {
 		private Node left; // also refers to down child
@@ -86,7 +82,6 @@ public class KDTree {
    * @return
    */
   public Point nearest(double x, double y) {
-		//Node nn = nearestBrute(root, new Point(x, y), root);
 		Node nn = nearestFast(root, new Point(x, y), root);
 
 		return nn.p;
