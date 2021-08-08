@@ -3,8 +3,10 @@ package bearmaps.test;
 import bearmaps.KDTree;
 import bearmaps.NaivePointSet;
 import bearmaps.Point;
+import edu.princeton.cs.algs4.Stopwatch;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -86,10 +88,95 @@ public class KDTreeTest {
 	}
 
 	@Test
-	public void testRandomNearest() {
+	public void testRandomNearestThousand() {
 		int pointsCount = 1000;
 		int queryCount = 200;
 		testWithNPointsAndQQueries(pointsCount, queryCount);
 
+	}
+
+
+	@Test
+	public void testRandomNearestTenThousand() {
+		int pointsCount = 10000;
+		int queryCount = 2000;
+		testWithNPointsAndQQueries(pointsCount, queryCount);
+
+	}
+
+	/** Timing table. */
+	private static void printTimingTable(List<Integer> Ns, List<Double> times, List<Integer> opCounts) {
+		System.out.printf("%12s %12s %12s %12s\n", "N", "time (s)", "# ops", "microsec/op");
+		System.out.printf("------------------------------------------------------------\n");
+		for (int i = 0; i < Ns.size(); i += 1) {
+			int N = Ns.get(i);
+			double time = times.get(i);
+			int opCount = opCounts.get(i);
+			double timePerOp = time / opCount * 1e6;
+			System.out.printf("%12d %12.2f %12d %12.2f\n", N, time, opCount, timePerOp);
+		}
+	}
+
+	public void timeKDTreeConstruction() {
+		// constant
+		int base = 31250;
+		int exponent = 7;
+
+		Stopwatch sw = new Stopwatch();
+		// store N , time (s) numbers
+		List<Integer> dataSize = new ArrayList<>();
+		ArrayList<Double> time = new ArrayList<>();
+
+		// a list of size
+		for (int i = 0; i < exponent; i++) {
+			dataSize.add(base * (int)Math.pow(2, i));
+		}
+		System.out.println("Timing table for Kd-Tree Construction");
+
+		for (Integer num : dataSize) {
+			// test KD tree
+			// kdT add num points
+			// store time to list
+			List<Point> pList = pointsList(num);
+			KDTree KDTest = new KDTree(pList);
+
+			time.add(sw.elapsedTime());
+		}
+
+		printTimingTable(dataSize, time, dataSize);
+
+	}
+
+	public void timeNPSetConstruction() {
+		// constant
+		int base = 125;
+		int exponent = 4;
+
+		Stopwatch sw = new Stopwatch();
+		// store N , time (s) numbers
+		List<Integer> dataSize = new ArrayList<>();
+		ArrayList<Double> time = new ArrayList<>();
+
+		// a list of size
+		for (int i = 0; i < exponent; i++) {
+			dataSize.add(base * (int)Math.pow(2, i));
+		}
+		System.out.println("\n\nTiming table for NaivePointSet Construction");
+
+		for (Integer num : dataSize) {
+			List<Point> pList = pointsList(num);
+			NaivePointSet nps = new NaivePointSet(pList);
+
+			time.add(sw.elapsedTime());
+		}
+
+		printTimingTable(dataSize, time, dataSize);
+
+	}
+
+	@Test
+	public void testKDTreeTimingTable() {
+		timeKDTreeConstruction();
+		timeNPSetConstruction();
 	}
 }

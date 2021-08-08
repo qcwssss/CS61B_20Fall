@@ -92,24 +92,6 @@ public class KDTree {
 		return nn.p;
 	}
 
-	// stage 1: brute force
-	private Node nearestBrute(Node n, Point target, Node best) {
-		// base case
-		if (n == null) {
-			return best;
-		}
-
-		// compare current node point with best
-		if (distance(n.p, target) < distance(best.p, target)) {
-			best = n; // update best
-		}
-		// recursive
-		best = nearestBrute(n.left, target, best);
-		best = nearestBrute(n.right, target, best);
-
-		return best;
-	}
-
 	/** stage 2: implement efficient find nearest. */
 	private Node nearestFast(Node n, Point target, Node best) {
 		if (n == null) {
@@ -141,7 +123,7 @@ public class KDTree {
 		return best;
 	}
 
-
+	/** A helper method for pruning.*/
 	private boolean isWorthLook(Node n, Point target, double curBest) {
 		// if best dist possible < curBest: -> the line separates bad&good side
 		if (n.orient == Orientation.HORIZONTAL) { // compare Y
