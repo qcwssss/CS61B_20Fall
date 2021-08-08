@@ -243,7 +243,7 @@ public class KDTreeTest {
 	}
 
 	@Test
-	public void timeTest() {
+	public void timeTestFromChen() {
 		List<Point> randomPoints = pointsList(100000);
 		KDTree kd = new KDTree(randomPoints);
 		NaivePointSet nps = new NaivePointSet(randomPoints);
@@ -261,7 +261,7 @@ public class KDTreeTest {
 			kd.nearest(point.getX(),point.getY());
 		}
 		end = System.currentTimeMillis();
-		System.out.println("After 10000 queries, NaivePointSet spends " + (end - start) +" time.");
+		System.out.println("After 10000 queries, KD-Tree spends " + (end - start) +" time.");
 
 	}
 }
