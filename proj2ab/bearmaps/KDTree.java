@@ -87,7 +87,7 @@ public class KDTree {
 		}
         // compare current node point with best, update best
         double curDist = distance(n.p, target);
-
+		
 		if (distance(n.p, target) < distance(best, target)) {
 			best = n.p;
 		}
