@@ -14,45 +14,25 @@ public class KDTree {
 		private Point p;
 		private Orientation orient;
 
-		private Node(double x, double y) {
-			p = new Point(x, y);
-		}
 
 		private Node(Point point, Orientation to) {
 			p = point;
 			orient = to;
 		}
-
-		// compare Node in ascending order
-		Comparator<Node> nodeCmp = (n1, n2) -> {
-			double diff;
-			if (n1.orient == Orientation.HORIZONTAL) {
-				diff = n1.p.getX() - n2.p.getX();
-			} else {
-				diff = n1.p.getY() - n2.p.getY();
-			}
-			return (int) diff;
-		};
-
 	}
 
 	public KDTree(List<Point> points) {
+		Orientation orient;
 		for (Point p : points) {
-			if (root == null) { // create root
-				root = put(root, p, Orientation.VERTICAL);
+			if (root == null) {
+				orient = Orientation.HORIZONTAL;
 			} else {
-				put(root, p, root.orient.opposite());
+				orient = root.orient.opposite();
 			}
+				put(root, p, orient);
 		}
 	}
 
-	private int comparePoint(Point a, Point b, Orientation orient) {
-		if (orient == Orientation.HORIZONTAL) {
-			return Double.compare(a.getX(), b.getX());
-		} else {
-			return Double.compare(a.getY(), b.getY());
-		}
-	}
 
 	private Node put(Node x, Point point, Orientation direct) {
 		if (x == null) {
@@ -73,7 +53,17 @@ public class KDTree {
 		return x;
 	}
 
-  // This should take \(O(\log N)\) time on average, where \(N\) is the number of points.
+
+	private int comparePoint(Point a, Point b, Orientation orient) {
+		if (orient == Orientation.HORIZONTAL) {
+			return Double.compare(a.getX(), b.getX());
+		} else {
+			return Double.compare(a.getY(), b.getY());
+		}
+	}
+
+
+	// This should take \(O(\log N)\) time on average, where \(N\) is the number of points.
 
   /**
    * Returns the closest point to the inputted coordinates.
@@ -82,26 +72,23 @@ public class KDTree {
    * @return
    */
   public Point nearest(double x, double y) {
-		Node nn = nearestFast(root, new Point(x, y), root);
-
-		return nn.p;
+	  return nearestFast(root, new Point(x, y), root.p);
 	}
 
 	/** stage 2: implement efficient find nearest. */
-	private Node nearestFast(Node n, Point target, Node best) {
+	private Point nearestFast(Node n, Point target, Point best) {
 		if (n == null) {
 			return best;
 		}
 		// compare current node point with best
-		double curDist = distance(n.p, target);
-		if (curDist < distance(best.p, target)) {
-				best = n; // update best
+		if (distance(n.p, target) < distance(best, target)) {
+				best = n.p; // update best
 		}
 
 		// recursive
 		Node goodSide, badSide;
-		if (comparePoint(n.p, target, n.orient) > 0) {
-			// n.p > target, left child is good
+		if (comparePoint(n.p, target, n.orient) < 0) {
+			// n.p < target, left child is good
 			goodSide = n.left;
 			badSide = n.right;
 		} else {
@@ -111,7 +98,7 @@ public class KDTree {
 		// consider the correct child first!
 		best = nearestFast(goodSide, target, best);
 		// if bad side could have sth useful
-		if (isWorthLook(n, target, curDist)) {
+		if (isWorthLook(n, target, best)) {
 			best = nearestFast(badSide, target, best);
 		}
 
@@ -119,7 +106,8 @@ public class KDTree {
 	}
 
 	/** A helper method for pruning.*/
-	private boolean isWorthLook(Node n, Point target, double curBest) {
+	private boolean isWorthLook(Node n, Point target, Point best) {
+		double curBest = Point.distance(best, target);
 		// if best dist possible < curBest: -> the line separates bad&good side
 		if (n.orient == Orientation.HORIZONTAL) { // compare Y
 			// goal.y - d.y)^2.

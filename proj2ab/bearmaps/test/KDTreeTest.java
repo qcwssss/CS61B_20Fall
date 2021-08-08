@@ -194,7 +194,7 @@ public class KDTreeTest {
 		ArrayList<Double> time = new ArrayList<>();
 		List<Integer> opsList = new ArrayList<>();
 
-		int max = 1000000;
+		int max = 100000;
 		// a list of size
 		for (int i = 0; i < exponent; i++) {
 			dataSize.add(base * (int)Math.pow(2, i));
@@ -210,6 +210,7 @@ public class KDTreeTest {
 		System.out.println(tableTitle);
 
 		List<Point> queries = pointsList(max);
+
 		for (Integer num : dataSize) {
 			List<Point> pList = pointsList(num);
 
@@ -238,7 +239,7 @@ public class KDTreeTest {
 		//timeKDTreeConstruction();
 		//timeNPSetConstruction();
 		timeTableNearest(true);
-		//timeTableNearest(false);
+		timeTableNearest(false);
 
 	}
 
@@ -250,17 +251,18 @@ public class KDTreeTest {
 		List<Point> queryPoints = pointsList(10000);
 
 		long start = System.currentTimeMillis();
+		/*
 		for (Point point: queryPoints) {
 			nps.nearest(point.getX(),point.getY());
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("After 10000 queries, NaivePointSet spends " + (end - start) +" time.");
-
+*/
 		start = System.currentTimeMillis();
 		for (Point point: queryPoints) {
 			kd.nearest(point.getX(),point.getY());
 		}
-		end = System.currentTimeMillis();
+		long end = System.currentTimeMillis();
 		System.out.println("After 10000 queries, KD-Tree spends " + (end - start) +" time.");
 
 	}
