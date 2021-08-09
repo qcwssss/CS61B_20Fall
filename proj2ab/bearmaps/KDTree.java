@@ -14,29 +14,11 @@ public class KDTree {
 		private Point p;
 		private Orientation orient;
 
-		/*
-		private Node(double x, double y) {
-			p = new Point(x, y);
-		}
-		*/
 
 		private Node(Point point, Orientation to) {
 			p = point;
 			orient = to;
 		}
-
-		// compare Node in ascending order
-		/*
-		Comparator<Node> nodeCmp = (n1, n2) -> {
-			double diff;
-			if (n1.orient == Orientation.HORIZONTAL) {
-				diff = n1.p.getX() - n2.p.getX();
-			} else {
-				diff = n1.p.getY() - n2.p.getY();
-			}
-			return (int) diff;
-		};
-		*/
 
 	}
 
@@ -58,7 +40,7 @@ public class KDTree {
 			return x;
 		}
 
-		if (comparePoint(x.p, point, x.orient) > 0) {
+		if (axisDiff(x.p, point, x.orient) > 0) {
 			// x.point > point, add left
 			x.left = put(x.left, point, x.orient);
 		} else {
@@ -86,15 +68,15 @@ public class KDTree {
 			return best;
 		}
         // compare current node point with best, update best
-        double curDist = distance(n.p, target);
-		if (distance(n.p, target) < distance(best, target)) {
+		if (Point.distance(n.p, target) < Point.distance(best, target)) {
 			best = n.p;
 		}
 
 		// recursive
+		double diffOfAxis = axisDiff(target, n.p, n.orient);
+
 		Node goodSide, badSide;
-		int cmp = comparePoint(target, n.p, n.orient);
-		if (cmp < 0) {
+		if (diffOfAxis < 0) {
 			// n.p < target, left child is good
 			goodSide = n.left;
 			badSide = n.right;
@@ -102,10 +84,10 @@ public class KDTree {
 			goodSide = n.right;
 			badSide = n.left;
 		}
-		// consider the correct child first!
+
 		best = nearestFast(goodSide, target, best);
 		// if bad side could have sth useful
-		if (isWorthLook(n, target, n.p)) {
+		if (Math.pow(diffOfAxis, 2) < Point.distance(target, n.p)) {
 			best = nearestFast(badSide, target, best);
 		}
 
@@ -129,6 +111,14 @@ public class KDTree {
 			return Math.abs(n.p.getY() - target.getY()  ) < Math.sqrt(curBest);
 		} else {
 			return Math.abs(n.p.getX() - target.getX() ) < Math.sqrt(curBest);
+		}
+	}
+
+	private double axisDiff(Point p1, Point p2, Orientation ornt) {
+		if (ornt == Orientation.HORIZONTAL) {
+			return p1.getX() - p2.getX();
+		} else {
+			return p1.getY() - p2.getY();
 		}
 	}
 
