@@ -117,8 +117,7 @@ public class KDTreeTest {
 		}
 	}
 
-	@Test
-	public void timeKDTreeConstruction() {
+	private void timeKDTreeConstruction() {
 		// constant
 		int base = 31250;
 		int exponent = 7;

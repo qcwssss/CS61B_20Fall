@@ -25,10 +25,10 @@ public class KDTree implements PointSet {
 
 	@Override
 	public Point nearest(double x, double y) {
-		return nearest(root, new Point(x, y), root, 'x').point;
+		return nearest(root, new Point(x, y), root, Orientation.HORIZONTAL).point;
 	}
 
-	private Node nearest(Node node, Point goal, Node best, char axis) {
+	private Node nearest(Node node, Point goal, Node best, Orientation axis) {
 		if (node == null) {
 			return best;
 		}if (Point.distance(goal, node.point) < Point.distance(goal, best.point)) {
@@ -47,10 +47,10 @@ public class KDTree implements PointSet {
 			badSide = node.left;
 		}
 
-		best = nearest(goodSide, goal, best, switchAxis(axis));
+		best = nearest(goodSide, goal, best, axis.opposite());
 		// Check to prune bad side or not.
 		if (axisDifference * axisDifference < Point.distance(goal, best.point)) {
-			best = nearest(badSide, goal, best, switchAxis(axis));
+			best = nearest(badSide, goal, best, axis.opposite());
 		}
 		return best;
 	}
@@ -80,11 +80,5 @@ public class KDTree implements PointSet {
 		}
 	}
 
-	private char switchAxis(char axis) {
-		if (axis == 'x') {
-			return 'y';
-		} else {
-			return 'x';
-		}
-	}
+
 }
