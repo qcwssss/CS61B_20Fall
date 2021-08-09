@@ -14,9 +14,11 @@ public class KDTree {
 		private Point p;
 		private Orientation orient;
 
+		/*
 		private Node(double x, double y) {
 			p = new Point(x, y);
 		}
+		*/
 
 		private Node(Point point, Orientation to) {
 			p = point;
@@ -24,6 +26,7 @@ public class KDTree {
 		}
 
 		// compare Node in ascending order
+		/*
 		Comparator<Node> nodeCmp = (n1, n2) -> {
 			double diff;
 			if (n1.orient == Orientation.HORIZONTAL) {
@@ -33,16 +36,13 @@ public class KDTree {
 			}
 			return (int) diff;
 		};
+		*/
 
 	}
 
 	public KDTree(List<Point> points) {
 		for (Point p : points) {
-			if (root == null) { // create root
 				root = put(root, p, Orientation.VERTICAL);
-			} else {
-				put(root, p, root.orient.opposite());
-			}
 		}
 	}
 
@@ -87,7 +87,6 @@ public class KDTree {
 		}
         // compare current node point with best, update best
         double curDist = distance(n.p, target);
-		
 		if (distance(n.p, target) < distance(best, target)) {
 			best = n.p;
 		}
@@ -95,7 +94,6 @@ public class KDTree {
 		// recursive
 		Node goodSide, badSide;
 		int cmp = comparePoint(target, n.p, n.orient);
-
 		if (cmp < 0) {
 			// n.p < target, left child is good
 			goodSide = n.left;
@@ -107,7 +105,7 @@ public class KDTree {
 		// consider the correct child first!
 		best = nearestFast(goodSide, target, best);
 		// if bad side could have sth useful
-		if (isWorthLook(n, target, curDist)) {
+		if (isWorthLook(n, target, n.p)) {
 			best = nearestFast(badSide, target, best);
 		}
 
@@ -123,13 +121,14 @@ public class KDTree {
 	}
 
 	/** A helper method for pruning.*/
-	private boolean isWorthLook(Node n, Point target, double curBest) {
+	private boolean isWorthLook(Node n, Point target, Point best) {
+		double curBest = Point.distance(best, target);
 		// if best dist possible < curBest: -> the line separates bad&good side
 		if (n.orient == Orientation.HORIZONTAL) { // compare Y
 			// goal.y - d.y)^2.
-			return Math.abs(n.p.getY() - target.getY()) < Math.sqrt(curBest);
+			return Math.abs(n.p.getY() - target.getY()  ) < Math.sqrt(curBest);
 		} else {
-			return Math.abs(n.p.getX() - target.getX()) < Math.sqrt(curBest);
+			return Math.abs(n.p.getX() - target.getX() ) < Math.sqrt(curBest);
 		}
 	}
 

@@ -208,10 +208,10 @@ public class KDTreeTest {
 
 	@Test
 	public void testKDTreeTimingTable() {
-		//timeKDTreeConstruction();
+		timeKDTreeConstruction();
 		//timeNPSetConstruction();
 		timeTableNearest(true);
-		//timeTableNearest(false);
+		timeTableNearest(false);
 
 	}
 
