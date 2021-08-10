@@ -3,17 +3,21 @@ package bearmaps;
 import java.util.ArrayList;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
-	ArrayList<T> heap;
-	ArrayList<Double> priorityAList;
+	ArrayList<PNode> heap;
+	//ArrayList<Double> priorityAList;
 
 	/** Constructor, create a empty ArrayHeapMinPQ. */
 	public ArrayHeapMinPQ() {
 		heap = new ArrayList<>();
-		priorityAList = new ArrayList<>();
+		//priorityAList = new ArrayList<>();
 		// Leaving one empty spot, for private parent, left/right child method
 		heap.set(0,null);
-		priorityAList.set(0, -1.0);
+		//priorityAList.set(0, -1.0);
 
+	}
+
+	private double getPriority(int k){
+		return this.heap.get(k).getPriority();
 	}
 
 	/** Helper methods to find parent, child index. */
@@ -36,25 +40,25 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		checkIndex(x1);
 		checkIndex(x2);
 
-		T temp = heap.get(x1);
+		PNode temp = heap.get(x1);
 		heap.set(x1, heap.get(x2));
 		heap.set(x2, temp);
 	}
 
 	private void swim(int k) {
-		if (priorityAList.get(k) < priorityAList.get(parent(k))) {
+		if (getPriority(k) < getPriority(parent(k))) {
 			swap(k, parent(k));
 			swim(parent(k));
 		}
 	}
 
 	private void sink(int k) {
-		if ( priorityAList.get(leftChild(k)) > priorityAList.get(rightChild(k)) ) {
+		if ( getPriority(leftChild(k)) > getPriority(rightChild(k)) ) {
 			swap(k, rightChild(k));
 		} else {
 			swap(k, leftChild(k));
 		}
-		if (priorityAList.get(k) < priorityAList.get(parent(k))) {
+		if (getPriority(k) < getPriority(parent(k)) ) {
 			swap(k, parent(k));
 			swim(parent(k));
 		}
@@ -73,11 +77,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		if (this.contains(item)) {
 			throw new IllegalArgumentException("** item already exists **\n");
 		}
-		heap.add(item);
-		priorityAList.add(priority);
-
-		swim(heap.indexOf(item));
-		swim(priorityAList.indexOf(priority));
+		PNode added = new PNode(item, priority);
+		heap.add(added);
+		swim(heap.size() -1);
 
 	}
 
@@ -103,7 +105,25 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public void changePriority(T item, double priority) {
-		int index = heap.indexOf(item);
-		priorityAList.set(index, priority);
+		//heap.indexOf(new PNode(item, 1));
+	}
+
+	/**
+	 * PNode class, which will be stroed in ArrayHeapMinPQ's ArrayList.
+	 */
+	private class PNode {
+		T item;
+		double priority;
+
+
+		/** Creates a PNode. */
+		private PNode(T item, double p) {
+			this.item = item;
+			this.priority = p;
+		}
+
+		private double getPriority() {
+			return this.priority;
+		}
 	}
 }
