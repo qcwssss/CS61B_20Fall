@@ -7,6 +7,7 @@ import org.junit.Test;
 import static bearmaps.PrintHeapDemo.printFancyHeapDrawing;
 import static bearmaps.PrintHeapDemo.printSimpleHeapDrawing;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ArrayHeapMinPQTest {
 	private ArrayHeapMinPQ<Character> Aheap;
@@ -14,30 +15,39 @@ public class ArrayHeapMinPQTest {
 	@Before
 	public void setUp() {
 		Aheap = new ArrayHeapMinPQ<>();
-	}
-
-	@Test
-	public void testAddSize() {
 		Aheap.add('a', 1);
 		Aheap.add('b', 3);
 		Aheap.add('c', 2);
 		Aheap.add('d', 5);
 		Aheap.add('e', 4);
 		Aheap.add('z', -1);
+	}
 
+	@Test
+	public void testAddSize() {
 		assertEquals(6, Aheap.size());
+		Aheap.add('n', 10);
+		Aheap.add('m', 20);
+		assertEquals(8, Aheap.size());
 
-		Object[] print1 = {1, 1, 3, 2, 5, 4, -1, 7};
-		Object[] print2 = {0, 7, 8, 2, 5, 4, 1, 7};
+		boolean expected1 = Aheap.contains('m');
+		assertTrue(expected1);
+		assertTrue(Aheap.contains('a'));
+		assertTrue(Aheap.contains('b'));
+
 		Object[] p3 = new Object[Aheap.size() + 1];
 		for (int i = 1; i < Aheap.size() + 1; i++ ) {
 			p3[i] = Aheap.removeSmallest();
 		}
 
-		printSimpleHeapDrawing(print1);
-		printSimpleHeapDrawing(print2);
+		//printSimpleHeapDrawing(print2);
 
 
+	}
+
+	@Test
+	public void testContains() {
+		
 	}
 }
 

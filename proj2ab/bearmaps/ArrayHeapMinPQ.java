@@ -89,7 +89,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public boolean contains(T item) {
-		return indexMap.contains(item);
+		return indexMap.containsKey(item);
 	}
 
 	@Override
