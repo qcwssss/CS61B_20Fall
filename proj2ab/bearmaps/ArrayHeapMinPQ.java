@@ -10,7 +10,41 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	public ArrayHeapMinPQ() {
 		heap = new ArrayList<>();
 		priorityAList = new ArrayList<>();
+		// Leaving one empty spot, for private parent, left/right child method
+		heap.set(0,null);
+		priorityAList.set(0,null);
 
+	}
+
+	/** Helper methods to find parent, child index. */
+	int parent(int k) {
+		checkIndex(k);
+		return k/2;
+	}
+
+	int rightChild(int k) {
+		checkIndex(k);
+		return 2*k + 1;
+	}
+
+	int leftChild(int k) {
+		checkIndex(k);
+		return 2*k;
+	}
+
+	void swap(int x1, int x2) {
+		checkIndex(x1);
+		checkIndex(x2);
+
+		T temp = heap.get(x1);
+		heap.set(x1, heap.get(x2));
+		heap.set(x2, temp);
+	}
+
+	private void checkIndex(int x) {
+		if (x == 0) {
+			throw new IllegalArgumentException("Invalid index, 0 cell is a fixed empty cell");
+		}
 	}
 
 
