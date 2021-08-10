@@ -12,7 +12,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		priorityAList = new ArrayList<>();
 		// Leaving one empty spot, for private parent, left/right child method
 		heap.set(0,null);
-		priorityAList.set(0,null);
+		priorityAList.set(0, -1.0);
 
 	}
 
@@ -41,6 +41,26 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		heap.set(x2, temp);
 	}
 
+	private void swim(int k) {
+		if (priorityAList.get(k) < priorityAList.get(parent(k))) {
+			swap(k, parent(k));
+			swim(parent(k));
+		}
+	}
+
+	private void sink(int k) {
+		if ( priorityAList.get(leftChild(k)) > priorityAList.get(rightChild(k)) ) {
+			swap(k, rightChild(k));
+		} else {
+			swap(k, leftChild(k));
+		}
+		if (priorityAList.get(k) < priorityAList.get(parent(k))) {
+			swap(k, parent(k));
+			swim(parent(k));
+		}
+
+	}
+
 	private void checkIndex(int x) {
 		if (x == 0) {
 			throw new IllegalArgumentException("Invalid index, 0 cell is a fixed empty cell");
@@ -55,6 +75,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		}
 		heap.add(item);
 		priorityAList.add(priority);
+
+		swim(heap.indexOf(item));
+		swim(priorityAList.indexOf(priority));
 
 	}
 
