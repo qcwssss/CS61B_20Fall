@@ -47,7 +47,33 @@ public class ArrayHeapMinPQTest {
 
 	@Test
 	public void testContains() {
-		
+		int num = 10000;
+		ArrayHeapMinPQ<Integer> in1 = new ArrayHeapMinPQ<>();
+		for (int i = 0 ; i < num; i++) {
+			in1.add(i,2*i);
+			assertTrue(in1.contains(i));
+		}
+
+		int actual = in1.getSmallest();
+		assertEquals(0, actual);
+
+	}
+
+	@Test
+	public void testGetSmallest() {
+		char actual1 = Aheap.getSmallest();
+		assertEquals('z', actual1);
+
+		int num = 20000;
+		int actual2;
+		ArrayHeapMinPQ<Integer> in1 = new ArrayHeapMinPQ<>();
+		for (int i = num ; i > 0; i--) {
+			in1.add(i,2*i);
+
+			actual2 = in1.getSmallest();
+			assertEquals(i, actual2);
+
+		}
 	}
 }
 

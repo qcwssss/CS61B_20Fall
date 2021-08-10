@@ -94,7 +94,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public T getSmallest() {
-		return null;
+		return heap.get(1).item;
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	}
 
 	/**
-	 * PNode class, which will be stroed in ArrayHeapMinPQ's ArrayList.
+	 * PNode class, which will be stored in ArrayHeapMinPQ's ArrayList.
 	 */
 	private class PNode {
 		T item;
