@@ -1,22 +1,24 @@
 package bearmaps;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	ArrayList<PNode> heap;
+	Hashtable<T, Integer> indexMap;
 	//ArrayList<Double> priorityAList;
 
 	/** Constructor, create a empty ArrayHeapMinPQ. */
 	public ArrayHeapMinPQ() {
 		heap = new ArrayList<>();
-		//priorityAList = new ArrayList<>();
 		// Leaving one empty spot, for private parent, left/right child method
-		heap.set(0,null);
-		//priorityAList.set(0, -1.0);
+		heap.add(null);
+		indexMap = new Hashtable<>();
 
 	}
 
 	private double getPriority(int k){
+		checkIndex(k);
 		return this.heap.get(k).getPriority();
 	}
 
@@ -46,7 +48,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	}
 
 	private void swim(int k) {
-		if (getPriority(k) < getPriority(parent(k))) {
+		if (k>1 && getPriority(k) < getPriority(parent(k))) {
 			swap(k, parent(k));
 			swim(parent(k));
 		}
@@ -80,12 +82,14 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		PNode added = new PNode(item, priority);
 		heap.add(added);
 		swim(heap.size() -1);
-
+		int idxAdded = heap.indexOf(added);
+		// add new item index to idxMap
+		indexMap.put(item, idxAdded);
 	}
 
 	@Override
 	public boolean contains(T item) {
-		return heap.contains(item);
+		return indexMap.contains(item);
 	}
 
 	@Override
@@ -100,7 +104,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public int size() {
-		return heap.size();
+		return heap.size() - 1;
 	}
 
 	@Override
