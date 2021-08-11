@@ -1,8 +1,11 @@
 package bearmaps.test;
 
 import bearmaps.ArrayHeapMinPQ;
+import bearmaps.NaiveMinPQ;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Random;
 
 import static bearmaps.PrintHeapDemo.printFancyHeapDrawing;
 import static bearmaps.PrintHeapDemo.printSimpleHeapDrawing;
@@ -10,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ArrayHeapMinPQTest {
+	private final Random r = new Random(500);
 	private ArrayHeapMinPQ<Character> Aheap;
 
 	@Before
@@ -21,6 +25,12 @@ public class ArrayHeapMinPQTest {
 		Aheap.add('d', 5);
 		Aheap.add('e', 4);
 		Aheap.add('z', -1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testAddException() {
+		Aheap.add('z', 15);
+
 	}
 
 	@Test
@@ -75,5 +85,25 @@ public class ArrayHeapMinPQTest {
 
 		}
 	}
+
+	/** Random test, taking advantage of NaiveMInPQ. */
+	@Test
+	public void testGetSmallestRandomly() {
+		int num = 10000;
+
+		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
+		NaiveMinPQ<Integer> npq = new NaiveMinPQ<>();
+
+		for (int i = 0; i < num; i++) {
+			int intR = r.nextInt();
+			double wR = r.nextDouble();
+			ahPQ.add(intR, wR);
+			npq.add(intR, wR);
+			assertEquals(npq.getSmallest(), ahPQ.getSmallest());
+			assertEquals(npq.contains(intR), ahPQ.contains(intR));
+		}
+
+	}
+
 }
 

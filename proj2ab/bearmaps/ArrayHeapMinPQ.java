@@ -6,7 +6,6 @@ import java.util.Hashtable;
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	ArrayList<PNode> heap;
 	Hashtable<T, Integer> indexMap;
-	//ArrayList<Double> priorityAList;
 
 	/** Constructor, create a empty ArrayHeapMinPQ. */
 	public ArrayHeapMinPQ() {
