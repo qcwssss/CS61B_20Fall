@@ -59,7 +59,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	}
 
 	private void sink(int k) { // k = 1
-    // checkIndex(k);
+        // checkIndex(k);
+		/* Only need to sink nodes with both left and right children. */
         if (leftChild(k) > this.size() || rightChild(k) > this.size()) {
             return;
         }
@@ -108,12 +109,13 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public T removeSmallest() {
+		T retrunVal = getSmallest();
 		PNode removedNode = heap.remove(heap.size() - 1);
-		int sinIdx;
+		indexMap.remove(retrunVal);
 
 		heap.set(1, removedNode);
 		sink(1); // sink to the smaller sub-node
-		return removedNode.item;
+		return retrunVal;
 	}
 
 	@Override

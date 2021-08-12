@@ -90,6 +90,18 @@ public class ArrayHeapMinPQTest {
 		}
 	}
 
+	@Test
+	public void testRemoveSmallest() {
+		char actual = Aheap.removeSmallest();
+		assertEquals('z', actual);
+
+		char actual2 = Aheap.removeSmallest();
+		assertEquals('a', actual2);
+
+		char actual3 = Aheap.removeSmallest();
+		assertEquals('c', actual3);
+	}
+
 	/** Random test, taking advantage of NaiveMInPQ. */
 	@Test
 	public void testSmallestAndContainsRandomly() {
@@ -111,7 +123,7 @@ public class ArrayHeapMinPQTest {
 
 	@Test
 	public void testRemoveSmallestRandomly() {
-		int num = 10000;
+		int num = 1000;
 
 		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
 		NaiveMinPQ<Integer> npq = new NaiveMinPQ<>();
