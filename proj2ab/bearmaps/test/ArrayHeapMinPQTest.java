@@ -45,10 +45,14 @@ public class ArrayHeapMinPQTest {
 		assertTrue(Aheap.contains('a'));
 		assertTrue(Aheap.contains('b'));
 
+		/*Print heap */
+		/*
 		Object[] p3 = new Object[Aheap.size() + 1];
 		for (int i = 1; i < Aheap.size() + 1; i++ ) {
 			p3[i] = Aheap.removeSmallest();
 		}
+
+		 */
 
 		//printSimpleHeapDrawing(print2);
 
@@ -88,7 +92,7 @@ public class ArrayHeapMinPQTest {
 
 	/** Random test, taking advantage of NaiveMInPQ. */
 	@Test
-	public void testGetSmallestRandomly() {
+	public void testSmallestAndContainsRandomly() {
 		int num = 10000;
 
 		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
@@ -101,6 +105,28 @@ public class ArrayHeapMinPQTest {
 			npq.add(intR, wR);
 			assertEquals(npq.getSmallest(), ahPQ.getSmallest());
 			assertEquals(npq.contains(intR), ahPQ.contains(intR));
+		}
+
+	}
+
+	@Test
+	public void testRemoveSmallestRandomly() {
+		int num = 10000;
+
+		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
+		NaiveMinPQ<Integer> npq = new NaiveMinPQ<>();
+
+		for (int i = 0; i < num; i++) {
+			int intR = r.nextInt();
+			double wR = r.nextDouble();
+			ahPQ.add(intR, wR);
+			npq.add(intR, wR);
+			if (i > num/2) {
+				assertEquals(npq.getSmallest(), ahPQ.getSmallest());
+				assertEquals(npq.removeSmallest(), ahPQ.removeSmallest());
+				assertEquals(npq.getSmallest(), ahPQ.getSmallest());
+			}
+
 		}
 
 	}
