@@ -2,6 +2,7 @@ package bearmaps;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.NoSuchElementException;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	ArrayList<PNode> heap;
@@ -45,8 +46,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		heap.set(x1, heap.get(x2));
 		heap.set(x2, temp);
 		// swap index
-		indexMap.put(heap.get(x1).item, x1);
-		indexMap.put(heap.get(x2).item, x2);
+		indexMap.put(heap.get(x1).item, x2);
+		indexMap.put(heap.get(x2).item, x1);
 
 	}
 
@@ -58,24 +59,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		}
 	}
 
-	private void sink(int k) { // k = 1
-        // checkIndex(k);
-		/* Only need to sink nodes with both left and right children. */
-        if (leftChild(k) > this.size() || rightChild(k) > this.size()) {
-            return;
-        }
 
-		if ( getPriority(leftChild(k)) > getPriority(rightChild(k)) ) {
-			swap(k, rightChild(k));
-			sink(rightChild(k));
-		} else {
-			swap(k, leftChild(k));
-			sink(leftChild(k));
-		}
-
-
-
-	}
 
 	private void checkIndex(int x) {
     if (x == 0 || x >= heap.size()) {
@@ -104,18 +88,43 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public T getSmallest() {
+		if (heap.isEmpty()) {
+			throw new NoSuchElementException("ArrayHeap is empty!");
+		}
 		return heap.get(1).item;
 	}
 
 	@Override
 	public T removeSmallest() {
+		if (heap.isEmpty()) {
+			throw new NoSuchElementException("ArrayHeap is empty!");
+		}
 		T retrunVal = getSmallest();
-		PNode removedNode = heap.remove(heap.size() - 1);
-		indexMap.remove(retrunVal);
+		//PNode removedNode = heap.remove(heap.size() - 1);
+		heap.set(1, heap.remove(heap.size() - 1));
 
-		heap.set(1, removedNode);
+		indexMap.remove(retrunVal);
+		indexMap.put(heap.get(1).item, 1);
+
 		sink(1); // sink to the smaller sub-node
 		return retrunVal;
+	}
+
+	private void sink(int k) { // k = 1
+		// checkIndex(k);
+		/* Only need to sink nodes with both left and right children. */
+		if (leftChild(k) > this.size() || rightChild(k) > this.size()) {
+			return;
+		}
+
+		if ( getPriority(leftChild(k)) > getPriority(rightChild(k)) ) {
+			swap(k, rightChild(k));
+			sink(rightChild(k));
+		} else {
+			swap(k, leftChild(k));
+			sink(leftChild(k));
+		}
+
 	}
 
 	@Override
