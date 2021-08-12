@@ -113,18 +113,27 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	private void sink(int k) { // k = 1
 		// checkIndex(k);
 		/* Only need to sink nodes with both left and right children. */
-		if (leftChild(k) > this.size() || rightChild(k) > this.size()) {
-			return;
-		}
+		int leftIdx = leftChild(k);
+		int rightIdx = rightChild(k);
+		int smaller = smallerChild(k);
 
-		if ( getPriority(leftChild(k)) > getPriority(rightChild(k)) ) {
-			swap(k, rightChild(k));
-			sink(rightChild(k));
-		} else {
-			swap(k, leftChild(k));
-			sink(leftChild(k));
+		//    int smallerChild = smallerChild(index);
+		if ( getPriority(k) > getPriority(smaller) ) {
+			swap(k, smaller);
+			sink(smaller);
 		}
+		//        swap(index, smallerChild);
+		//        swimDown(smallerChild);
 
+	}
+
+	private int smallerChild(int index) {
+		int leftChild = index * 2 + 1;
+		leftChild = leftChild < size() ? leftChild : index;
+		int rightChild = index * 2 + 2;
+		rightChild = rightChild < size() ? rightChild : leftChild;
+		return heap.get(leftChild).getPriority() < heap.get(rightChild).getPriority()
+				? leftChild : rightChild;
 	}
 
 	@Override

@@ -134,9 +134,7 @@ public class ArrayHeapMinPQTest {
 			ahPQ.add(intR, wR);
 			npq.add(intR, wR);
 			if (i > num/2) {
-				//assertEquals(npq.getSmallest(), ahPQ.getSmallest());
 				assertEquals(npq.removeSmallest(), ahPQ.removeSmallest());
-				//assertEquals(npq.getSmallest(), ahPQ.getSmallest());
 			}
 
 		}
