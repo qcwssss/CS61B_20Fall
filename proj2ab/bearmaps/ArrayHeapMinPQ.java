@@ -104,9 +104,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		heap.set(1, heap.remove(heap.size() - 1));
 
 		indexMap.remove(retrunVal);
-		indexMap.put(heap.get(1).item, 1);
 
 		sink(1); // sink to the smaller sub-node
+		indexMap.put(heap.get(1).item, 1);
 		return retrunVal;
 	}
 
@@ -122,8 +122,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 			swap(k, smaller);
 			sink(smaller);
 		}
-		//        swap(index, smallerChild);
-		//        swimDown(smallerChild);
 
 	}
 
