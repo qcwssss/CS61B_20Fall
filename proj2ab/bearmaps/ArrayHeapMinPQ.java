@@ -111,11 +111,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 	}
 
 	private void sink(int k) { // k = 1
-		// checkIndex(k);
+		// base case
+		if (leftChild(k) > this.size() || rightChild(k) > this.size() ) return;
 		/* Only need to sink nodes with both left and right children. */
 		int leftIdx = leftChild(k);
 		int rightIdx = rightChild(k);
-		int smaller = smallerChild(k);
+		int smaller = (getPriority(leftIdx) > getPriority(rightIdx) ? rightIdx : leftIdx);
 
 		//    int smallerChild = smallerChild(index);
 		if ( getPriority(k) > getPriority(smaller) ) {
