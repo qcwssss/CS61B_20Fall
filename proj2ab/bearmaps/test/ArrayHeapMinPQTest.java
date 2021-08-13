@@ -8,8 +8,7 @@ import org.junit.Test;
 import java.util.Random;
 
 import static bearmaps.PrintHeapDemo.printFancyHeapDrawing;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ArrayHeapMinPQTest {
 	private final Random r = new Random(500);
@@ -89,42 +88,10 @@ public class ArrayHeapMinPQTest {
 		}
 	}
 
-	@Test
-	public void testRemoveSmallest() {
-		char actual = Aheap.removeSmallest();
-		assertEquals('z', actual);
-
-		char actual2 = Aheap.removeSmallest();
-		assertEquals('a', actual2);
-
-		char actual3 = Aheap.removeSmallest();
-		assertEquals('c', actual3);
-	}
 
 	@Test
-	public void testRemoveSmallest2() {
-		ArrayHeapMinPQ<Integer> minHeap = new ArrayHeapMinPQ<>();
-		minHeap.add(1, 1);
-		minHeap.add(2, 2);
-		minHeap.add(3, 3);
-		minHeap.add(4, 7);
-		minHeap.add(5, 6);
-		minHeap.add(6, 4);
-		minHeap.add(7, 5);
-		minHeap.add(8, 8);
-		assertEquals(1, (int) minHeap.removeSmallest());
-		assertEquals(2, (int) minHeap.removeSmallest());
-		assertEquals(3, (int) minHeap.removeSmallest());
-		assertEquals(6, (int) minHeap.removeSmallest());
-		assertEquals(7, (int) minHeap.removeSmallest());
-		assertEquals(5, (int) minHeap.removeSmallest());
-		assertEquals(4, (int) minHeap.removeSmallest());
-		assertEquals(8, (int) minHeap.removeSmallest());
-	}
-
-	@Test
-	public void testRemoveSmallest3() {
-		int num = 8;
+	public void testRemoveSmallestAndContains() {
+		int num = 5000;
 		Object[] inArr = new Object[num + 1];
 		inArr[0] = 0;
 		ArrayHeapMinPQ<Integer> a1 = new ArrayHeapMinPQ<>();
@@ -133,13 +100,14 @@ public class ArrayHeapMinPQTest {
 			a1.add(i, i);
 		}
 		printFancyHeapDrawing(inArr);
-		//for (int i = 0; i < num; i++) {}
-		assertEquals(1,(int) a1.removeSmallest());
+		for (int i = 1; i < num; i++) {
+			assertEquals(i, (int) a1.removeSmallest());
+			assertFalse(a1.contains(i));
+
+		}
 
 		//Object[] arr2 = { 1, 2, 3, 4, 5, 6, 7};
 		//printFancyHeapDrawing(arr2);
-
-		assertEquals(2,(int) a1.removeSmallest());
 
 	}
 
@@ -165,7 +133,7 @@ public class ArrayHeapMinPQTest {
 
 	@Test
 	public void testRemoveSmallestRandomly() {
-		int num = 50;
+		int num = 50000;
 
 		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
 		NaiveMinPQ<Integer> npq = new NaiveMinPQ<>();

@@ -96,30 +96,27 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public T removeSmallest() {
-		if (heap.isEmpty()) {
+		if (heap.size() == 1) {
 			throw new NoSuchElementException("ArrayHeap is empty!");
 		}
 		T retrunVal = getSmallest();
-		//PNode removedNode = heap.remove(heap.size() - 1);
 		heap.set(1, heap.get(heap.size() - 1));
 
 		indexMap.remove(retrunVal);
-
 		sink(1); // sink to the smaller sub-node
-		indexMap.put(heap.get(1).item, 1);
+		if (indexMap.size() != 0) {
+			indexMap.put(heap.get(1).item, 1);
+		}
+
 		heap.remove(this.size());
 		return retrunVal;
 	}
 
 	private void sink(int k) { // k = 1
 		// base case
-		//if (leftChild(k) > this.size() || rightChild(k) > this.size() ) return;
 		/* Only need to sink nodes with both left and right children. */
-		int leftIdx = leftChild(k);
-		int rightIdx = rightChild(k);
 		int smaller = smallerChild(k);
 
-		//    int smallerChild = smallerChild(index);
 		if ( getPriority(k) > getPriority(smaller) ) {
 			swap(k, smaller);
 			sink(smaller);
@@ -144,7 +141,30 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public void changePriority(T item, double priority) {
-		//heap.indexOf(new PNode(item, 1));
+		int idx = heap.indexOf(item);
+		heap.set(idx, new PNode(item, priority) );
+		// compare priority with parents and children
+		double parentPrior, childPrior, curPrior;
+		curPrior = getPriority(idx);
+		/*
+		if (hasParent(idx)){
+			parentPrior = getPriority(parent(idx));
+		} else {
+			parentPrior = getPriority(idx);
+		}
+		*/
+		parentPrior = (hasParent(idx)? getPriority(parent(idx)) : curPrior);
+		childPrior = getPriority(smallerChild(idx));
+		if (curPrior < parentPrior) {
+			swim(idx);
+		} else if (curPrior > childPrior) {
+			sink(idx);
+		}
+	}
+
+	private boolean hasParent(int k) {
+		checkIndex(k);
+		return k > 1;
 	}
 
 	/**
