@@ -46,9 +46,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		heap.set(x1, heap.get(x2));
 		heap.set(x2, temp);
 		// swap index
-		indexMap.put(heap.get(x1).item, x2);
-		indexMap.put(heap.get(x2).item, x1);
-
+		indexMap.put(heap.get(x1).item, x1);
+        indexMap.put(heap.get(x2).item, x2);
 	}
 
 	private void swim(int k) {
@@ -141,7 +140,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	@Override
 	public void changePriority(T item, double priority) {
-		int idx = heap.indexOf(item);
+		if (!this.contains(item)) {
+			throw new NoSuchElementException("item doesn't exist in heap");
+		}
+		int idx = indexMap.get(item);
 		heap.set(idx, new PNode(item, priority) );
 		// compare priority with parents and children
 		double parentPrior, childPrior, curPrior;
@@ -153,7 +155,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 			parentPrior = getPriority(idx);
 		}
 		*/
-		parentPrior = (hasParent(idx)? getPriority(parent(idx)) : curPrior);
+		parentPrior = hasParent(idx) ? getPriority(parent(idx)) : curPrior;
 		childPrior = getPriority(smallerChild(idx));
 		if (curPrior < parentPrior) {
 			swim(idx);
@@ -167,9 +169,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		return k > 1;
 	}
 
-	/**
-	 * PNode class, which will be stored in ArrayHeapMinPQ's ArrayList.
-	 */
+	/** PNode class, which will be stored in ArrayHeapMinPQ's ArrayList.*/
 	private class PNode {
 		T item;
 		double priority;
