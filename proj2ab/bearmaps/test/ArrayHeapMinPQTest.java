@@ -187,16 +187,17 @@ public class ArrayHeapMinPQTest {
 			ahPQ.add(intR, wR);
 			npq.add(intR, wR);
 			if (i > num / 2) {
-			ahPQ.changePriority(intR / 2, wR / 2);
-			npq.changePriority(intR / 2, wR / 2);
+				ahPQ.changePriority(intR / 2, wR / 2);
+				npq.changePriority(intR / 2, wR / 2);
 
-			assertEquals(npq.getSmallest(), ahPQ.getSmallest());
+				assertEquals(npq.getSmallest(), ahPQ.getSmallest());
 			}
 		}
+
 	}
 
 	private void testRunningTime(int num) {
-		num = num > 1000 ? num : 1000;
+		num = Math.max(num, 1000);
 
 		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
 		NaiveMinPQ<Integer> npq = new NaiveMinPQ<>();
@@ -243,11 +244,55 @@ public class ArrayHeapMinPQTest {
 				+ (removeEndNaive - removeStartNaive)/1000.0  + " seconds.");
 
 	}
-	
+
+	private void testTimeOfChangePriority(int num) {
+		num = Math.max(num, 1000);
+
+		ArrayHeapMinPQ<Integer> ahPQ = new ArrayHeapMinPQ<>();
+		NaiveMinPQ<Integer> npq = new NaiveMinPQ<>();
+
+		for (int i = 0; i < num; i++) {
+			int intR = i + 1;
+			double wR = r.nextDouble();
+			ahPQ.add(intR, wR);
+			npq.add(intR, wR);
+			if (i > num / 2) {
+				ahPQ.changePriority(intR / 2, wR / 2);
+				npq.changePriority(intR / 2, wR / 2);
+
+				assertEquals(npq.getSmallest(), ahPQ.getSmallest());
+			}
+		}
+
+		long start1 = System.currentTimeMillis();
+		for (int i = 0; i < num; i++) {
+			int intR = i + 1;
+			ahPQ.changePriority(intR, i);
+		}
+		long end1 = System.currentTimeMillis();
+		System.out.println("Total Time elapsed of ArrayHeapMinPQ changePriority(): "
+				+ (end1 - start1)/1000.0  + "seconds.");
+
+		long start2 = System.currentTimeMillis();
+		for (int i = 0; i < num; i++) {
+			int intR = i + 1;
+			npq.changePriority(intR, i);
+		}
+		long end2 = System.currentTimeMillis();
+		System.out.println("Total Time elapsed of NaiveMinPQ changePriority(): "
+				+ (end2 - start2)/1000.0  + "seconds.");
+
+	}
+
+
 
 	@Test
 	public void compareRunnigTime() {
-		testRunningTime(100000);
+		int n = 100000;
+		System.out.println("#Ops of getSmallest, removeSmallest: " + n );
+		testRunningTime(n);
+		System.out.println("#Ops of changePriority: " + n +"\n");
+		testTimeOfChangePriority(n);
 	}
 
 }
