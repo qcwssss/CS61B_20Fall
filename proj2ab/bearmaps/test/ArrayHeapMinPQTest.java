@@ -102,7 +102,7 @@ public class ArrayHeapMinPQTest {
 	}
 
 	@Test
-	public void testRemoveSmallest2() { 
+	public void testRemoveSmallest2() {
 		ArrayHeapMinPQ<Integer> minHeap = new ArrayHeapMinPQ<>();
 		minHeap.add(1, 1);
 		minHeap.add(2, 2);

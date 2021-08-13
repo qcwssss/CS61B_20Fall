@@ -101,22 +101,23 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 		}
 		T retrunVal = getSmallest();
 		//PNode removedNode = heap.remove(heap.size() - 1);
-		heap.set(1, heap.remove(heap.size() - 1));
+		heap.set(1, heap.get(heap.size() - 1));
 
 		indexMap.remove(retrunVal);
 
 		sink(1); // sink to the smaller sub-node
 		indexMap.put(heap.get(1).item, 1);
+		heap.remove(this.size());
 		return retrunVal;
 	}
 
 	private void sink(int k) { // k = 1
 		// base case
-		if (leftChild(k) > this.size() || rightChild(k) > this.size() ) return;
+		//if (leftChild(k) > this.size() || rightChild(k) > this.size() ) return;
 		/* Only need to sink nodes with both left and right children. */
 		int leftIdx = leftChild(k);
 		int rightIdx = rightChild(k);
-		int smaller = (getPriority(leftIdx) > getPriority(rightIdx) ? rightIdx : leftIdx);
+		int smaller = smallerChild(k);
 
 		//    int smallerChild = smallerChild(index);
 		if ( getPriority(k) > getPriority(smaller) ) {
@@ -126,11 +127,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T>{
 
 	}
 
-	private int smallerChild(int index) {
-		int leftChild = index * 2 + 1;
-		leftChild = leftChild < size() ? leftChild : index;
-		int rightChild = index * 2 + 2;
-		rightChild = rightChild < size() ? rightChild : leftChild;
+	private int smallerChild(int k) {
+		int leftChild = leftChild(k);
+		leftChild = leftChild <= size() ? leftChild : k;
+
+		int rightChild = rightChild(k);
+		rightChild = rightChild <= size() ? rightChild : leftChild;
 		return heap.get(leftChild).getPriority() < heap.get(rightChild).getPriority()
 				? leftChild : rightChild;
 	}
