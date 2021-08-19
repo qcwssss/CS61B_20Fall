@@ -9,29 +9,60 @@ import java.util.*;
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	private SolverOutcome outcome;
 	private double solutionWeight;
-	private List<Vertex> solution;
+	private LinkedList<Vertex> solution;
 	private double timeSpent;
+	private int numOfDequeue;
 
 	public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout){
 		Stopwatch watch = new Stopwatch();
 
 		this.solution = new LinkedList<>();
+		solutionWeight = 0;
+		numOfDequeue = 0;
+
 		ExtrinsicMinPQ<Vertex> fringe = new ArrayHeapMinPQ<>();
 		Map<Vertex, Double> distTo = new HashMap<>();
 		Map<Vertex, Vertex> edgeTo = new HashMap<>(); // <to, from>
 
 		distTo.put(start, 0.0);
-		double priorStart = input.estimatedDistanceToGoal(start, end);
-		fringe.add(start, priorStart);
+		fringe.add(start, input.estimatedDistanceToGoal(start, end));
 		
-		while ((fringe.size() != 0 && fringe.getSmallest() == end) || outcome() == SolverOutcome.TIMEOUT) {
-			Vertex p = fringe.getSmallest();
+		while (fringe.size() > 0) {
+			// time out
+			if (watch.elapsedTime() > timeout ) {
+				outcome = SolverOutcome.TIMEOUT;
+				timeSpent = watch.elapsedTime();
+				return;
+			}
+			// solved
+			if (fringe.getSmallest().equals(end)) {
+				outcome = SolverOutcome.SOLVED;
+				timeSpent = watch.elapsedTime();
+				solutionWeight = distTo.get(end);
+
+				Vertex ptr = fringe.getSmallest();
+
+				solution.add(ptr); // last node
+				while (!ptr.equals(start)) {
+					ptr = edgeTo.get(ptr);
+					solution.addFirst(ptr);
+				}
+				solution.addFirst(start);
+				return;
+			}
+
+			Vertex p = fringe.removeSmallest();
+			numOfDequeue ++;
 			for (WeightedEdge w: input.neighbors(p)) {
 				relax(w);
 				// update edgeTo, distTo
-				distTo.put((Vertex) w.to(), w.weight());
-				edgeTo.put((Vertex) w.from(), p);
-                fringe.add((Vertex) w.to(), input.estimatedDistanceToGoal((Vertex) w.to(), end) + distTo.get(w.to()));
+				Vertex cur = (Vertex) w.from();
+				distTo.put(cur, w.weight());
+				edgeTo.put(cur, p);
+				double wPrior = input.estimatedDistanceToGoal(cur, end) + distTo.get(cur);
+				if (wPrior < distTo.get(cur)) {
+					fringe.add(cur, wPrior);
+				}
 			}
 
 		}
@@ -76,6 +107,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 
 	@Override
 	public double explorationTime() {
-		return 0;
+		return timeSpent;
 	}
 }
