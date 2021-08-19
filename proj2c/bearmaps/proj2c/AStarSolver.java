@@ -4,7 +4,7 @@ import bearmaps.proj2ab.ArrayHeapMinPQ;
 import bearmaps.proj2ab.ExtrinsicMinPQ;
 import edu.princeton.cs.algs4.Stopwatch;
 
-import java.util.List;
+import java.util.*;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	private SolverOutcome outcome;
@@ -14,15 +14,26 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 
 	public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout){
 		Stopwatch watch = new Stopwatch();
+
+		this.solution = new LinkedList<>();
 		ExtrinsicMinPQ<Vertex> fringe = new ArrayHeapMinPQ<>();
-		// Create a PQ where each vertex v will have priority p equal to the
-		// sum of v’s distance from the source plus the heuristic estimate from v to the goal.
-		Vertex source;
-		double priorStart = input.estimatedDistanceToGoal(start, end) + 0;
+		Map<Vertex, Double> distTo = new HashMap<>();
+		Map<Vertex, Vertex> edgeTo = new HashMap<>(); // <to, from>
+
+		distTo.put(start, 0.0);
+		double priorStart = input.estimatedDistanceToGoal(start, end);
 		fringe.add(start, priorStart);
-		while (fringe.size() != 0 || fringe.getSmallest() == end || outcome() == SolverOutcome.TIMEOUT) {
+		
+		while ((fringe.size() != 0 && fringe.getSmallest() == end) || outcome() == SolverOutcome.TIMEOUT) {
 			Vertex p = fringe.getSmallest();
-			relax(new WeightedEdge<>());
+			for (WeightedEdge w: input.neighbors(p)) {
+				relax(w);
+				// update edgeTo, distTo
+				distTo.put((Vertex) w.to(), w.weight());
+				edgeTo.put((Vertex) w.from(), p);
+                fringe.add((Vertex) w.to(), input.estimatedDistanceToGoal((Vertex) w.to(), end) + distTo.get(w.to()));
+			}
+
 		}
 
 
