@@ -16,7 +16,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	Map<Vertex, Vertex> edgeTo;
 
 	public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout){
-		Stopwatch watch = new Stopwatch();
 
 		this.solution = new LinkedList<>();
 		solutionWeight = 0;
@@ -28,20 +27,17 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 
 		distTo.put(start, 0.0);
 		fringe.add(start, input.estimatedDistanceToGoal(start, end));
+		Stopwatch watch = new Stopwatch();
 
 		while (fringe.size() > 0) {
 			// time out
 			if (watch.elapsedTime() > timeout ) {
 				outcome = SolverOutcome.TIMEOUT;
-				timeSpent = watch.elapsedTime();
+				//timeSpent = watch.elapsedTime();
 				return;
 			}
 			// solved
 			if (fringe.getSmallest().equals(end)) {
-				outcome = SolverOutcome.SOLVED;
-				timeSpent = watch.elapsedTime();
-				solutionWeight = distTo.get(end);
-
 				Vertex ptr = fringe.getSmallest();
 
 				solution.add(ptr); // last node
@@ -49,14 +45,17 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 					ptr = edgeTo.get(ptr);
 					solution.addFirst(ptr);
 				}
-				solution.addFirst(start);
+				//solution.addFirst(start);
+				outcome = SolverOutcome.SOLVED;
+				solutionWeight = distTo.get(end);
+				timeSpent = watch.elapsedTime();
+
 				return;
 			}
 
 			Vertex p = fringe.removeSmallest();
 			numOfDequeue ++;
 			for (WeightedEdge w: input.neighbors(p)) {
-				relax(w, fringe, input, end);
 				// update edgeTo, distTo
 				Vertex curFrom = p;
 				Vertex curTo = (Vertex) w.to();
@@ -65,6 +64,8 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 				edgeTo.put(curTo, p); // <to, from>
 				double wPrior = input.estimatedDistanceToGoal(curTo, end) + distTo.get(curTo);
 				// if (wPrior < distTo.get(curFrom)) { // ?? }
+				relax(w, fringe, input, end);
+
 				if (distTo.containsKey(curTo) ) {
 					if (wPrior < distTo.get(curTo)) {
 						fringe.changePriority(curTo, wPrior);
@@ -75,6 +76,13 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 			}
 		}
 		//this.numOfDequeue = numOfDequeue;
+		timeSpent = watch.elapsedTime();
+		outcome = SolverOutcome.UNSOLVABLE;
+		solution.clear();
+		solutionWeight = 0;
+		return;
+
+
 	}
 
   /* update better value. */
@@ -90,11 +98,11 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	  double w = e.weight();
 	  if (distTo.get(p) + w < distTo.get(q)) {
 	      distTo.put(q, distTo.get(p) + w);
-	      if (fringe.contains(q)) {
-	        fringe.changePriority(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
-          } else {
-	        fringe.add(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
-          }
+	  }
+	  if (fringe.contains(q)) {
+		  fringe.changePriority(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
+	  } else {
+		  fringe.add(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
 	  }
 
 
