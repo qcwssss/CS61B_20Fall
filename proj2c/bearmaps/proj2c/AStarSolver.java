@@ -56,15 +56,21 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 			for (WeightedEdge w: input.neighbors(p)) {
 				relax(w);
 				// update edgeTo, distTo
-				Vertex cur = (Vertex) w.from();
-				distTo.put(cur, w.weight());
-				edgeTo.put(cur, p);
-				double wPrior = input.estimatedDistanceToGoal(cur, end) + distTo.get(cur);
-				if (wPrior < distTo.get(cur)) {
-					fringe.add(cur, wPrior);
+				Vertex curFrom = p;
+				Vertex curTo = (Vertex) w.to();
+
+				distTo.put(curTo, w.weight());
+				edgeTo.put(curTo, p); // <to, from>
+				double wPrior = input.estimatedDistanceToGoal(curFrom, end) + distTo.get(curFrom);
+				// if (wPrior < distTo.get(curFrom)) { // ?? }
+				if (distTo.containsKey(curTo) ) {
+					if (wPrior < distTo.get(curFrom)) {
+						fringe.changePriority(curTo, wPrior);
+					}
+				} else {
+					fringe.add(curTo, wPrior);
 				}
 			}
-
 		}
 
 
