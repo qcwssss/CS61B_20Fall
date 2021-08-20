@@ -12,6 +12,8 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	private LinkedList<Vertex> solution;
 	private double timeSpent;
 	private int numOfDequeue;
+	Map<Vertex, Double> distTo;
+	Map<Vertex, Vertex> edgeTo;
 
 	public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout){
 		Stopwatch watch = new Stopwatch();
@@ -21,12 +23,12 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 		numOfDequeue = 0;
 
 		ExtrinsicMinPQ<Vertex> fringe = new ArrayHeapMinPQ<>();
-		Map<Vertex, Double> distTo = new HashMap<>();
-		Map<Vertex, Vertex> edgeTo = new HashMap<>(); // <to, from>
+		this.distTo = new HashMap<>();
+		this.edgeTo = new HashMap<>(); // <to, from>
 
 		distTo.put(start, 0.0);
 		fringe.add(start, input.estimatedDistanceToGoal(start, end));
-		
+
 		while (fringe.size() > 0) {
 			// time out
 			if (watch.elapsedTime() > timeout ) {
@@ -54,17 +56,17 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 			Vertex p = fringe.removeSmallest();
 			numOfDequeue ++;
 			for (WeightedEdge w: input.neighbors(p)) {
-				relax(w);
+				relax(w, fringe, input, end);
 				// update edgeTo, distTo
 				Vertex curFrom = p;
 				Vertex curTo = (Vertex) w.to();
 
 				distTo.put(curTo, w.weight());
 				edgeTo.put(curTo, p); // <to, from>
-				double wPrior = input.estimatedDistanceToGoal(curFrom, end) + distTo.get(curFrom);
+				double wPrior = input.estimatedDistanceToGoal(curTo, end) + distTo.get(curTo);
 				// if (wPrior < distTo.get(curFrom)) { // ?? }
 				if (distTo.containsKey(curTo) ) {
-					if (wPrior < distTo.get(curFrom)) {
+					if (wPrior < distTo.get(curTo)) {
 						fringe.changePriority(curTo, wPrior);
 					}
 				} else {
@@ -72,12 +74,11 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 				}
 			}
 		}
-
-
+		//this.numOfDequeue = numOfDequeue;
 	}
 
   /* update better value. */
-  private void relax(WeightedEdge<Vertex> e) {
+  private void relax(WeightedEdge<Vertex> e, ExtrinsicMinPQ<Vertex> fringe, AStarGraph<Vertex> graph, Vertex end) {
     // 		• p = e.from(), q = e.to(), w = e.weight()
     //		• if distTo[p] + w < distTo[q]:
     //
@@ -87,6 +88,14 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	  Vertex p = e.from();
 	  Vertex q = e.to();
 	  double w = e.weight();
+	  if (distTo.get(p) + w < distTo.get(q)) {
+	      distTo.put(q, distTo.get(p) + w);
+	      if (fringe.contains(q)) {
+	        fringe.changePriority(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
+          } else {
+	        fringe.add(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
+          }
+	  }
 
 
   }
@@ -108,7 +117,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 
 	@Override
 	public int numStatesExplored() {
-		return 0;
+		return numOfDequeue;
 	}
 
 	@Override
