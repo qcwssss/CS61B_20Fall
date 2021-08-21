@@ -41,7 +41,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 					ptr = edgeTo.get(ptr);
 					solution.addFirst(ptr);
 				}
-				//solution.addFirst(start);
 				outcome = SolverOutcome.SOLVED;
 				solutionWeight = distTo.get(end);
 				timeSpent = watch.elapsedTime();
@@ -59,28 +58,11 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 			Vertex p = fringe.removeSmallest();
 			numOfDequeue ++;
 
-			double distToCurr = distTo.get(p);
-
 			for (WeightedEdge<Vertex> edge : input.neighbors(p)) {
-				if (!distTo.containsKey(edge.to())
-						|| distToCurr + edge.weight() < distTo.get(edge.to())) {
-
-					distTo.put(edge.to(), distToCurr + edge.weight());
-					edgeTo.put(edge.to(), p);
-
-					// relax
-					if (fringe.contains(edge.to())) {
-						fringe.changePriority(edge.to(), distTo.get(edge.to())
-								+ input.estimatedDistanceToGoal(edge.to(), end));
-					} else {
-						fringe.add(edge.to(), distTo.get(edge.to())
-								+ input.estimatedDistanceToGoal(edge.to(), end));
-					}
-				}
+				relax(edge, fringe, input, end);
 			}
 		}
 
-		//this.numOfDequeue = numOfDequeue;
 		timeSpent = watch.elapsedTime();
 		outcome = SolverOutcome.UNSOLVABLE;
 		solution.clear();
@@ -100,15 +82,18 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	  Vertex p = e.from();
 	  Vertex q = e.to();
 	  double w = e.weight();
-	  if (distTo.get(p) + w < distTo.get(q)) {
+	  if (!distTo.containsKey(q) || distTo.get(p) + w < distTo.get(q)) {
 	      distTo.put(q, distTo.get(p) + w);
+	      edgeTo.put(q, p);
+
+		  if (fringe.contains(q)) {
+			  fringe.changePriority(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
+		  } else {
+			  fringe.add(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
+		  }
 	  }
 
-	  if (fringe.contains(q)) {
-		  fringe.changePriority(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
-	  } else {
-		  fringe.add(q, distTo.get(q) + graph.estimatedDistanceToGoal(q, end));
-	  }
+
 
 
   }
