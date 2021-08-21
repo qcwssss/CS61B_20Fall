@@ -58,19 +58,28 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 
 			Vertex p = fringe.removeSmallest();
 			numOfDequeue ++;
-			for (WeightedEdge<Vertex> w: input.neighbors(p)) {
-				// update edgeTo, distTo
-				Vertex curTo = (Vertex) w.to();
 
-				distTo.put(curTo, w.weight());
-				edgeTo.put(curTo, p); // <to, from: p>
-				double wPrior = input.estimatedDistanceToGoal(curTo, end) + distTo.get(curTo);
-				// if (wPrior < distTo.get(curFrom)) { // ?? }
-				relax(w, fringe, input, end);
+			double distToCurr = distTo.get(p);
 
+			for (WeightedEdge<Vertex> edge : input.neighbors(p)) {
+				if (!distTo.containsKey(edge.to())
+						|| distToCurr + edge.weight() < distTo.get(edge.to())) {
 
+					distTo.put(edge.to(), distToCurr + edge.weight());
+					edgeTo.put(edge.to(), p);
+
+					// relax
+					if (fringe.contains(edge.to())) {
+						fringe.changePriority(edge.to(), distTo.get(edge.to())
+								+ input.estimatedDistanceToGoal(edge.to(), end));
+					} else {
+						fringe.add(edge.to(), distTo.get(edge.to())
+								+ input.estimatedDistanceToGoal(edge.to(), end));
+					}
+				}
 			}
 		}
+
 		//this.numOfDequeue = numOfDequeue;
 		timeSpent = watch.elapsedTime();
 		outcome = SolverOutcome.UNSOLVABLE;
