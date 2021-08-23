@@ -112,16 +112,12 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
 
     /**  Get depth, upper limit is 7. */
     public int getDepth(double ullon, double lrlon, double w) {
-        //final double lonDPP_d1 = 49.472808837890625;
         final double SL = 288200.0;
-
-        double xDist = Math.abs(ullon - lrlon);
-        double boxWidth = xDist * SL;
-        double lonDPPExpected = boxWidth / w;
+        double lonDPPExpected = Math.abs(ullon - lrlon) * SL / w;
 
         int depth = 0;
         double curLonDPP = SL * Math.abs(Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE;
-        while (curLonDPP < lonDPPExpected && depth <= 7) {
+        while (curLonDPP > lonDPPExpected && depth <= 7) {
             curLonDPP /=2;
             depth ++;
         }
