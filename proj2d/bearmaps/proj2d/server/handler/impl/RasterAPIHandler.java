@@ -90,24 +90,38 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         //System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "//+ "your browser.");
 
         // "ullat", "ullon", "lrlat", "lrlon", "w", "h";
-        final double SL = 288200.0;
-        //final double lonDPP_d1 = 49.472808837890625;
+        double ullat = requestParams.get("ullat");
+        double ullon = requestParams.get("ullon");
+        double lrlat = requestParams.get("lrlat");
+        double lrlon = requestParams.get("lrlon");
+        double width = requestParams.get("w");
+        double height = requestParams.get("h");
 
-        double xDist = Math.abs(requestParams.get("ullon") - requestParams.get("lrlon"));
-        double boxWidth = xDist * SL;
-        double lonDPPExpected = boxWidth / requestParams.get("w");
+        //Corner Case 2: No Coverage,  ensure query_success is set to false.
+        if (ullon < Constants.ROOT_ULLON || lrlon > Constants.ROOT_LRLON
+                || ullat > Constants.ROOT_ULLAT || lrlat < Constants.ROOT_LRLAT
+                || ullon >= lrlon || ullat <= lrlat) {
+            results.put(REQUIRED_RASTER_RESULT_PARAMS[6], false);
+        }
 
-        int depth = getDepth(lonDPPExpected);
+        int depth = getDepth(requestParams);
 
 
         return results;
     }
 
     /**  Get depth, upper limit is 7. */
-    public int getDepth(double expected) {
+    public int getDepth(Map<String, Double> requestParams) {
         final double lonDPP_d1 = 49.472808837890625;
+        final double SL = 288200.0;
+
+
+        double xDist = Math.abs(requestParams.get("ullon") - requestParams.get("lrlon"));
+        double boxWidth = xDist * SL;
+        double lonDPPExpected = boxWidth / requestParams.get("w");
+
         //Resolution = lonDPP_d1  / 2^(D-1)
-        double dMinus1 = Math.sqrt(lonDPP_d1 / expected);
+        double dMinus1 = Math.sqrt(lonDPP_d1 / lonDPPExpected);
         int depth =  (int) dMinus1;
         return Math.min(depth, 7);
     }
