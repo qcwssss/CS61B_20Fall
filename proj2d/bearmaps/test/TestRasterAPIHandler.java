@@ -159,4 +159,15 @@ public class TestRasterAPIHandler {
         return sj.toString();
     }
 
+    @Test
+    public void testGetDepth() {
+        //{lrlon=-122.22275132672245, ullon=-122.23995662778569, w=613.0, h=676.0
+        final double SL = 288200.0;
+        double xDist = Math.abs(-122.23995662778569 - -122.22275132672245);
+        double boxWidth = xDist * SL;
+        double lonDPPExpected = boxWidth / 613.0;
+        int actual  = rasterer.getDepth(lonDPPExpected);
+        assertEquals(2, actual);
+    }
+
 }

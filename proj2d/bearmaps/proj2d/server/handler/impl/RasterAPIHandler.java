@@ -87,8 +87,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         System.out.println("yo, wanna know the parameters given by the web browser? They are:");
         System.out.println(requestParams);
         Map<String, Object> results = new HashMap<>();
-        //System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                //+ "your browser.");
+        //System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "//+ "your browser.");
 
         // "ullat", "ullon", "lrlat", "lrlon", "w", "h";
         final double SL = 288200.0;
@@ -104,12 +103,12 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return results;
     }
 
-    /* Get depth, whose upper limit is 7. */
-    private int getDepth(double expected) {
+    /**  Get depth, upper limit is 7. */
+    public int getDepth(double expected) {
         final double lonDPP_d1 = 49.472808837890625;
         //Resolution = lonDPP_d1  / 2^(D-1)
-        double dMinus1 = lonDPP_d1 / expected;
-        int depth =  (int) (dMinus1 - 1);
+        double dMinus1 = Math.sqrt(lonDPP_d1 / expected);
+        int depth =  (int) dMinus1;
         return Math.min(depth, 7);
     }
 
