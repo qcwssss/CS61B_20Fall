@@ -104,26 +104,29 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
             results.put(REQUIRED_RASTER_RESULT_PARAMS[6], false);
         }
 
-        int depth = getDepth(requestParams);
+        int depth = getDepth(ullon, lrlon, width);
 
 
         return results;
     }
 
     /**  Get depth, upper limit is 7. */
-    public int getDepth(Map<String, Double> requestParams) {
-        final double lonDPP_d1 = 49.472808837890625;
+    public int getDepth(double ullon, double lrlon, double w) {
+        //final double lonDPP_d1 = 49.472808837890625;
         final double SL = 288200.0;
 
-
-        double xDist = Math.abs(requestParams.get("ullon") - requestParams.get("lrlon"));
+        double xDist = Math.abs(ullon - lrlon);
         double boxWidth = xDist * SL;
-        double lonDPPExpected = boxWidth / requestParams.get("w");
+        double lonDPPExpected = boxWidth / w;
 
-        //Resolution = lonDPP_d1  / 2^(D-1)
-        double dMinus1 = Math.sqrt(lonDPP_d1 / lonDPPExpected);
-        int depth =  (int) dMinus1;
-        return Math.min(depth, 7);
+        int depth = 0;
+        double curLonDPP = SL * Math.abs(Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE;
+        while (curLonDPP < lonDPPExpected && depth <= 7) {
+            curLonDPP /=2;
+            depth ++;
+        }
+
+        return depth;
     }
 
     @Override
