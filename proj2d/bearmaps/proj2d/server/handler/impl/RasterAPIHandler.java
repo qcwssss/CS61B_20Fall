@@ -110,24 +110,8 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         int depth = (int) DepthAndPixelPerFeet[0];
         double pixelPerFeet = DepthAndPixelPerFeet[1];
 
-        double dXul, dYul, dXlr, dYlr;
-        dXul = Math.abs(Constants.ROOT_ULLON - ullon);
-        dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
-        int ulXNum = (int) (dXul/pixelPerFeet);
-        int ulYNum = (int) (dYul/pixelPerFeet);
 
-        dXlr = Math.abs(Constants.ROOT_LRLON - lrlon);
-        dYlr = Math.abs(Constants.ROOT_LRLAT - lrlat);
-        int lrXNum = (int) (dXlr/pixelPerFeet);
-        int lrYNum = (int) (dYlr/pixelPerFeet);
-
-        // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
-        double raster_ul_lon = Constants.ROOT_ULLON - ulXNum * pixelPerFeet;
-        double raster_ul_lat = Constants.ROOT_ULLAT - ulYNum * pixelPerFeet;
-        double raster_lr_lon = Constants.ROOT_ULLAT - lrXNum * pixelPerFeet;
-        double raster_lr_lat = Constants.ROOT_ULLAT - lrYNum * pixelPerFeet;
-
-        double[] coordinates = new double[] {raster_ul_lon, raster_ul_lat, raster_lr_lon, raster_lr_lat };
+        double[] coordinates = getCoordinates(pixelPerFeet, ullon, ullat, lrlon, lrlat);
         for (int i = 0; i < coordinates.length; i++) {
             results.put(REQUIRED_RASTER_RESULT_PARAMS[i + 1], coordinates[i]);
         }
@@ -149,6 +133,28 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
 
         double[] reVals = {depth, curLonDPP};
         return reVals;
+    }
+
+    public double[] getCoordinates(double pixelPerFeet, double ullon, double ullat, double lrlon, double lrlat) {
+        double dXul, dYul, dXlr, dYlr;
+        dXul = Math.abs(Constants.ROOT_ULLON - ullon);
+        dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
+        int ulXNum = (int) (dXul/pixelPerFeet);
+        int ulYNum = (int) (dYul/pixelPerFeet);
+
+        dXlr = Math.abs(Constants.ROOT_LRLON - lrlon);
+        dYlr = Math.abs(Constants.ROOT_LRLAT - lrlat);
+        int lrXNum = (int) (dXlr/pixelPerFeet);
+        int lrYNum = (int) (dYlr/pixelPerFeet);
+
+        // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
+        double raster_ul_lon = Constants.ROOT_ULLON - ulXNum * pixelPerFeet;
+        double raster_ul_lat = Constants.ROOT_ULLAT - ulYNum * pixelPerFeet;
+        double raster_lr_lon = Constants.ROOT_ULLAT - lrXNum * pixelPerFeet;
+        double raster_lr_lat = Constants.ROOT_ULLAT - lrYNum * pixelPerFeet;
+
+        double[] coordinates = new double[] {raster_ul_lon, raster_ul_lat, raster_lr_lon, raster_lr_lat };
+        return coordinates;
     }
 
     @Override
