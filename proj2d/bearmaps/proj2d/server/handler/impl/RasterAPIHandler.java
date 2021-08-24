@@ -95,7 +95,6 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double lrlat = requestParams.get("lrlat");
         double lrlon = requestParams.get("lrlon");
         double width = requestParams.get("w");
-        double height = requestParams.get("h");
 
         //Corner Case 2: No Coverage,  ensure query_success is set to false.
         if (ullon < Constants.ROOT_ULLON || lrlon > Constants.ROOT_LRLON
@@ -109,29 +108,24 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double[] DepthAndPixelPerFeet = getDepthAndPixelInFeet(ullon, lrlon, width);
         int depth = (int) DepthAndPixelPerFeet[0];
         double pixelPerFeet = DepthAndPixelPerFeet[1];
-        double lonPerImg = pixelPerFeet * Constants.TILE_SIZE / Constants.SL;
+        //double lonPerImg = pixelPerFeet * Constants.TILE_SIZE / Constants.SL;
 
         results.put("depth", depth);
 
+        double lonDistPerTile = (Constants.ROOT_LRLON - Constants.ROOT_ULLON) / Math.pow(2, depth);
+        double latDistPerTile = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT) / Math.pow(2, depth);
 
-        double dXul, dYul, dXlr, dYlr;
         // get rid of remainder
-        dXul = Math.abs(Constants.ROOT_ULLON - ullon);
-        dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
-        int ulXNum = (int) (dXul/lonPerImg);
-        int ulYNum = (int) (dYul/lonPerImg);
-
-        // round
-        dXlr = Math.abs(Constants.ROOT_LRLON - lrlon);
-        dYlr = Math.abs(Constants.ROOT_LRLAT - lrlat);
-        int lrXNum = (int) Math.ceil(dXlr/lonPerImg);
-        int lrYNum = (int) Math.ceil(dYlr/lonPerImg);
+        int ulXNum = (int) (Math.abs(Constants.ROOT_ULLON - ullon)/lonDistPerTile);
+        int ulYNum = (int) (Math.abs(Constants.ROOT_ULLAT - ullat)/latDistPerTile);
+        int lrXNum = (int) (Math.abs(Constants.ROOT_LRLON - lrlon)/lonDistPerTile);
+        int lrYNum = (int) (Math.abs(Constants.ROOT_LRLAT - lrlat)/latDistPerTile);
 
         // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
-        double raster_ul_lon = Constants.ROOT_ULLON - ulXNum * pixelPerFeet;
-        double raster_ul_lat = Constants.ROOT_ULLAT - ulYNum * pixelPerFeet;
-        double raster_lr_lon = Constants.ROOT_ULLAT - lrXNum * pixelPerFeet;
-        double raster_lr_lat = Constants.ROOT_ULLAT - lrYNum * pixelPerFeet;
+        double raster_ul_lon = Constants.ROOT_ULLON + ulXNum * lonDistPerTile;
+        double raster_ul_lat = Constants.ROOT_ULLAT - ulYNum * latDistPerTile;
+        double raster_lr_lon = Constants.ROOT_LRLON - lrXNum * lonDistPerTile;
+        double raster_lr_lat = Constants.ROOT_LRLAT + lrYNum * latDistPerTile;
 
         double[] coordinates = new double[] {raster_ul_lon, raster_ul_lat, raster_lr_lon, raster_lr_lat };
         for (int i = 0; i < coordinates.length; i++) {
@@ -157,7 +151,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
             depth ++;
         }
 
-        double[] reVals = {depth, curLonDPP};
+        double[] reVals = {Math.min(7, depth), curLonDPP};
         return reVals;
     }
 
