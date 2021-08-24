@@ -110,16 +110,36 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         int depth = (int) DepthAndPixelPerFeet[0];
         double pixelPerFeet = DepthAndPixelPerFeet[1];
 
+        double dXul, dYul, dXlr, dYlr;
+        // get rid of remainder
+        dXul = Math.abs(Constants.ROOT_ULLON - ullon);
+        dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
+        int ulXNum = (int) (dXul/pixelPerFeet);
+        int ulYNum = (int) (dYul/pixelPerFeet);
 
-        double[] coordinates = getCoordinates(pixelPerFeet, ullon, ullat, lrlon, lrlat);
+        // round
+        dXlr = Math.abs(Constants.ROOT_LRLON - lrlon);
+        dYlr = Math.abs(Constants.ROOT_LRLAT - lrlat);
+        int lrXNum = (int) Math.ceil(dXlr/pixelPerFeet);
+        int lrYNum = (int) Math.ceil(dYlr/pixelPerFeet);
+
+        // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
+        double raster_ul_lon = Constants.ROOT_ULLON - ulXNum * pixelPerFeet;
+        double raster_ul_lat = Constants.ROOT_ULLAT - ulYNum * pixelPerFeet;
+        double raster_lr_lon = Constants.ROOT_ULLAT - lrXNum * pixelPerFeet;
+        double raster_lr_lat = Constants.ROOT_ULLAT - lrYNum * pixelPerFeet;
+
+        double[] coordinates = new double[] {raster_ul_lon, raster_ul_lat, raster_lr_lon, raster_lr_lat };
         for (int i = 0; i < coordinates.length; i++) {
             results.put(REQUIRED_RASTER_RESULT_PARAMS[i + 1], coordinates[i]);
         }
 
+
+
         return results;
     }
 
-    /**  Get depth, upper limit is 7. */
+    /** Get depth helper. */
     public double[] getDepthAndPixelInFeet(double ullon, double lrlon, double w) {
         final double SL = 288200.0;
         double lonDPPExpected = Math.abs(ullon - lrlon) * SL / w;
@@ -135,7 +155,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return reVals;
     }
 
-    public double[] getCoordinates(double pixelPerFeet, double ullon, double ullat, double lrlon, double lrlat) {
+    private double[] getCoordinates(double pixelPerFeet, double ullon, double ullat, double lrlon, double lrlat) {
         double dXul, dYul, dXlr, dYlr;
         dXul = Math.abs(Constants.ROOT_ULLON - ullon);
         dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
@@ -155,6 +175,33 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
 
         double[] coordinates = new double[] {raster_ul_lon, raster_ul_lat, raster_lr_lon, raster_lr_lat };
         return coordinates;
+    }
+
+    private String[][] getGridNames(int ulXNum, int ulYNum, int lrXNum, int lrYNum, int depth) {
+        int Length = (int) (Math.pow(2, depth) - 1);
+        int viewWidth, viewHeight;
+        viewWidth = lrXNum -ulXNum;
+        viewHeight = lrYNum - ulYNum;
+
+        //Point[][] gridIdx = new Point[viewHeight][viewWidth];
+        Point upperLeft = new Point(Length - ulXNum, Length - ulYNum);
+        Point lowerRight = new Point(lrXNum, lrYNum);
+        // int ulXNum
+        //        int ulYNum
+        //        int lrXNum
+        //        int lrYNum
+        String[][] grid = new String[viewHeight][viewWidth];
+        for (int i = Length - ulXNum; i < lrXNum; i++) {
+            for (int j = Length - ulYNum; j < lrYNum; j++) {
+                grid[i][j] = String.format("d%d_x%d_y%d", depth, i, j);
+            }
+        }
+
+
+
+
+
+        return grid;
     }
 
     @Override
