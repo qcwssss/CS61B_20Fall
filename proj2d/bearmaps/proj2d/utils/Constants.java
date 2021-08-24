@@ -22,7 +22,7 @@ public class Constants {
             ROOT_LRLAT = 37.82280243352756, ROOT_LRLON = -122.2119140625;
 
     /**
-     * The OSM XML file path. Downloaded from <a href="http://download.bbbike.org/osm/">here</a>
+     * The OSM XML file path. Downleoaded from <a href="http://download.bbbike.org/osm/">here</a>
      * using custom region selection.
      **/
     public static final String OSM_DB_PATH = "../library-fa20/data/proj2d_xml/berkeley-2019.osm.xml";

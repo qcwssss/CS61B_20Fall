@@ -97,10 +97,9 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double width = requestParams.get("w");
 
         //Corner Case 2: No Coverage,  ensure query_success is set to false.
-        if (ullon < Constants.ROOT_ULLON || lrlon > Constants.ROOT_LRLON
-                || ullat > Constants.ROOT_ULLAT || lrlat < Constants.ROOT_LRLAT
-                || ullon >= lrlon || ullat <= lrlat)
-        {
+        if (lrlon < Constants.ROOT_ULLON || Constants.ROOT_LRLON < ullon
+                || lrlat > Constants.ROOT_ULLAT || ullat < Constants.ROOT_LRLAT
+                || ullon >= lrlon || ullat <= lrlat) {
             results.put(REQUIRED_RASTER_RESULT_PARAMS[6], false);
             return results;
         }
