@@ -182,7 +182,6 @@ public class TestRasterAPIHandler {
 
     @Test
     public void testProcessFourImages() {
-
         Map<String, Double> params1 = new HashMap<>();
         // {lrlon=-122.2104604264636, ullon=-122.30410170759153, w=1091.0, h=566.0, ullat=37.870213571328854, lrlat=37.8318576119893}
         params1.put("ullon",-122.30410170759153);
@@ -193,7 +192,7 @@ public class TestRasterAPIHandler {
         params1.put("h", 566.0);
 
         Map<String, Object> actual = rasterer.processRequest(params1, null);
-        assertEquals(2, actual.get("w"));
+        assertEquals(2, actual.get("depth"));
     }
 
 }

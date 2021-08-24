@@ -152,9 +152,8 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
     /** Get filenames grid. */
     private String[][] getGridFileNames(int ulXNum, int ulYNum, int lrXNum, int lrYNum, int depth) {
         int Length = (int) (Math.pow(2, depth) - 1);
-        int viewWidth, viewHeight;
-        viewWidth = Length - lrXNum -ulXNum + 1;
-        viewHeight = Length - lrYNum - ulYNum + 1;
+        int viewWidth = Length - lrXNum -ulXNum + 1;
+        int viewHeight = Length - lrYNum - ulYNum + 1;
 
         String[][] grid = new String[viewHeight][viewWidth];
         for (int i = 0; i < viewHeight; i++) {
