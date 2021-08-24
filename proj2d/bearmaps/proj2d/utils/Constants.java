@@ -46,4 +46,9 @@ public class Constants {
      * from everywhere in the code. Enum is a cleaner way to achieve such a singleton pattern.
      */
     public static final List<Long> ROUTE_LIST = new LinkedList<>();
+
+
+    /** each degree of longitude is SL = 288,200 feet.*/
+    public static final double SL = 288200.0;
+
 }

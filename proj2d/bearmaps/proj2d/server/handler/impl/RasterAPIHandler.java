@@ -109,19 +109,23 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double[] DepthAndPixelPerFeet = getDepthAndPixelInFeet(ullon, lrlon, width);
         int depth = (int) DepthAndPixelPerFeet[0];
         double pixelPerFeet = DepthAndPixelPerFeet[1];
+        double lonPerImg = pixelPerFeet * Constants.TILE_SIZE / Constants.SL;
+
+        results.put("depth", depth);
+
 
         double dXul, dYul, dXlr, dYlr;
         // get rid of remainder
         dXul = Math.abs(Constants.ROOT_ULLON - ullon);
         dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
-        int ulXNum = (int) (dXul/pixelPerFeet);
-        int ulYNum = (int) (dYul/pixelPerFeet);
+        int ulXNum = (int) (dXul/lonPerImg);
+        int ulYNum = (int) (dYul/lonPerImg);
 
         // round
         dXlr = Math.abs(Constants.ROOT_LRLON - lrlon);
         dYlr = Math.abs(Constants.ROOT_LRLAT - lrlat);
-        int lrXNum = (int) Math.ceil(dXlr/pixelPerFeet);
-        int lrYNum = (int) Math.ceil(dYlr/pixelPerFeet);
+        int lrXNum = (int) Math.ceil(dXlr/lonPerImg);
+        int lrYNum = (int) Math.ceil(dYlr/lonPerImg);
 
         // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
         double raster_ul_lon = Constants.ROOT_ULLON - ulXNum * pixelPerFeet;
@@ -134,6 +138,9 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
             results.put(REQUIRED_RASTER_RESULT_PARAMS[i + 1], coordinates[i]);
         }
 
+        String[][] render_grid = getGridFileNames(ulXNum, ulYNum, lrXNum, lrYNum, depth);
+        results.put("render_grid", render_grid);
+        results.put("query_success", true);
 
 
         return results;
@@ -141,11 +148,10 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
 
     /** Get depth helper. */
     public double[] getDepthAndPixelInFeet(double ullon, double lrlon, double w) {
-        final double SL = 288200.0;
-        double lonDPPExpected = Math.abs(ullon - lrlon) * SL / w;
+        double lonDPPExpected = Math.abs(ullon - lrlon) * Constants.SL / w;
 
         int depth = 0;
-        double curLonDPP = SL * Math.abs(Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE;
+        double curLonDPP = Constants.SL * Math.abs(Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE;
         while (curLonDPP > lonDPPExpected && depth <= 7) {
             curLonDPP /= 2;
             depth ++;
@@ -177,29 +183,20 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return coordinates;
     }
 
-    private String[][] getGridNames(int ulXNum, int ulYNum, int lrXNum, int lrYNum, int depth) {
+    private String[][] getGridFileNames(int ulXNum, int ulYNum, int lrXNum, int lrYNum, int depth) {
         int Length = (int) (Math.pow(2, depth) - 1);
         int viewWidth, viewHeight;
         viewWidth = lrXNum -ulXNum;
         viewHeight = lrYNum - ulYNum;
 
-        //Point[][] gridIdx = new Point[viewHeight][viewWidth];
-        Point upperLeft = new Point(Length - ulXNum, Length - ulYNum);
-        Point lowerRight = new Point(lrXNum, lrYNum);
-        // int ulXNum
-        //        int ulYNum
-        //        int lrXNum
-        //        int lrYNum
+        //Point upperLeft = new Point(ulXNum, ulYNum);
+        //Point lowerRight = new Point(lrXNum, lrYNum);
         String[][] grid = new String[viewHeight][viewWidth];
-        for (int i = Length - ulXNum; i < lrXNum; i++) {
-            for (int j = Length - ulYNum; j < lrYNum; j++) {
-                grid[i][j] = String.format("d%d_x%d_y%d", depth, i, j);
+        for (int i = ulXNum; i < lrXNum; i++) {
+            for (int j = ulYNum; j < lrYNum; j++) {
+                grid[i][j] = String.format("d%d_x%d_y%d.png", depth, i, j);
             }
         }
-
-
-
-
 
         return grid;
     }

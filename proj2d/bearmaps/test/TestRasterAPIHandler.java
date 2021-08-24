@@ -170,8 +170,8 @@ public class TestRasterAPIHandler {
 
         double lrlon=-122.22275132672245, ullon=-122.23995662778569, w=613.0, h=676.0;
 
-        int actual  = (int) rasterer.getDepth(ullon, lrlon, w)[0];
-        double pixel1  =  rasterer.getDepth(ullon, lrlon, w)[1];
+        int actual  = (int) rasterer.getDepthAndPixelInFeet(ullon, lrlon, w)[0];
+        double pixel1  =  rasterer.getDepthAndPixelInFeet(ullon, lrlon, w)[1];
 
         assertEquals(4, actual);
         assertEquals(6.1841, pixel1, 0.0001);
