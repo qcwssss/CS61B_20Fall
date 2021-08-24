@@ -180,15 +180,15 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
     private String[][] getGridFileNames(int ulXNum, int ulYNum, int lrXNum, int lrYNum, int depth) {
         int Length = (int) (Math.pow(2, depth) - 1);
         int viewWidth, viewHeight;
-        viewWidth = lrXNum -ulXNum;
-        viewHeight = lrYNum - ulYNum;
+        viewWidth = Length - lrXNum -ulXNum + 1;
+        viewHeight = Length - lrYNum - ulYNum + 1;
 
         //Point upperLeft = new Point(ulXNum, ulYNum);
         //Point lowerRight = new Point(lrXNum, lrYNum);
         String[][] grid = new String[viewHeight][viewWidth];
-        for (int i = ulXNum; i < lrXNum; i++) {
-            for (int j = ulYNum; j < lrYNum; j++) {
-                grid[i][j] = String.format("d%d_x%d_y%d.png", depth, i, j);
+        for (int i = 0; i < viewHeight; i++) {
+            for (int j = 0; j < viewWidth; j++) {
+                grid[i][j] = String.format("d%d_x%d_y%d.png", depth, j + ulXNum, i + ulYNum);
             }
         }
 
