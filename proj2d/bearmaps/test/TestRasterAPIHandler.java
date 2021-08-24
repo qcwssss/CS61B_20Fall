@@ -163,6 +163,7 @@ public class TestRasterAPIHandler {
         return sj.toString();
     }
 
+    /*
     @Test
     public void testGetDepth() {
         //double SL = 288200.0;
@@ -176,6 +177,35 @@ public class TestRasterAPIHandler {
         assertEquals(4, actual);
         assertEquals(6.1841, pixel1, 0.0001);
 
+    }
+     */
+
+    @Test
+    public void testProcessFourImages() {
+
+        Map<String, Double> params1 = new HashMap<>();
+        // {lrlon=-122.2104604264636, ullon=-122.30410170759153, w=1091.0, h=566.0, ullat=37.870213571328854, lrlat=37.8318576119893}
+        params1.put("ullon",-122.30410170759153);
+        params1.put("ullat", 37.870213571328854);
+        params1.put("lrlon", -122.2104604264636);
+        params1.put("lrlat", 37.8318576119893);
+        params1.put("w", 1091.0);
+        params1.put("h", 566.0);
+
+        Map<String, Double> expected1 = new HashMap<>();
+        // {lrlon=-122.2104604264636, ullon=-122.30410170759153, w=1091.0, h=566.0, ullat=37.870213571328854, lrlat=37.8318576119893}
+        expected1.put("ullon",-122.30410170759153);
+        expected1.put("ullat", 37.870213571328854);
+        expected1.put("lrlon", -122.2104604264636);
+        expected1.put("lrlat", 37.8318576119893);
+        expected1.put("w", 1091.0);
+        expected1.put("h", 566.0);
+
+        Map<String, Object> actual = rasterer.processRequest(params1, null);
+        String msg = "Your results did not match the expected results for input "
+                + mapToString(params1) + ".\n";
+        // expected = 4, when i = 0;
+        checkParamsMap(msg, expected1, actual);
     }
 
 }

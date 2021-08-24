@@ -99,17 +99,13 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         //Corner Case 2: No Coverage,  ensure query_success is set to false.
         if (ullon < Constants.ROOT_ULLON || lrlon > Constants.ROOT_LRLON
                 || ullat > Constants.ROOT_ULLAT || lrlat < Constants.ROOT_LRLAT
-                || ullon >= lrlon || ullat <= lrlat) {
-
+                || ullon >= lrlon || ullat <= lrlat)
+        {
             results.put(REQUIRED_RASTER_RESULT_PARAMS[6], false);
             return results;
         }
 
-        double[] DepthAndPixelPerFeet = getDepthAndPixelInFeet(ullon, lrlon, width);
-        int depth = (int) DepthAndPixelPerFeet[0];
-        double pixelPerFeet = DepthAndPixelPerFeet[1];
-        //double lonPerImg = pixelPerFeet * Constants.TILE_SIZE / Constants.SL;
-
+        int depth = getDepth(ullon, lrlon, width);
         results.put("depth", depth);
 
         double lonDistPerTile = (Constants.ROOT_LRLON - Constants.ROOT_ULLON) / Math.pow(2, depth);
@@ -141,50 +137,26 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
     }
 
     /** Get depth helper. */
-    public double[] getDepthAndPixelInFeet(double ullon, double lrlon, double w) {
+    public int getDepth(double ullon, double lrlon, double w) {
         double lonDPPExpected = Math.abs(ullon - lrlon) * Constants.SL / w;
 
         int depth = 0;
         double curLonDPP = Constants.SL * Math.abs(Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE;
-        while (curLonDPP > lonDPPExpected && depth <= 7) {
+        while (curLonDPP > lonDPPExpected && depth < 7) {
             curLonDPP /= 2;
             depth ++;
         }
 
-        double[] reVals = {Math.min(7, depth), curLonDPP};
-        return reVals;
+        return depth;
     }
 
-    private double[] getCoordinates(double pixelPerFeet, double ullon, double ullat, double lrlon, double lrlat) {
-        double dXul, dYul, dXlr, dYlr;
-        dXul = Math.abs(Constants.ROOT_ULLON - ullon);
-        dYul = Math.abs(Constants.ROOT_ULLAT - ullat);
-        int ulXNum = (int) (dXul/pixelPerFeet);
-        int ulYNum = (int) (dYul/pixelPerFeet);
-
-        dXlr = Math.abs(Constants.ROOT_LRLON - lrlon);
-        dYlr = Math.abs(Constants.ROOT_LRLAT - lrlat);
-        int lrXNum = (int) (dXlr/pixelPerFeet);
-        int lrYNum = (int) (dYlr/pixelPerFeet);
-
-        // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
-        double raster_ul_lon = Constants.ROOT_ULLON - ulXNum * pixelPerFeet;
-        double raster_ul_lat = Constants.ROOT_ULLAT - ulYNum * pixelPerFeet;
-        double raster_lr_lon = Constants.ROOT_ULLAT - lrXNum * pixelPerFeet;
-        double raster_lr_lat = Constants.ROOT_ULLAT - lrYNum * pixelPerFeet;
-
-        double[] coordinates = new double[] {raster_ul_lon, raster_ul_lat, raster_lr_lon, raster_lr_lat };
-        return coordinates;
-    }
-
+    /** Get filenames grid. */
     private String[][] getGridFileNames(int ulXNum, int ulYNum, int lrXNum, int lrYNum, int depth) {
         int Length = (int) (Math.pow(2, depth) - 1);
         int viewWidth, viewHeight;
         viewWidth = Length - lrXNum -ulXNum + 1;
         viewHeight = Length - lrYNum - ulYNum + 1;
 
-        //Point upperLeft = new Point(ulXNum, ulYNum);
-        //Point lowerRight = new Point(lrXNum, lrYNum);
         String[][] grid = new String[viewHeight][viewWidth];
         for (int i = 0; i < viewHeight; i++) {
             for (int j = 0; j < viewWidth; j++) {
