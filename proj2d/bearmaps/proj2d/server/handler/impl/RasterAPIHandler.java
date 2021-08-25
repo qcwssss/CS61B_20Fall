@@ -23,7 +23,7 @@ import static bearmaps.proj2d.utils.Constants.ROUTE_LIST;
 /**
  * Handles requests from the web browser for map images. These images
  * will be rastered into one large image to be displayed to the user.
- * @author rahul, Josh Hug, _________
+ * @author rahul, Josh Hug, Chen Qiu
  */
 public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<String, Object>> {
 
