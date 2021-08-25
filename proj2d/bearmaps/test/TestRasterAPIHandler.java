@@ -163,27 +163,10 @@ public class TestRasterAPIHandler {
         return sj.toString();
     }
 
-    /*
-    @Test
-    public void testGetDepth() {
-        //double SL = 288200.0;
-        //double curLonDPP = SL * Math.abs(Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE;
-
-        double lrlon=-122.22275132672245, ullon=-122.23995662778569, w=613.0, h=676.0;
-
-        int actual  = (int) rasterer.getDepthAndPixelInFeet(ullon, lrlon, w)[0];
-        double pixel1  =  rasterer.getDepthAndPixelInFeet(ullon, lrlon, w)[1];
-
-        assertEquals(4, actual);
-        assertEquals(6.1841, pixel1, 0.0001);
-
-    }
-     */
 
     @Test
     public void testProcessFourImages() {
         Map<String, Double> params1 = new HashMap<>();
-        // {lrlon=-122.2104604264636, ullon=-122.30410170759153, w=1091.0, h=566.0, ullat=37.870213571328854, lrlat=37.8318576119893}
         params1.put("ullon",-122.30410170759153);
         params1.put("ullat", 37.870213571328854);
         params1.put("lrlon", -122.2104604264636);
