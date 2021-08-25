@@ -1,4 +1,4 @@
-package bearmaps;
+package bearmaps.proj2ab;
 
 public enum Orientation {
 	VERTICAL,
