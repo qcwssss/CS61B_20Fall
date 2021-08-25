@@ -110,11 +110,18 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double lonDistPerTile = (Constants.ROOT_LRLON - Constants.ROOT_ULLON) / Math.pow(2, depth);
         double latDistPerTile = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT) / Math.pow(2, depth);
 
-        // get rid of remainder
-        int ulXNum = (int) (Math.abs(Constants.ROOT_ULLON - ullon)/lonDistPerTile);
-        int ulYNum = (int) (Math.abs(Constants.ROOT_ULLAT - ullat)/latDistPerTile);
-        int lrXNum = (int) (Math.abs(Constants.ROOT_LRLON - lrlon)/lonDistPerTile);
-        int lrYNum = (int) (Math.abs(Constants.ROOT_LRLAT - lrlat)/latDistPerTile);
+        // get rid of remainder, calculate the absolute number of tiles to the bound
+        int ulXNumAbs = (int) (Math.abs(Constants.ROOT_ULLON - ullon)/lonDistPerTile);
+        int ulYNumAbs = (int) (Math.abs(Constants.ROOT_ULLAT - ullat)/latDistPerTile);
+        int lrXNumAbs = (int) (Math.abs(Constants.ROOT_LRLON - lrlon)/lonDistPerTile);
+        int lrYNumAbs = (int) (Math.abs(Constants.ROOT_LRLAT - lrlat)/latDistPerTile);
+
+        // Bound checking, corner case #1
+        // if view > img , X/Y = 0
+        int ulXNum = ullon < Constants.ROOT_ULLON ? 0 : ulXNumAbs;
+        int ulYNum = ullat > Constants.ROOT_ULLAT ? 0 : ulYNumAbs;
+        int lrXNum = lrlon > Constants.ROOT_LRLON ? 0 : lrXNumAbs;
+        int lrYNum = lrlat < Constants.ROOT_LRLAT ? 0 : lrYNumAbs;
 
         // "raster_ul_lon", "raster_ul_lat", "raster_lr_lon", "raster_lr_lat",
         double raster_ul_lon = Constants.ROOT_ULLON + ulXNum * lonDistPerTile;
@@ -217,7 +224,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      * we made this into provided code since it was just a bit too low level.
      */
     private  void writeImagesToOutputStream(Map<String, Object> rasteredImageParams,
-                                                  ByteArrayOutputStream os) {
+                                            ByteArrayOutputStream os) {
         String[][] renderGrid = (String[][]) rasteredImageParams.get("render_grid");
         int numVertTiles = renderGrid.length;
         int numHorizTiles = renderGrid[0].length;

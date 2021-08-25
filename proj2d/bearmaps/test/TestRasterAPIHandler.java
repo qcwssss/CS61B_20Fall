@@ -195,4 +195,20 @@ public class TestRasterAPIHandler {
         assertEquals(2, actual.get("depth"));
     }
 
+
+    @Test
+    public void testCornerCase1() {
+        Map<String, Double> params1 = new HashMap<>();
+        // {lrlon=-122.25874053955079, ullon=-122.32650386810303, w=1579.0, h=722.0, ullat=37.876543897656674, lrlat=37.852080114403}
+        params1.put("ullon", -122.32650386810303);
+        params1.put("ullat", 37.876543897656674);
+        params1.put("lrlon", -122.25874053955079);
+        params1.put("lrlat", 37.852080114403);
+        params1.put("w", 1579.0);
+        params1.put("h", 722.0);
+
+        Map<String, Object> actual = rasterer.processRequest(params1, null);
+        assertEquals(1, actual.get("depth"));
+    }
+
 }
