@@ -6,6 +6,8 @@ import bearmaps.proj2c.streetmap.StreetMapGraph;
 import bearmaps.proj2c.streetmap.Node;
 import bearmaps.proj2d.trie.MyTrieSet;
 import bearmaps.proj2d.trie.TrieSet61B;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.*;
 
@@ -19,9 +21,9 @@ import java.util.*;
 public class AugmentedStreetMapGraph extends StreetMapGraph {
     private final KDTree kdT;
     private final HashMap<Point, Node> pointToNode;
-    //private final HashMap<String, Node> nameToNode;
-    private HashMap<String, String> cleanToFullName;
-    private TrieSet61B trie;
+    private final HashMap<String, List<Node>> nameToNode;
+    private final HashMap<String, String> cleanToFullName;
+    private final TrieSet61B trie;
 
 
     public AugmentedStreetMapGraph(String dbPath) {
@@ -29,7 +31,7 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
         List<Node> nodes = this.getNodes();
         this.pointToNode = new HashMap<>();
         // Implement autocomplete
-        //nameToNode = new HashMap<>();
+        nameToNode = new HashMap<>();
         trie = new MyTrieSet();
         cleanToFullName = new HashMap<>();
 
@@ -42,10 +44,15 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
             }
 
             if (n.name() != null) {
-                //nameToNode.put(n.name(), n);
                 String cleanName = cleanString(n.name()), fullName = n.name();
                 cleanToFullName.put(cleanName, fullName);
                 this.trie.add(cleanName);
+
+                // multiple locations can share the same name
+                if (!nameToNode.containsKey(cleanName)) {
+                    nameToNode.put(cleanName, new LinkedList<>());
+                }
+                nameToNode.get(cleanName).add(n);
 
             }
         }
@@ -101,7 +108,24 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * "id" -> Number, The id of the node. <br>
      */
     public List<Map<String, Object>> getLocations(String locationName) {
-        return new LinkedList<>();
+        String cleanLocation = cleanString(locationName);
+        List<Map<String, Object>> listOfNodes = new LinkedList<>();
+
+        if (!cleanToFullName.containsKey(cleanLocation)) {
+            return null;
+        }
+        for (Node n : nameToNode.get(cleanLocation)) {
+            Map<String, Object> locationMap = new HashMap<>();
+            // {"lat", "lon", "name", "id" };
+            locationMap.put("lat", n.lat());
+            locationMap.put("lon", n.lon());
+            locationMap.put("name", n.name());
+            locationMap.put("id", n.id());
+
+            listOfNodes.add(locationMap);
+        }
+
+        return listOfNodes;
     }
 
 
@@ -113,6 +137,17 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      */
     private static String cleanString(String s) {
         return s.replaceAll("[^a-zA-Z ]", "").toLowerCase();
+    }
+
+    // Does cleanString method remove the spaces?
+    public static void main(String[] args) {
+        String day = "Claremont Day";
+        String expected = "claremont day";
+        System.out.println("Does cleanString method remove the spaces?\n"
+                + day + " => "+ cleanString(day) + "\n" +
+                expected.equals(cleanString(day)));
+
+
     }
 
 }
