@@ -102,7 +102,7 @@ public class MyTrieSet implements TrieSet61B {
 	@Override
 	public List<String> keysWithPrefix(String prefix) {
 		if (!this.contains(prefix)) {
-			throw new IllegalArgumentException("prefix doesn't exist in this Trie");
+			throw new IllegalArgumentException("prefix: " + prefix + " doesn't exist in this Trie");
 		}
 
 		int preLength = prefix.length();
