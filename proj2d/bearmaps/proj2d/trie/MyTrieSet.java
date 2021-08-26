@@ -1,10 +1,13 @@
+package bearmaps.proj2d.trie;
 
-import java.sql.Struct;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 
-public class MyTrieSet implements TrieSet61B{
+public class MyTrieSet implements TrieSet61B {
 	private Node root;
 	private int numOfKeys;
+
 
 
 	private class Node {
@@ -133,5 +136,9 @@ public class MyTrieSet implements TrieSet61B{
 	@Override
 	public String longestPrefixOf(String key) {
 		throw new UnsupportedOperationException();
+	}
+
+	public int getNumOfKeys() {
+		return numOfKeys;
 	}
 }

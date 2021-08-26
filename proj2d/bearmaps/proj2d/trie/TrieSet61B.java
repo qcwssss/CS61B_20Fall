@@ -1,3 +1,5 @@
+package bearmaps.proj2d.trie;
+
 import java.util.List;
 
 public interface TrieSet61B {

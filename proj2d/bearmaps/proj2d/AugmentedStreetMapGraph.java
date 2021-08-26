@@ -4,6 +4,7 @@ import bearmaps.proj2ab.KDTree;
 import bearmaps.proj2ab.Point;
 import bearmaps.proj2c.streetmap.StreetMapGraph;
 import bearmaps.proj2c.streetmap.Node;
+import bearmaps.proj2d.trie.MyTrieSet;
 
 import java.util.*;
 
@@ -17,13 +18,18 @@ import java.util.*;
 public class AugmentedStreetMapGraph extends StreetMapGraph {
     private final KDTree kdT;
     private final HashMap<Point, Node> pointToNode;
+    //private final HashMap<String, Node> nameToNode;
+    private MyTrieSet trie;
+
 
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
-        // You might find it helpful to uncomment the line below:
         List<Node> nodes = this.getNodes();
-
         this.pointToNode = new HashMap<>();
+        // Implement autocomplete
+        //nameToNode = new HashMap<>();
+        trie = new MyTrieSet();
+
         ArrayList<Point> listOfPoints = new ArrayList<>(nodes.size());
         for (Node n : nodes) {
             if (neighbors(n.id()).size() > 0) {
@@ -31,8 +37,18 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
                 pointToNode.put(p, n);
                 listOfPoints.add(p);
             }
+
+            if (n.name() != null) {
+                //nameToNode.put(n.name(), n);
+                //this.trie.add(cleanString(n.name())); // ?
+                this.trie.add(n.name());
+
+            }
         }
+
         this.kdT = new KDTree(listOfPoints);
+
+
     }
 
 
@@ -59,7 +75,8 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * cleaned <code>prefix</code>.
      */
     public List<String> getLocationsByPrefix(String prefix) {
-        return new LinkedList<>();
+        prefix = cleanString(prefix);
+        return trie.keysWithPrefix(prefix);
     }
 
     /**
