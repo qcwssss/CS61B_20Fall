@@ -92,17 +92,18 @@ public class Router {
             check if route is on the same road. Only check direction may not be enough,
             since a slight turing may remain on the same road
              */
-
             if (destWEdge.getName() == null && !nd.way.equals(UNKNOWN_ROAD)
-                    ||destWEdge.getName() != null &&!destWEdge.getName().equals(nd.way)) {
+                    ||destWEdge.getName() != null && !destWEdge.getName().equals(nd.way)) {
                 // different road
                 result.add(nd);
+
                 double prevBearing = bearing(g.lon(prev), g.lon(cur), g.lat(prev), g.lat(cur));
                 double curBearing = bearing(g.lon(cur), g.lon(next), g.lat(cur), g.lat(next));
                 int curDirect = NavigationDirection.getDirection(prevBearing, curBearing);
 
                 String curName = destWEdge.getName() == null ? UNKNOWN_ROAD : destWEdge.getName();
-                nd = new NavigationDirection(NavigationDirection.DIRECTIONS[curDirect], curName, destWEdge.weight());
+                nd = new NavigationDirection(curDirect, curName, destWEdge.weight());
+
             } else {
                 nd.distance += destWEdge.weight();
             }
@@ -170,10 +171,10 @@ public class Router {
             this.distance = 0.0;
         }
 
-        public NavigationDirection(String direct, String road, double dist) {
-            this.direction = STRAIGHT;
-            this.way = UNKNOWN_ROAD;
-            this.distance = 0.0;
+        public NavigationDirection(int direct, String road, double dist) {
+            this.direction = direct;
+            this.way = road;
+            this.distance = dist;
         }
 
         public String toString() {
