@@ -1,6 +1,7 @@
 package bearmaps.proj2d;
 
 import bearmaps.proj2c.AStarSolver;
+import bearmaps.proj2c.WeightedEdge;
 import bearmaps.proj2c.WeirdSolver;
 import bearmaps.proj2c.streetmap.Node;
 
@@ -9,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static bearmaps.proj2d.Router.NavigationDirection.bearing;
+import static bearmaps.proj2d.Router.NavigationDirection.getDirection;
 
 /**
  * This class acts as a helper for the RoutingAPIHandler.
@@ -51,20 +53,23 @@ public class Router {
             return result;
         }
 
-        NavigationDirection start = new NavigationDirection();
-        start.direction = NavigationDirection.START;
-        start.way = g.name(route.get(0));
+        Iterator<Long> routeItr = route.iterator();
+        long prev = routeItr.next();
+        long cur = routeItr.next();
 
-        List<Double> bearingList = new ArrayList<>();
-        //ArrayList<Double> b2 = new ArrayList<>();
+        NavigationDirection nd = new NavigationDirection();
+        nd.direction = NavigationDirection.START;
+        //nd.way = g.name(prev);
+        //nd.distance = 0;
 
+        /*
         for (int i = 1; i < route.size(); i++) {
             long prevId = route.get(i - 1);
             long curId = route.get(i);
             double curBearing = bearing(g.lon(prevId), g.lon(curId), g.lon(prevId), g.lat(curId));
             bearingList.add(curBearing);
         }
-        /*
+
         two pointer ?
         // loop route, for (i = 1)
             Navigation curNavi = new NavigationDirection();
@@ -73,7 +78,31 @@ public class Router {
             if (preD != curD)
                 curD = preD
         */
-        return null;
+
+        // use this loop to get weight and store it in distance, no need to calculate it again
+        for (WeightedEdge<Long> w : g.neighbors(prev)) {
+            if (w.to() == cur) {
+                nd.distance += w.weight();
+                nd.way = w.getName();
+                break;
+            }
+        }
+        /* route only have two vertices */
+
+        // more than two vertices
+        while (routeItr.hasNext()) {
+            long next = routeItr.next();
+            double prevBearing = bearing(g.lon(prev), g.lon(cur), g.lat(prev), g.lat(cur));
+
+
+            prev = cur;
+            cur = next;
+
+        }
+
+
+        result.add(nd);
+        return result;
     }
 
     /**
