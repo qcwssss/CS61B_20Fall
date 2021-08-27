@@ -49,63 +49,71 @@ public class Router {
     public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g,
                                                             List<Long> route) {
         /* fill in for part IV */
-        List<NavigationDirection> results = new LinkedList<>();
+        List<NavigationDirection> result = new LinkedList<>();
         if (route.size() < 2) {
-            return results;
+            return result;
         }
 
-        //Iterator<Long> routeItr = route.iterator();
-        Iterator<Long> routeIter = route.iterator();
-
-        long pre = routeIter.next();
-        long cur = routeIter.next();
+        Iterator<Long> routeItr = route.iterator();
+        long prev = routeItr.next();
+        long cur = routeItr.next();
 
         NavigationDirection nd = new NavigationDirection();
         nd.direction = NavigationDirection.START;
-        nd.distance = -1.0;  // as a flag, meaning the WeightedEdge is not found.
+        //nd.way = g.name(prev);
 
-        for (WeightedEdge<Long> we : g.neighbors(pre)) {
-            if (we.to() == cur) {
-                nd.way = (we.getName() == null) ? NavigationDirection.UNKNOWN_ROAD : we.getName();
-                nd.distance = we.weight();
+        // use this loop to get weight and store it in distance, no need to calculate it again
+        for (WeightedEdge<Long> w : g.neighbors(prev)) {
+            if (w.to() == cur) {
+                nd.distance += w.weight();
+                nd.way = w.getName() == null ? UNKNOWN_ROAD : w.getName();
                 break;
             }
         }
+        /* route only have two vertices */
 
-        while (routeIter.hasNext()) {
-            long next = routeIter.next();
+        // more than two vertices
+        while (routeItr.hasNext()) {
+            long next = routeItr.next();
 
-            WeightedEdge<Long> we = null;  // from pre to cur
-            for (WeightedEdge<Long> weightedEdge : g.neighbors(cur)) {
-                if (weightedEdge.to() == next) {
-                    we = weightedEdge;
+            WeightedEdge<Long> destWEdge = null;
+            for (WeightedEdge<Long> w : g.neighbors(cur)) {
+                if (w.to() == next) {
+                    destWEdge = w;
                     break;
                 }
             }
-            if (we == null) {
-                throw new IllegalArgumentException("Invalid route.");
+
+            if (destWEdge == null) {
+                throw new IllegalArgumentException("Invalid route, can't find next vertex");
             }
 
-            if ((we.getName() == null && !nd.way.equals(NavigationDirection.UNKNOWN_ROAD))
-                    || (we.getName() != null && !we.getName().equals(nd.way))) {
-                results.add(nd);
+            /*
+            check if route is on the same road. Only check direction may not be enough,
+            since a slight turing may remain on the same road
+             */
 
-                nd = new NavigationDirection();
-                nd.direction = NavigationDirection.getDirection(
-                        NavigationDirection.bearing(g.lon(pre), g.lon(cur), g.lat(pre), g.lat(cur)),
-                        NavigationDirection.bearing(g.lon(cur), g.lon(next), g.lat(cur), g.lat(next)));
-                nd.way = (we.getName() == null) ? NavigationDirection.UNKNOWN_ROAD : we.getName();
-                nd.distance = we.weight();
+            if (destWEdge.getName() == null && !nd.way.equals(UNKNOWN_ROAD)
+                    ||destWEdge.getName() != null &&!destWEdge.getName().equals(nd.way)) {
+                // different road
+                result.add(nd);
+                double prevBearing = bearing(g.lon(prev), g.lon(cur), g.lat(prev), g.lat(cur));
+                double curBearing = bearing(g.lon(cur), g.lon(next), g.lat(cur), g.lat(next));
+                int curDirect = NavigationDirection.getDirection(prevBearing, curBearing);
+
+                String curName = destWEdge.getName() == null ? UNKNOWN_ROAD : destWEdge.getName();
+                nd = new NavigationDirection(NavigationDirection.DIRECTIONS[curDirect], curName, destWEdge.weight());
             } else {
-                nd.distance += we.weight();
+                nd.distance += destWEdge.weight();
             }
 
-            pre = cur;
+            prev = cur;
             cur = next;
         }
 
-        results.add(nd);
-        return results;
+
+        result.add(nd);
+        return result;
     }
 
     /**
@@ -267,8 +275,8 @@ public class Router {
         public boolean equals(Object o) {
             if (o instanceof NavigationDirection) {
                 return direction == ((NavigationDirection) o).direction
-                    && way.equals(((NavigationDirection) o).way)
-                    && distance == ((NavigationDirection) o).distance;
+                        && way.equals(((NavigationDirection) o).way)
+                        && distance == ((NavigationDirection) o).distance;
             }
             return false;
         }
