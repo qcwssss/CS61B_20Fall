@@ -2,15 +2,17 @@ package bearmaps.proj2d;
 
 import bearmaps.proj2c.AStarSolver;
 import bearmaps.proj2c.WeirdSolver;
+import bearmaps.proj2c.streetmap.Node;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static bearmaps.proj2d.Router.NavigationDirection.bearing;
+
 /**
  * This class acts as a helper for the RoutingAPIHandler.
- * @author Josh Hug, ______
+ * @author Josh Hug, Chen Qiu
  */
 public class Router {
 
@@ -29,8 +31,7 @@ public class Router {
                                           double destlon, double destlat) {
         long src = g.closest(stlon, stlat);
         long dest = g.closest(destlon, destlat);
-        return new WeirdSolver<>(g, src, dest, 20).solution();
-        //return new AStarSolver<>(g, src, dest, 20).solution();
+        return new AStarSolver<>(g, src, dest, 20).solution();
 
     }
 
@@ -45,6 +46,33 @@ public class Router {
     public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g,
                                                             List<Long> route) {
         /* fill in for part IV */
+        List<NavigationDirection> result = new LinkedList<>();
+        if (route.size() < 2) {
+            return result;
+        }
+
+        NavigationDirection start = new NavigationDirection();
+        start.direction = NavigationDirection.START;
+        start.way = g.name(route.get(0));
+
+        List<Double> bearingList = new ArrayList<>();
+        //ArrayList<Double> b2 = new ArrayList<>();
+
+        for (int i = 1; i < route.size(); i++) {
+            long prevId = route.get(i - 1);
+            long curId = route.get(i);
+            double curBearing = bearing(g.lon(prevId), g.lon(curId), g.lon(prevId), g.lat(curId));
+            bearingList.add(curBearing);
+        }
+        /*
+        two pointer ?
+        // loop route, for (i = 1)
+            Navigation curNavi = new NavigationDirection();
+            //preDirection = getDirection(bearingList.get(i -1), bearingList.get(i));
+            //curDirection = getDirection(bearingList.get(i), bearingList.get(i+1));
+            if (preD != curD)
+                curD = preD
+        */
         return null;
     }
 
