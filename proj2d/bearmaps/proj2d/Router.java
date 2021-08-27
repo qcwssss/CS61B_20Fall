@@ -2,15 +2,16 @@ package bearmaps.proj2d;
 
 import bearmaps.proj2c.AStarSolver;
 import bearmaps.proj2c.WeightedEdge;
-import bearmaps.proj2c.WeirdSolver;
-import bearmaps.proj2c.streetmap.Node;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static bearmaps.proj2d.Router.NavigationDirection.UNKNOWN_ROAD;
 import static bearmaps.proj2d.Router.NavigationDirection.bearing;
-import static bearmaps.proj2d.Router.NavigationDirection.getDirection;
 
 /**
  * This class acts as a helper for the RoutingAPIHandler.
@@ -60,30 +61,12 @@ public class Router {
         NavigationDirection nd = new NavigationDirection();
         nd.direction = NavigationDirection.START;
         //nd.way = g.name(prev);
-        //nd.distance = 0;
-
-        /*
-        for (int i = 1; i < route.size(); i++) {
-            long prevId = route.get(i - 1);
-            long curId = route.get(i);
-            double curBearing = bearing(g.lon(prevId), g.lon(curId), g.lon(prevId), g.lat(curId));
-            bearingList.add(curBearing);
-        }
-
-        two pointer ?
-        // loop route, for (i = 1)
-            Navigation curNavi = new NavigationDirection();
-            //preDirection = getDirection(bearingList.get(i -1), bearingList.get(i));
-            //curDirection = getDirection(bearingList.get(i), bearingList.get(i+1));
-            if (preD != curD)
-                curD = preD
-        */
 
         // use this loop to get weight and store it in distance, no need to calculate it again
         for (WeightedEdge<Long> w : g.neighbors(prev)) {
             if (w.to() == cur) {
                 nd.distance += w.weight();
-                nd.way = w.getName();
+                nd.way = w.getName() == null ? UNKNOWN_ROAD : w.getName();
                 break;
             }
         }
@@ -92,7 +75,35 @@ public class Router {
         // more than two vertices
         while (routeItr.hasNext()) {
             long next = routeItr.next();
+            WeightedEdge<Long> destWEdge = null;
+            for (WeightedEdge<Long> w : g.neighbors(cur)) {
+                if (w.to() == cur) {
+                    destWEdge = w;
+                    break;
+                }
+            }
+            if (destWEdge == null) {
+                throw new IllegalArgumentException("Invalid route, can't find next vertex");
+            }
+
+            /*
+            check if route is on the same road. Only check direction may not be enough,
+            since a slight turing may remain on the same road
+             */
             double prevBearing = bearing(g.lon(prev), g.lon(cur), g.lat(prev), g.lat(cur));
+            double curBearing = bearing(g.lon(cur), g.lon(next), g.lat(cur), g.lat(next));
+            int curDirect = NavigationDirection.getDirection(prevBearing, curBearing);
+
+            if (destWEdge.getName() == null && !nd.way.equals(UNKNOWN_ROAD)
+                    ||!destWEdge.getName().equals(nd.way)) {
+                // different road
+                result.add(nd);
+
+                String curName = destWEdge.getName() == null ? UNKNOWN_ROAD : destWEdge.getName();
+                nd = new NavigationDirection(NavigationDirection.DIRECTIONS[curDirect], curName, destWEdge.weight());
+            } else {
+                nd.distance += destWEdge.weight();
+            }
 
 
             prev = cur;
@@ -154,6 +165,12 @@ public class Router {
          * Create a default, anonymous NavigationDirection.
          */
         public NavigationDirection() {
+            this.direction = STRAIGHT;
+            this.way = UNKNOWN_ROAD;
+            this.distance = 0.0;
+        }
+
+        public NavigationDirection(String direct, String road, double dist) {
             this.direction = STRAIGHT;
             this.way = UNKNOWN_ROAD;
             this.distance = 0.0;
