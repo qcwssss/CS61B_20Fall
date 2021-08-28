@@ -287,6 +287,8 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
             try {
                 File in = new File(imgPath);
                 tileImg = ImageIO.read(in);
+                //tileImg = ImageIO.read(Thread.currentThread().getContextClassLoader().getResource(imgPath));
+
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }

@@ -20,6 +20,7 @@ public class MapServerInitializer {
      * Do not place it in the main function. Do not place initialization code anywhere else.
      **/
     public static void initializeServer(Map<String, APIRouteHandler> apiHandlers){
+        port(getHerokuAssignedPort());
 
         Constants.SEMANTIC_STREET_GRAPH = new AugmentedStreetMapGraph(Constants.OSM_DB_PATH);
         staticFileLocation("/page");
@@ -41,5 +42,13 @@ public class MapServerInitializer {
         }
 
 
+    }
+
+    private static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 }
