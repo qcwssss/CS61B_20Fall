@@ -2,7 +2,7 @@ package bearmaps.proj2c;
 
 import bearmaps.proj2ab.ArrayHeapMinPQ;
 import bearmaps.proj2ab.ExtrinsicMinPQ;
-import edu.princeton.cs.algs4.Stopwatch;
+import bearmaps.proj2c.streetmap.alg4.Stopwatch;
 
 import java.util.*;
 
