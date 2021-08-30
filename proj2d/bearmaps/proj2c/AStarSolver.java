@@ -2,9 +2,12 @@ package bearmaps.proj2c;
 
 import bearmaps.proj2ab.ArrayHeapMinPQ;
 import bearmaps.proj2ab.ExtrinsicMinPQ;
-import bearmaps.proj2c.streetmap.alg4.Stopwatch;
+import edu.princeton.cs.algs4.Stopwatch;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex>{
 	private SolverOutcome outcome;
