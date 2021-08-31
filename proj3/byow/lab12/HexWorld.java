@@ -22,6 +22,10 @@ public class HexWorld {
 		int height = size * 2;
 		boolean[][] hex = new boolean[height][longest];
 		// fill
+		int indent = size - 1;
+		for (int i = 0; i < height; i++) {
+			hex[i] = drawRow(size, indent);
+		}
 
 		return hex;
 
@@ -70,12 +74,12 @@ public class HexWorld {
 
 	}
 
-	public void printRow(boolean[] row) {
+	public static void printRow(boolean[] row) {
 		for (boolean val : row) {
-			if (val == true) System.out.print("1");
+			if (val) System.out.print("1");
 			else System.out.print("_");
 		}
-		System.out.println("\n____________");
+		System.out.println("");
 	}
 
 	public static void main(String[] args) {
