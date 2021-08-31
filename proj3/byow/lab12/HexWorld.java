@@ -46,4 +46,41 @@ public class HexWorld {
 
 		return row;
 	}
+
+	private boolean[] drawRow(int size, int indent) {
+		// indent/col <= size - 1
+		if (size < 2) {
+			throw new IllegalArgumentException("size must be a positive integer larger than 1");
+		}
+		if (indent > size - 1 || indent < 0) {
+			throw new IllegalArgumentException("Invalid indent");
+		}
+
+		int longest = 3 * size - 2;
+		boolean[] row = new boolean[longest];
+		for (int i = 0; i < longest; i++) {
+			if (i >= indent && i < size + indent) {
+			//if (i >= size - 1 && i < 2 * size -1) {
+				row[i] = true;
+			} else {
+				row[i] = false;
+			}
+		}
+		return row;
+
+	}
+
+	public void printRow(boolean[] row) {
+		for (boolean val : row) {
+			if (val == true) System.out.print("1");
+			else System.out.print("_");
+		}
+		System.out.println("\n____________");
+	}
+
+	public static void main(String[] args) {
+		HexWorld hex = new HexWorld();
+		boolean[] a = hex.drawRow(3, 2);
+		hex.printRow(a);
+	}
 }
