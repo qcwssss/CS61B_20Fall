@@ -32,6 +32,11 @@ public class BoringWorldDemo {
             }
         }
 
+        // add a row of 10 flowers
+        for (int x = 25; x < 30; x += 1) {
+            world[x][8] = Tileset.FLOWER;
+        }
+
         // draws the world to the screen
         ter.renderFrame(world);
     }
