@@ -45,15 +45,16 @@ public class HexWorld {
 		// fill
 		int indent = size - 1;
 		// upper half
-		for (int i = yPos; i < size; i++) {
-			drawRow(size, indent, xPos, i, randomTile, board);
-			if (indent > 0) indent--;
-			else indent = 0;
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size + i * 2; j++) {
+				board[xPos - i + j][yPos - i] = randomTile;
+			}
 		}
 		// lower half
-		for (int i = size; i < height; i++) {
-			drawRow(size, indent, xPos, i, randomTile, board);
-			indent++;
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size + i * 2; j++) {
+				board[xPos - i + j][yPos + i] = randomTile;
+			}
 		}
 
 	}
