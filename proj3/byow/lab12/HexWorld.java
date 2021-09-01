@@ -6,14 +6,27 @@ import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
  * Draws a world consisting of hexagonal regions.
  */
 public class HexWorld {
+	private static final int WIDTH = 60;
+	private static final int HEIGHT = 30;
 
-	public boolean[][] addHexagon(int size) {
+	private TETile[][] hexWorld;
+
+	public HexWorld() {
+		this.hexWorld = buildHexWorld();
+	}
+
+	public void addHexagon(int size, int xPos, int yPos) {
+
+	}
+
+	public void createHexagon(int size, int xPos, int yPos, TETile tile) {
 		if (size < 2) {
 			throw new IllegalArgumentException("size must be a positive integer larger than 1");
 		}
@@ -23,20 +36,31 @@ public class HexWorld {
 		boolean[][] hex = new boolean[height][longest];
 		// fill
 		int indent = size - 1;
-		for (int i = 0; i < height/2; i++) {
-			hex[i] = drawRow(size, indent);
+		for (int i = yPos; i < height/2; i++) {
+			drawRow(size, indent, xPos, i, tile);
 			if (indent > 0) indent--;
 			else indent = 0;
 		}
 		for (int i = height/2; i < height; i++) {
-			hex[i] = drawRow(size, indent);
+			drawRow(size, indent, xPos, i, tile);
 			indent++;
 		}
-		return hex;
+		//return hex;
 
 	}
 
-	private boolean[] drawRow(int size, int indent) {
+	private TETile[][] buildHexWorld() {
+		TETile[][] world = new TETile[WIDTH][HEIGHT];
+		for (int x = 0; x < WIDTH; x += 1) {
+			for (int y = 0; y < HEIGHT; y += 1) {
+				world[x][y] = Tileset.NOTHING;
+			}
+		}
+		return world;
+
+	}
+
+	private void drawRow(int size, int indent, int xPos, int yPos, TETile tile) {
 		// indent/col <= size - 1
 		if (size < 2) {
 			throw new IllegalArgumentException("size must be a positive integer larger than 1");
@@ -46,16 +70,12 @@ public class HexWorld {
 		}
 
 		int longest = 3 * size - 2;
-		boolean[] row = new boolean[longest];
-		for (int i = 0; i < longest; i++) {
+		//boolean[] row = new boolean[longest];
+		for (int i = xPos; i < longest; i++) {
 			if (i >= indent && i < longest - indent) {
-			//if (i >= size - 1 && i < 2 * size -1) {
-				row[i] = true;
-			} else {
-				row[i] = false;
+				this.hexWorld[yPos][i] = tile;
 			}
 		}
-		return row;
 
 	}
 
@@ -69,7 +89,7 @@ public class HexWorld {
 
 	public static void main(String[] args) {
 		HexWorld hex = new HexWorld();
-		boolean[] a = hex.drawRow(3, 2);
-		hex.printRow(a);
+		//boolean[] a = hex.drawRow(3, 2);
+		//hex.printRow(a);
 	}
 }

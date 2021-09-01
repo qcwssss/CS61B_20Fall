@@ -5,6 +5,7 @@ After looking at your own implementation, consider the implementation provided n
 How did your implementation differ from the given one? What lessons can be learned from it?**
 
 Answer:
+It's easy to create a single hexagon. In order to place it in the right location, we need to carefully set up the initial location, make the loop happening in an existing world grid.
 
 -----
 
