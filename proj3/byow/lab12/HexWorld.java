@@ -16,14 +16,13 @@ public class HexWorld {
 	private static final int WIDTH = 30;
 	private static final int HEIGHT = 30;
 
-	private TETile[][] hexWorld;
+	//private TETile[][] hexWorld;
+	private static final long SEED = 2873123;
+	private static final Random RANDOM = new Random(SEED);
 
-	/** Constructs a HexWorld. */
-	public HexWorld() {
-		this.hexWorld = buildHexWorld();
-	}
 
-	private TETile[][] buildHexWorld() {
+	/** Create a tile world of nothing. */
+	public static TETile[][] buildBoardWithNothing() {
 		TETile[][] world = new TETile[WIDTH][HEIGHT];
 		for (int x = 0; x < WIDTH; x += 1) {
 			for (int y = 0; y < HEIGHT; y += 1) {
@@ -34,35 +33,34 @@ public class HexWorld {
 	}
 
 
-	public void addHexagon(int size, int xPos, int yPos, TETile tile) {
+	public void addHexagon(int size, int xPos, int yPos, TETile[][] board) {
 		if (size < 2) {
 			throw new IllegalArgumentException("size must be a positive integer larger than 1");
 		}
-		// longest row = size + 2 * (size - 1)
+
 		int longest = 3 * size - 2;
 		int height = size * 2;
-		//boolean[][] hex = new boolean[height][longest];
+		TETile randomTile = randomTile();
+
 		// fill
 		int indent = size - 1;
-		for (int i = yPos; i < height/2; i++) {
-			drawRow(size, indent, xPos, i, tile);
+		// upper half
+		for (int i = yPos; i < size; i++) {
+			drawRow(size, indent, xPos, i, randomTile, board);
 			if (indent > 0) indent--;
 			else indent = 0;
 		}
-		for (int i = height/2; i < height; i++) {
-			drawRow(size, indent, xPos, i, tile);
+		// lower half
+		for (int i = size; i < height; i++) {
+			drawRow(size, indent, xPos, i, randomTile, board);
 			indent++;
 		}
-		//return hex;
 
 	}
 
 
-	private void drawRow(int size, int indent, int xPos, int yPos, TETile tile) {
+	private void drawRow(int size, int indent, int xPos, int yPos, TETile tile, TETile[][] board) {
 		// indent/col <= size - 1
-		if (size < 2) {
-			throw new IllegalArgumentException("size must be a positive integer larger than 1");
-		}
 		if (indent > size - 1 || indent < 0) {
 			throw new IllegalArgumentException("Invalid indent");
 		}
@@ -71,7 +69,7 @@ public class HexWorld {
 		//boolean[] row = new boolean[longest];
 		for (int i = xPos; i < longest; i++) {
 			if (i >= indent && i < longest - indent) {
-				this.hexWorld[yPos][i] = tile;
+				board[yPos][i] = tile;
 			}
 		}
 
@@ -85,13 +83,27 @@ public class HexWorld {
 		System.out.println("");
 	}
 
+	private static TETile randomTile() {
+		int tileNum = RANDOM.nextInt(5);
+		switch (tileNum) {
+			case 0: return Tileset.WALL;
+			case 1: return Tileset.FLOWER;
+			case 2: return Tileset.TREE;
+			case 3: return Tileset.WATER;
+			case 4: return Tileset.MOUNTAIN;
+
+			default: return Tileset.NOTHING;
+		}
+	}
+
 	public static void main(String[] args) {
+		HexWorld hex = new HexWorld();
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
-		HexWorld hexWorld = new HexWorld();
-		hexWorld.addHexagon(3, 3, 1, Tileset.WALL);
+		TETile[][] hexBoard = buildBoardWithNothing();
+		hex.addHexagon(3, 3, 1, hexBoard);
 
-		ter.renderFrame(hexWorld.hexWorld);
+		ter.renderFrame(hexBoard);
 	}
 }
