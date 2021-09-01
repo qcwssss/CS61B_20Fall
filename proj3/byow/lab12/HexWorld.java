@@ -13,27 +13,35 @@ import java.util.Random;
  * Draws a world consisting of hexagonal regions.
  */
 public class HexWorld {
-	private static final int WIDTH = 60;
+	private static final int WIDTH = 30;
 	private static final int HEIGHT = 30;
 
 	private TETile[][] hexWorld;
 
+	/** Constructs a HexWorld. */
 	public HexWorld() {
 		this.hexWorld = buildHexWorld();
 	}
 
-	public void addHexagon(int size, int xPos, int yPos) {
-
+	private TETile[][] buildHexWorld() {
+		TETile[][] world = new TETile[WIDTH][HEIGHT];
+		for (int x = 0; x < WIDTH; x += 1) {
+			for (int y = 0; y < HEIGHT; y += 1) {
+				world[x][y] = Tileset.NOTHING;
+			}
+		}
+		return world;
 	}
 
-	public void createHexagon(int size, int xPos, int yPos, TETile tile) {
+
+	public void addHexagon(int size, int xPos, int yPos, TETile tile) {
 		if (size < 2) {
 			throw new IllegalArgumentException("size must be a positive integer larger than 1");
 		}
 		// longest row = size + 2 * (size - 1)
 		int longest = 3 * size - 2;
 		int height = size * 2;
-		boolean[][] hex = new boolean[height][longest];
+		//boolean[][] hex = new boolean[height][longest];
 		// fill
 		int indent = size - 1;
 		for (int i = yPos; i < height/2; i++) {
@@ -49,16 +57,6 @@ public class HexWorld {
 
 	}
 
-	private TETile[][] buildHexWorld() {
-		TETile[][] world = new TETile[WIDTH][HEIGHT];
-		for (int x = 0; x < WIDTH; x += 1) {
-			for (int y = 0; y < HEIGHT; y += 1) {
-				world[x][y] = Tileset.NOTHING;
-			}
-		}
-		return world;
-
-	}
 
 	private void drawRow(int size, int indent, int xPos, int yPos, TETile tile) {
 		// indent/col <= size - 1
@@ -88,8 +86,12 @@ public class HexWorld {
 	}
 
 	public static void main(String[] args) {
-		HexWorld hex = new HexWorld();
-		//boolean[] a = hex.drawRow(3, 2);
-		//hex.printRow(a);
+		TERenderer ter = new TERenderer();
+		ter.initialize(WIDTH, HEIGHT);
+
+		HexWorld hexWorld = new HexWorld();
+		hexWorld.addHexagon(3, 3, 1, Tileset.WALL);
+
+		ter.renderFrame(hexWorld.hexWorld);
 	}
 }

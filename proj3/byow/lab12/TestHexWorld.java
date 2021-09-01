@@ -1,5 +1,6 @@
 package byow.lab12;
 
+import byow.TileEngine.Tileset;
 import org.junit.Test;
 
 public class TestHexWorld {
@@ -15,9 +16,13 @@ public class TestHexWorld {
 	@Test
 	public void testAddHexagon() {
 		HexWorld h = new HexWorld();
-		for (int i = 2; i < 6; i++) {
-			boolean[][] row = h.addHexagon(i);
-			printGrid(h.addHexagon(i));
-		}
+		h.addHexagon(2, 1, 1, Tileset.FLOWER);
+
+	}
+
+	@Test
+	public void testConstructor() {
+		HexWorld w = new HexWorld();
+
 	}
 }
