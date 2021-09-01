@@ -23,32 +23,17 @@ public class HexWorld {
 		boolean[][] hex = new boolean[height][longest];
 		// fill
 		int indent = size - 1;
-		for (int i = 0; i < height; i++) {
+		for (int i = 0; i < height/2; i++) {
 			hex[i] = drawRow(size, indent);
+			if (indent > 0) indent--;
+			else indent = 0;
 		}
-
+		for (int i = height/2; i < height; i++) {
+			hex[i] = drawRow(size, indent);
+			indent++;
+		}
 		return hex;
 
-	}
-
-	private boolean[] fillRow(int size, int type) {
-		boolean[] row = new boolean[size];
-		switch (type) {
-			case 1:
-				for (int i = 0; i < size; i++) {
-					if (i >= size - 1 && i < 2 * size -1) {
-						row[i] = true;
-					} else {
-						row[i] = false;
-					}
-				}
-				break;
-			default:
-				for (int i = 0; i < size; i++) row[i] = true;
-				break;
-		}
-
-		return row;
 	}
 
 	private boolean[] drawRow(int size, int indent) {
@@ -63,7 +48,7 @@ public class HexWorld {
 		int longest = 3 * size - 2;
 		boolean[] row = new boolean[longest];
 		for (int i = 0; i < longest; i++) {
-			if (i >= indent && i < size + indent) {
+			if (i >= indent && i < longest - indent) {
 			//if (i >= size - 1 && i < 2 * size -1) {
 				row[i] = true;
 			} else {
@@ -76,8 +61,8 @@ public class HexWorld {
 
 	public static void printRow(boolean[] row) {
 		for (boolean val : row) {
-			if (val) System.out.print("1");
-			else System.out.print("_");
+			if (val) System.out.print("a ");
+			else System.out.print("_ ");
 		}
 		System.out.println("");
 	}
