@@ -37,52 +37,32 @@ public class HexWorld {
 		if (size < 2) {
 			throw new IllegalArgumentException("size must be a positive integer larger than 1");
 		}
-
-		int longest = 3 * size - 2;
-		int height = size * 2;
+		// need to check x, y position first
 		TETile randomTile = randomTile();
-
-		// fill
-		int indent = size - 1;
 		// upper half
+		addUpperHalf(size, xPos, yPos, board, randomTile);
+		// fill lower half, from bottom to middle
+		addLowerHalf(size, xPos, yPos - 2 * size + 1, board, randomTile);
+
+	}
+
+	private static void addUpperHalf(int size, int xPos, int yPos, TETile[][] board, TETile tile ) {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size + i * 2; j++) {
-				board[xPos - i + j][yPos - i] = randomTile;
+				board[xPos - i + j][yPos - i] = tile;
 			}
 		}
-		// lower half
+	}
+
+	private static void addLowerHalf(int size, int xPos, int yPos, TETile[][] board, TETile tile ) {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size + i * 2; j++) {
-				board[xPos - i + j][yPos + i] = randomTile;
+				board[xPos - i + j][yPos + i] = tile;
 			}
 		}
-
 	}
 
 
-	private void drawRow(int size, int indent, int xPos, int yPos, TETile tile, TETile[][] board) {
-		// indent/col <= size - 1
-		if (indent > size - 1 || indent < 0) {
-			throw new IllegalArgumentException("Invalid indent");
-		}
-
-		int longest = 3 * size - 2;
-		//boolean[] row = new boolean[longest];
-		for (int i = xPos; i < longest; i++) {
-			if (i >= indent && i < longest - indent) {
-				board[yPos][i] = tile;
-			}
-		}
-
-	}
-
-	public static void printRow(boolean[] row) {
-		for (boolean val : row) {
-			if (val) System.out.print("a ");
-			else System.out.print("_ ");
-		}
-		System.out.println("");
-	}
 
 	private static TETile randomTile() {
 		int tileNum = RANDOM.nextInt(5);
@@ -103,7 +83,7 @@ public class HexWorld {
 		ter.initialize(WIDTH, HEIGHT);
 
 		TETile[][] hexBoard = buildBoardWithNothing();
-		hex.addHexagon(3, 3, 1, hexBoard);
+		hex.addHexagon(3, 10, 5, hexBoard);
 
 		ter.renderFrame(hexBoard);
 	}

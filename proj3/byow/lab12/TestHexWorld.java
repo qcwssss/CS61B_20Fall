@@ -8,7 +8,7 @@ public class TestHexWorld {
 
 	public void printGrid(boolean[][] grid) {
 		for (boolean[] row : grid) {
-			HexWorld.printRow(row);
+			//HexWorld.printRow(row);
 		}
 		System.out.println("");
 
