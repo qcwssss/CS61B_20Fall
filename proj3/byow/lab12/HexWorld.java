@@ -38,6 +38,8 @@ public class HexWorld {
 			throw new IllegalArgumentException("size must be a positive integer larger than 1");
 		}
 		// need to check x, y position first
+		checkLocation(xPos, yPos, size);
+
 		TETile randomTile = randomTile();
 		// upper half
 		addUpperHalf(size, xPos, yPos, board, randomTile);
@@ -46,7 +48,19 @@ public class HexWorld {
 
 	}
 
-	private static void addUpperHalf(int size, int xPos, int yPos, TETile[][] board, TETile tile ) {
+	private void checkLocation(int x, int y, int size) {
+		int height = size * 2;
+		int lengthMax = size + 2*(size -1);
+		String message = " Hexagon is not fully on the tile board!";
+		if ( y < height - 1) { // y starts from 0
+			throw new IllegalArgumentException("Invalid yPos." + message);
+		}
+		if ( x < size - 1) { // x starts from 0
+			throw new IllegalArgumentException("Invalid xPos." + message);
+		}
+	}
+
+	private void addUpperHalf(int size, int xPos, int yPos, TETile[][] board, TETile tile ) {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size + i * 2; j++) {
 				board[xPos - i + j][yPos - i] = tile;
@@ -54,15 +68,13 @@ public class HexWorld {
 		}
 	}
 
-	private static void addLowerHalf(int size, int xPos, int yPos, TETile[][] board, TETile tile ) {
+	private void addLowerHalf(int size, int xPos, int yPos, TETile[][] board, TETile tile ) {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size + i * 2; j++) {
 				board[xPos - i + j][yPos + i] = tile;
 			}
 		}
 	}
-
-
 
 	private static TETile randomTile() {
 		int tileNum = RANDOM.nextInt(5);
@@ -83,7 +95,8 @@ public class HexWorld {
 		ter.initialize(WIDTH, HEIGHT);
 
 		TETile[][] hexBoard = buildBoardWithNothing();
-		hex.addHexagon(3, 10, 5, hexBoard);
+		// size 3 hexagon locates at bottom left 
+		hex.addHexagon(3, 2, 5, hexBoard);
 
 		ter.renderFrame(hexBoard);
 	}
