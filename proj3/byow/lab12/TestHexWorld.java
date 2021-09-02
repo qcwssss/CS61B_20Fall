@@ -1,29 +1,45 @@
 package byow.lab12;
 
+import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
+import org.junit.Before;
 import org.junit.Test;
 
+import static byow.lab12.HexWorld.buildBoardWithNothing;
+
 public class TestHexWorld {
+	private HexWorld hex;
+	private TERenderer ter;
 
-	public void printGrid(boolean[][] grid) {
-		for (boolean[] row : grid) {
-			//HexWorld.printRow(row);
-		}
-		System.out.println("");
-
+	@Before
+	public void setUp() {
+		hex = new HexWorld();
+		ter = new TERenderer();
+		ter.initialize(30 ,30);
 	}
 
 	@Test
 	public void testAddHexagon() {
-		HexWorld h = new HexWorld();
-		//h.addHexagon(2, 1, 1, Tileset.FLOWER);
+		HexWorld hex = new HexWorld();
+		TETile[][] hexBoard = buildBoardWithNothing();
+		// size 3 hexagon locates at bottom left
+		hex.addHexagon(3, 2, 5, hexBoard);
+
+		//ter.renderFrame(hexBoard);
 
 	}
 
-	@Test
-	public void testBuildBoard() {
-		//TETile[][] hexBoard = HexWorld.buildTilesBoard();
+	public static void main(String[] args) {
+		HexWorld hex = new HexWorld();
+		TERenderer ter = new TERenderer();
+		ter.initialize(50, 30);
 
+		TETile[][] hexBoard = buildBoardWithNothing();
+		// size 3 hexagon locates at bottom left
+		hex.addHexagon(3, 2, 5, hexBoard);
+
+		ter.renderFrame(hexBoard);
 	}
+
 }
