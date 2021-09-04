@@ -15,8 +15,17 @@ public class MapGenerator {
 		this.mapGrid = grid;
 	}
 
+	public void buildRoom(int xStart, int yStart, int width, int height) {
+		// horizontal walls
+		buildLine(width, xStart, yStart, true, Tileset.WALL);
+		buildLine(width, xStart, yStart + height - 1, true, Tileset.WALL);
+		// vertical walls
+		buildLine(height - 2, xStart, yStart + 1, false, Tileset.WALL);
+		buildLine(height - 2, xStart + width - 1, yStart + 1, false, Tileset.WALL);
 
 
+		buildPlane(xStart + 1, yStart + 1, width -2, height - 2, Tileset.FLOOR);
+	}
 	/*
 	1. Create a tile grid
 	buildEmptyMap(int width, int height)
@@ -24,12 +33,15 @@ public class MapGenerator {
 	buildWall(int length, int xStart, int yStart, int direct)
 		buildLine
 	buildHallWay
+		L turn, T, cross turns?
 	buildRoom
 		buildPlane (rectangle)
 	connectRoom
 		isOverlap?
 
 	 */
+
+
 
     private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
 	    checkLocation(xStart, yStart);
@@ -84,7 +96,7 @@ public class MapGenerator {
 	// --------------Test private methods----------------//
 
 	/** Create a tile world of nothing. For testing private method.	 */
-	private static TETile[][] buildEmptyMap(int width, int height) {
+	static TETile[][] buildEmptyMap(int width, int height) {
 		TETile[][] world = new TETile[width][height];
 		for (int x = 0; x < width; x += 1) {
 			for (int y = 0; y < height; y += 1) {
@@ -139,7 +151,7 @@ public class MapGenerator {
 
 
 
-	    System.out.println(TETile.toString(map.mapGrid));
+	    System.out.println(TETile.toString(grid));
     }
 
 
