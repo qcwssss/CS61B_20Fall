@@ -2,6 +2,7 @@ package byow.Core;
 
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.lab12.HexWorld;
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -45,6 +46,7 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
+        TETile[][] board = HexWorld.buildBoardWithNothing();
 
         TETile[][] finalWorldFrame = null;
         return finalWorldFrame;
