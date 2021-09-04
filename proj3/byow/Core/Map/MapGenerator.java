@@ -15,17 +15,26 @@ public class MapGenerator {
 		this.mapGrid = grid;
 	}
 
-	public void buildRoom(int xStart, int yStart, int width, int height) {
+	void buildRoom(int xStart, int yStart, int width, int height) {
 		// horizontal walls
 		buildLine(width, xStart, yStart, true, Tileset.WALL);
 		buildLine(width, xStart, yStart + height - 1, true, Tileset.WALL);
 		// vertical walls
 		buildLine(height - 2, xStart, yStart + 1, false, Tileset.WALL);
 		buildLine(height - 2, xStart + width - 1, yStart + 1, false, Tileset.WALL);
-
-
+		// floor
 		buildPlane(xStart + 1, yStart + 1, width -2, height - 2, Tileset.FLOOR);
 	}
+
+	/** Lower left corner is the starting point. */
+	void buildHallWays(int length, int xStart, int yStart, boolean horizontal){
+		buildLine(length, xStart, yStart, horizontal, Tileset.WALL);
+		buildLine(length, xStart, yStart + 1, horizontal, Tileset.FLOOR);
+		buildLine(length, xStart, yStart + 2, horizontal, Tileset.WALL);
+
+	}
+
+
 	/*
 	1. Create a tile grid
 	buildEmptyMap(int width, int height)
@@ -76,8 +85,8 @@ public class MapGenerator {
 		isLineValid(length, xStart, yStart, horizontal);
 
 		for (int i = 0; i < length; i++) {
-			int x = 0, y = 0;
 			// check direction
+			int x = 0, y = 0;
 			if (horizontal) x = i;
 			else y = i;
 

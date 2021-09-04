@@ -41,5 +41,29 @@ public class TestMapGenerator {
 
 	}
 
+	@Test (expected = IllegalArgumentException.class)
+	public void testExceptionOfBuildRoom() {
+		map.buildRoom(20, 10, 11, 8);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void testExceptionOfBuildRoom2() {
+		map.buildRoom(20, 25, 10, 8);
+	}
+
+	@Test
+	public void testHorizontalHallWays() {
+		map.buildHallWays(10, 0, 0, true);
+		map.buildHallWays(8, 0, 3, true);
+		map.buildHallWays(10, 0, 27, true);
+
+		System.out.println(TETile.toString(grid));
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void testHallWayExceptionHorizon1() {
+		map.buildHallWays(10, 0, 28, true);
+
+	}
 
 }
