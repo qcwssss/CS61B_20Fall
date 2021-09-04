@@ -31,20 +31,6 @@ public class MapGenerator {
 
 	 */
 
-	/** The most basic unit of a map. */
- 	private void buildLine(int length, int xStart, int yStart, boolean horizontal, TETile tile){
- 		isLineValid(length, xStart, yStart, horizontal);
-
- 		for (int i = 0; i < length; i++) {
-		    int x = 0, y = 0;
-		    // check direction
-		    if (horizontal) x = i;
-		    else y = i;
-
- 			this.mapGrid[xStart + x][yStart + y] = tile;
-	    }
-    }
-
     private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
 	    checkLocation(xStart, yStart);
 
@@ -56,7 +42,8 @@ public class MapGenerator {
 	    try {
 		    checkLocation(xEnd, yEnd);
 	    } catch (IllegalArgumentException e) {
-		    throw new IllegalArgumentException("Invalid end position, length out of bound!");
+	    	String err = String.format("Invalid end position: (%d, %d), length out of bound!", xEnd, yEnd);
+		    throw new IllegalArgumentException(err);
 	    }
     }
 
@@ -64,18 +51,39 @@ public class MapGenerator {
 	    int h = mapGrid.length;
 	    int w = mapGrid[0].length;
 	    if ( yPos > h - 1 || yPos < 0) { // y starts from 0
-		    throw new IllegalArgumentException("Invalid Y start position");
+		    throw new IllegalArgumentException("Invalid Y start position: " + yPos);
 	    }
 	    if ( xPos > w - 1 || xPos < 0) { // x starts from 0
-		    throw new IllegalArgumentException("Invalid X start position");
+		    throw new IllegalArgumentException("Invalid X start position: " + xPos);
 	    }
 
     }
 
+	/** The most basic unit of a map. */
+	private void buildLine(int length, int xStart, int yStart, boolean horizontal, TETile tile){
+		isLineValid(length, xStart, yStart, horizontal);
 
-	/**
-	 * Create a tile world of nothing. For testing private method.
-	 */
+		for (int i = 0; i < length; i++) {
+			int x = 0, y = 0;
+			// check direction
+			if (horizontal) x = i;
+			else y = i;
+
+			this.mapGrid[xStart + x][yStart + y] = tile;
+		}
+	}
+
+	/** start position locates at lower left corner. */
+	private void buildPlane(int xStart, int yStart, int width, int height, TETile tile) {
+		for (int i = 0; i < height; i++) {
+			buildLine(width, xStart, yStart + i, true, tile);
+		}
+	}
+
+
+	// --------------Test private methods----------------//
+
+	/** Create a tile world of nothing. For testing private method.	 */
 	private static TETile[][] buildEmptyMap(int width, int height) {
 		TETile[][] world = new TETile[width][height];
 		for (int x = 0; x < width; x += 1) {
@@ -86,32 +94,49 @@ public class MapGenerator {
 		return world;
 	}
 
+	private void testLines() {
+		this.buildLine(9, 0, 0, true, Tileset.WATER);
+		this.buildLine(8, 0, 1, true, Tileset.WALL);
+		this.buildLine(7, 0, 2, true, Tileset.FLOWER);
+		this.buildLine(4, 0, 5, true, Tileset.GRASS);
 
-    public static void main(String[] args) {
-		TETile[][] grid = buildEmptyMap(30 ,30);
- 		MapGenerator map = new MapGenerator(grid);
-	    map.buildLine(9, 0, 0, true, Tileset.WATER);
-	    map.buildLine(8, 0, 1, true, Tileset.WALL);
-	    map.buildLine(7, 0, 2, true, Tileset.FLOWER);
-	    map.buildLine(4, 0, 5, true, Tileset.GRASS);
+		this.buildLine(6, 8, 6, false, Tileset.GRASS);
+		this.buildLine(4, 7, 6, false, Tileset.WATER);
+		this.buildLine(3, 6, 6, false, Tileset.WALL);
+		this.buildLine(6, 18, 6, false, Tileset.WALL);
+		this.buildLine(6, 29, 6, false, Tileset.WALL);
+		this.buildLine(2, 28, 28, false, Tileset.WALL);
 
-	    map.buildLine(6, 8, 6, false, Tileset.GRASS);
-	    map.buildLine(4, 7, 6, false, Tileset.WATER);
-	    map.buildLine(3, 6, 6, false, Tileset.WALL);
-	    map.buildLine(6, 18, 6, false, Tileset.WALL);
-	    map.buildLine(6, 29, 6, false, Tileset.WALL);
-
-
-	    /* Test invalid position */
-	    // horizontal
+		/* Test invalid position */
+	    /* horizontal
 	    //map.buildLine(4, 30, 5, true, Tileset.GRASS);
 	    //map.buildLine(4, 4, 35, true, Tileset.GRASS);
 	    //map.buildLine(4, 28, 20, true, Tileset.GRASS);
 
 	    // vertical
 	    //map.buildLine(6, 30, 6, false, Tileset.WALL);
-	    map.buildLine(2, 28, 28, false, Tileset.WALL);
-	    map.buildLine(3, 28, 28, false, Tileset.WALL);
+	    //map.buildLine(3, 28, 28, false, Tileset.WALL);
+		*/
+	}
+
+	private void testBuildPlanes() {
+		this.buildPlane(5,0, 25, 10, Tileset.GRASS);
+		this.buildPlane(20,10, 5, 5, Tileset.WALL);
+		this.buildPlane(10,10, 6, 3, Tileset.WATER);
+
+		//this.buildPlane(6,0, 25, 10, Tileset.GRASS);
+		//this.buildPlane(25,0, 6, 10, Tileset.GRASS);
+		//this.buildPlane(6,15, 10, 20, Tileset.GRASS);
+
+	}
+
+    public static void main(String[] args) {
+		TETile[][] grid = buildEmptyMap(30 ,30);
+ 		MapGenerator map = new MapGenerator(grid);
+ 		//map.testLines();
+	    map.testBuildPlanes();
+
+
 
 
 	    System.out.println(TETile.toString(map.mapGrid));
