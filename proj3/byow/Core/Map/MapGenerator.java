@@ -50,8 +50,6 @@ public class MapGenerator {
 
 	 */
 
-
-
     private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
 	    checkLocation(xStart, yStart);
 
