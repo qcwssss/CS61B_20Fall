@@ -47,36 +47,37 @@ public class MapGenerator {
 		buildPlane (rectangle)
 	connectRoom
 		isOverlap?
-
 	 */
 
-    private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
-	    checkLocation(xStart, yStart);
 
-	    int xPlus = 0, yPlus = 0;
-	    if (horizontal) xPlus = length - 1;
-	    else yPlus = length - 1;
 
-	    int xEnd = xStart + xPlus, yEnd = yStart + yPlus;
-	    try {
-		    checkLocation(xEnd, yEnd);
-	    } catch (IllegalArgumentException e) {
-	    	String err = String.format("Invalid end position: (%d, %d), length out of bound!", xEnd, yEnd);
-		    throw new IllegalArgumentException(err);
-	    }
-    }
+	private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
+		checkLocation(xStart, yStart);
 
-    private void checkLocation(int xPos, int yPos) {
-	    int h = mapGrid.length;
-	    int w = mapGrid[0].length;
-	    if ( yPos > h - 1 || yPos < 0) { // y starts from 0
-		    throw new IllegalArgumentException("Invalid Y start position: " + yPos);
-	    }
-	    if ( xPos > w - 1 || xPos < 0) { // x starts from 0
-		    throw new IllegalArgumentException("Invalid X start position: " + xPos);
-	    }
+		int xPlus = 0, yPlus = 0;
+		if (horizontal) xPlus = length - 1;
+		else yPlus = length - 1;
 
-    }
+		int xEnd = xStart + xPlus, yEnd = yStart + yPlus;
+		try {
+			checkLocation(xEnd, yEnd);
+		} catch (IllegalArgumentException e) {
+			String err = String.format("Invalid end position: (%d, %d), length out of bound!", xEnd, yEnd);
+			throw new IllegalArgumentException(err);
+		}
+	}
+
+	private void checkLocation(int xPos, int yPos) {
+		int h = mapGrid.length;
+		int w = mapGrid[0].length;
+		if ( yPos > h - 1 || yPos < 0) { // y starts from 0
+			throw new IllegalArgumentException("Invalid Y start position: " + yPos);
+		}
+		if ( xPos > w - 1 || xPos < 0) { // x starts from 0
+			throw new IllegalArgumentException("Invalid X start position: " + xPos);
+		}
+
+	}
 
 	/** The most basic unit of a map. */
 	private void buildLine(int length, int xStart, int yStart, boolean horizontal, TETile tile){
@@ -131,7 +132,6 @@ public class MapGenerator {
 	    //map.buildLine(4, 30, 5, true, Tileset.GRASS);
 	    //map.buildLine(4, 4, 35, true, Tileset.GRASS);
 	    //map.buildLine(4, 28, 20, true, Tileset.GRASS);
-
 	    // vertical
 	    //map.buildLine(6, 30, 6, false, Tileset.WALL);
 	    //map.buildLine(3, 28, 28, false, Tileset.WALL);
@@ -149,17 +149,17 @@ public class MapGenerator {
 
 	}
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		TETile[][] grid = buildEmptyMap(30 ,30);
- 		MapGenerator map = new MapGenerator(grid);
- 		//map.testLines();
-	    map.testBuildPlanes();
+		MapGenerator map = new MapGenerator(grid);
+		//map.testLines();
+		map.testBuildPlanes();
 
 
 
 
-	    System.out.println(TETile.toString(grid));
-    }
+		System.out.println(TETile.toString(grid));
+	}
 
 
 }

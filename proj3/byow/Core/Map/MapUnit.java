@@ -4,10 +4,11 @@ import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 public abstract class MapUnit {
+	public MapUnit(TETile[][] mapGrid) {
+		this.mapGrid = mapGrid;
+	}
+
 	private TETile[][] mapGrid;
-
-
-
 
 
 	/*
