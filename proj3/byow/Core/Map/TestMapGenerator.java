@@ -1,5 +1,6 @@
 package byow.Core.Map;
 
+import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 import org.junit.Before;
@@ -63,7 +64,25 @@ public class TestMapGenerator {
 		map.buildRoom(0, 0, 4, 8);
 		map.buildRoom(5, 0, 6, 8);
 
+
 		System.out.println(TETile.toString(grid));
+
+	}
+
+	@Test
+	public void strangeExceptionsOfBuildRoom() {
+		final int WIDTH = 60, HEIGHT = 35;
+		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+
+		TERenderer ter = new TERenderer();
+		ter.initialize(WIDTH, HEIGHT);
+
+		MapGenerator map = new MapGenerator(grid);
+		map.buildRoom(40, 12, 7, 5);
+
+		ter.renderFrame(grid);
+
+		//System.out.println(TETile.toString(grid));
 
 	}
 

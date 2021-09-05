@@ -20,7 +20,7 @@ public class MapGenerator {
 	}
 
 	public ArrayList<Room> createRandomRooms(Random rand) {
-		final int UPPER_LIMIT = 200;
+		final int UPPER_LIMIT = 100;
 		ArrayList<Room> listOfRooms = new ArrayList<>();
 		// duplicates? overlap?
 
@@ -29,11 +29,13 @@ public class MapGenerator {
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
 			//double sigmaWidth = mapWidth * 3 / 4;
-			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/4);
-			System.out.println(xPos);
+			//int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/4);
+			int xPos = rand.nextInt(mapWidth);
 
-			int yPos = (int) RandomUtils.gaussian(rand, mapHeight/2, mapHeight/2);
-			int width = rand.nextInt(mapWidth/10) + 4; // floor = 4-2 = 2,
+			int yPos = rand.nextInt(mapHeight);
+			int width = rand.nextInt(mapWidth/10) + 4; // floor = 4-2 = 2
+			//if (xPos > mapWidth / 2) width  = 4;
+
 			int height = rand.nextInt(mapHeight/10) + 4;
 
 			if (yPos + height - 1 > mapHeight - 1 || xPos + width - 1 > mapWidth - 1) {
@@ -43,9 +45,14 @@ public class MapGenerator {
 			try {
 				buildRoom(curRoom);
 			} catch (IllegalArgumentException e) {
+				System.out.println("xPos: " + xPos + ", yPos: " + yPos +
+						", width: " + width +  ",height : " + height);
 				continue;
 			}
 			listOfRooms.add(curRoom);
+
+			//System.out.println("xPos: " + xPos + ", width: " + width);
+
 		}
 		return listOfRooms;
 	}
@@ -111,8 +118,8 @@ public class MapGenerator {
 	}
 
 	private void checkLocation(int xPos, int yPos) {
-		int h = mapGrid.length;
-		int w = mapGrid[0].length;
+		int h = mapGrid[0].length;
+		int w = mapGrid.length;
 		if ( yPos > h - 1 || yPos < 0) { // y starts from 0
 			throw new IllegalArgumentException("Invalid Y start position: " + yPos);
 		}
