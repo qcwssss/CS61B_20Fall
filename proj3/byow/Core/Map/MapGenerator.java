@@ -21,16 +21,31 @@ public class MapGenerator {
 	public ArrayList<Room> createRandomRooms(Random rand) {
 		final int UPPER_LIMIT = 200;
 		ArrayList<Room> listOfRooms = new ArrayList<>();
-		// duplicates?
+		// duplicates? overlap?
 
 		int mapWidth = this.mapGrid.length;
 		int mapHeight = this.mapGrid[0].length;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
-			int xPos = rand.nextInt();
-			int yPos = rand.nextInt();
-			int width = rand.nextInt(mapWidth/4);
-			int height = rand.nextInt(mapHeight/4);
+			int xPos = rand.nextInt(mapWidth);
+			int yPos = rand.nextInt(mapHeight);
+			int width = rand.nextInt(mapWidth/10) + 2;
+			int height = rand.nextInt(mapHeight/10) + 4;
+
+			if (yPos + height - 1 > mapHeight - 1 || xPos + width - 1 > mapWidth - 1) {
+				continue;
+			}
+			Room curRoom = new Room(width, height, xPos, yPos);
+			try {
+				buildRoom(curRoom);
+				listOfRooms.add(curRoom);
+
+			} catch (IllegalArgumentException e) {
+				System.out.println("Go on");
+				continue;
+			}
+
+
 		}
 
 		return listOfRooms;
