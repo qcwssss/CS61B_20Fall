@@ -1,5 +1,6 @@
 package byow.Core.Map;
 
+import byow.Core.RandomUtils;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
@@ -27,9 +28,12 @@ public class MapGenerator {
 		int mapHeight = this.mapGrid[0].length;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
-			int xPos = rand.nextInt(mapWidth);
-			int yPos = rand.nextInt(mapHeight);
-			int width = rand.nextInt(mapWidth/10) + 2;
+			//double sigmaWidth = mapWidth * 3 / 4;
+			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/4);
+			System.out.println(xPos);
+
+			int yPos = (int) RandomUtils.gaussian(rand, mapHeight/2, mapHeight/2);
+			int width = rand.nextInt(mapWidth/10) + 4; // floor = 4-2 = 2,
 			int height = rand.nextInt(mapHeight/10) + 4;
 
 			if (yPos + height - 1 > mapHeight - 1 || xPos + width - 1 > mapWidth - 1) {
@@ -38,16 +42,11 @@ public class MapGenerator {
 			Room curRoom = new Room(width, height, xPos, yPos);
 			try {
 				buildRoom(curRoom);
-				listOfRooms.add(curRoom);
-
 			} catch (IllegalArgumentException e) {
-				System.out.println("Go on");
 				continue;
 			}
-
-
+			listOfRooms.add(curRoom);
 		}
-
 		return listOfRooms;
 	}
 
@@ -56,7 +55,7 @@ public class MapGenerator {
 		int yStart = room.getYPos();
 		int width = room.getWidth();
 		int height = room.getHeight();
-		buildRoom(xStart, yStart, width, height);
+		buildRoom(room.getXPos(),  room.getYPos(), room.getWidth(), room.getHeight());
 	}
 
 	void buildRoom(int xStart, int yStart, int width, int height) {
