@@ -1,6 +1,7 @@
 package byow.Core.Map;
 
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +31,31 @@ public class TestMapGenerator {
 	public void setUp() {
 		grid = buildEmptyMap(30 ,30);
 		map = new MapGenerator(grid);
+	}
+
+	@Test
+	public void testLines() {
+		map.buildLine(9, 0, 0, true, Tileset.WATER);
+		map.buildLine(8, 0, 1, true, Tileset.WALL);
+		map.buildLine(7, 0, 2, true, Tileset.FLOWER);
+		map.buildLine(4, 0, 5, true, Tileset.GRASS);
+
+		map.buildLine(6, 8, 6, false, Tileset.GRASS);
+		map.buildLine(4, 7, 6, false, Tileset.WATER);
+		map.buildLine(3, 6, 6, false, Tileset.WALL);
+		map.buildLine(6, 18, 6, false, Tileset.WALL);
+		map.buildLine(6, 29, 6, false, Tileset.WALL);
+		map.buildLine(2, 28, 28, false, Tileset.WALL);
+
+		/* Test invalid position */
+	    /* horizontal
+	    //map.buildLine(4, 30, 5, true, Tileset.GRASS);
+	    //map.buildLine(4, 4, 35, true, Tileset.GRASS);
+	    //map.buildLine(4, 28, 20, true, Tileset.GRASS);
+	    // vertical
+	    //map.buildLine(6, 30, 6, false, Tileset.WALL);
+	    //map.buildLine(3, 28, 28, false, Tileset.WALL);
+		*/
 	}
 
 	@Test

@@ -3,6 +3,9 @@ package byow.Core.Map;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * Create by Chen.
  * Generate a map of tiles.
@@ -13,6 +16,32 @@ public class MapGenerator {
 
 	public MapGenerator(TETile[][] grid) {
 		this.mapGrid = grid;
+	}
+
+	public ArrayList<Room> createRandomRooms(Random rand) {
+		final int UPPER_LIMIT = 200;
+		ArrayList<Room> listOfRooms = new ArrayList<>();
+		// duplicates?
+
+		int mapWidth = this.mapGrid.length;
+		int mapHeight = this.mapGrid[0].length;
+
+		for (int i = 0; i < UPPER_LIMIT; i++) {
+			int xPos = rand.nextInt();
+			int yPos = rand.nextInt();
+			int width = rand.nextInt(mapWidth/4);
+			int height = rand.nextInt(mapHeight/4);
+		}
+
+		return listOfRooms;
+	}
+
+	public void buildRoom(Room room) {
+		int xStart = room.getXPos();
+		int yStart = room.getYPos();
+		int width = room.getWidth();
+		int height = room.getHeight();
+		buildRoom(xStart, yStart, width, height);
 	}
 
 	void buildRoom(int xStart, int yStart, int width, int height) {
@@ -80,7 +109,7 @@ public class MapGenerator {
 	}
 
 	/** The most basic unit of a map. */
-	private void buildLine(int length, int xStart, int yStart, boolean horizontal, TETile tile){
+	void buildLine(int length, int xStart, int yStart, boolean horizontal, TETile tile){
 		isLineValid(length, xStart, yStart, horizontal);
 
 		for (int i = 0; i < length; i++) {
@@ -114,29 +143,6 @@ public class MapGenerator {
 		return world;
 	}
 
-	private void testLines() {
-		this.buildLine(9, 0, 0, true, Tileset.WATER);
-		this.buildLine(8, 0, 1, true, Tileset.WALL);
-		this.buildLine(7, 0, 2, true, Tileset.FLOWER);
-		this.buildLine(4, 0, 5, true, Tileset.GRASS);
-
-		this.buildLine(6, 8, 6, false, Tileset.GRASS);
-		this.buildLine(4, 7, 6, false, Tileset.WATER);
-		this.buildLine(3, 6, 6, false, Tileset.WALL);
-		this.buildLine(6, 18, 6, false, Tileset.WALL);
-		this.buildLine(6, 29, 6, false, Tileset.WALL);
-		this.buildLine(2, 28, 28, false, Tileset.WALL);
-
-		/* Test invalid position */
-	    /* horizontal
-	    //map.buildLine(4, 30, 5, true, Tileset.GRASS);
-	    //map.buildLine(4, 4, 35, true, Tileset.GRASS);
-	    //map.buildLine(4, 28, 20, true, Tileset.GRASS);
-	    // vertical
-	    //map.buildLine(6, 30, 6, false, Tileset.WALL);
-	    //map.buildLine(3, 28, 28, false, Tileset.WALL);
-		*/
-	}
 
 	private void testBuildPlanes() {
 		this.buildPlane(5,0, 25, 10, Tileset.GRASS);
@@ -154,8 +160,6 @@ public class MapGenerator {
 		MapGenerator map = new MapGenerator(grid);
 		//map.testLines();
 		map.testBuildPlanes();
-
-
 
 
 		System.out.println(TETile.toString(grid));
