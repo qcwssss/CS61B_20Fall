@@ -5,6 +5,7 @@ import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -20,7 +21,7 @@ public class MapGenerator {
 	}
 
 	public ArrayList<Room> createRandomRooms(Random rand) {
-		final int UPPER_LIMIT = 100;
+		final int UPPER_LIMIT = 200;
 		ArrayList<Room> listOfRooms = new ArrayList<>();
 		// duplicates? overlap?
 
@@ -28,36 +29,29 @@ public class MapGenerator {
 		int mapHeight = this.mapGrid[0].length;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
-			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/4);
+			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/3);
 			//int xPos = rand.nextInt(mapWidth);
 			int yPos = rand.nextInt(mapHeight);
-			int width = rand.nextInt(mapWidth/10) + 4; // floor = 4-2 = 2
-			int height = rand.nextInt(mapHeight/10) + 4;
+			int width = rand.nextInt(mapWidth/8) + 4; // floor = 4-2 = 2
+			int height = rand.nextInt(mapHeight/8) + 4;
 
 			// check if lower left corner is out of bound
 			if (yPos + height - 1 > mapHeight - 1 || xPos + width - 1 > mapWidth - 1) {
 				continue;
 			}
 
-
 			Room curRoom = new Room(width, height, xPos, yPos);
 			// check overlap
-			if (listOfRooms.size() > 1) {
-				for (Room r : listOfRooms) {
-					if (curRoom.isOverlap(r)) {
-						break;
-					}
-				}
+			if (isOverLap(curRoom, listOfRooms)) {
+				continue;
 			}
 
 			try {
 				buildRoom(curRoom);
 			} catch (IllegalArgumentException e) {
-				System.out.println("xPos: " + xPos + ", yPos: " + yPos +
-						", width: " + width +  ",height : " + height);
+				//System.out.println("xPos: " + xPos + ", yPos: " + yPos + ", width: " + width +  ",height : " + height);
 				continue;
 			}
-
 
 
 			listOfRooms.add(curRoom);
@@ -65,6 +59,18 @@ public class MapGenerator {
 
 		}
 		return listOfRooms;
+	}
+
+	private boolean isOverLap(Room cur, List<Room> listOfRooms) {
+		// check overlap
+		if (listOfRooms.size() > 1) {
+			for (Room r : listOfRooms) {
+				if (cur.isOverlap(r)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public void buildRoom(Room room) {
