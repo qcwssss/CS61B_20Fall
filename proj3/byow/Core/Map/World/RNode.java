@@ -3,19 +3,21 @@ package byow.Core.Map.World;
 import byow.Core.Map.Position;
 import byow.Core.Map.Room;
 
+import java.util.Map;
+
 public class RNode {
-	private int id;
+	private long id;
 	//private Position center;
+	//private Map<Long, RNode> rnodes;
+
 	private Room room;
 
-	public RNode(Room room) {
+	public RNode(Room room, long id) {
 		this.room = room;
 		//this.center = room.getLRPosition();
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
+
 
 	public Room getRoom() {
 		return room;

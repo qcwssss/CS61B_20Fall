@@ -16,7 +16,7 @@ public class WorldGraph {
 	/** Create a WorldGraph. */
 	public WorldGraph(List<Room> roomList) {
 		for (Room r: roomList) {
-			RNode curNode = new RNode(r);
+			RNode curNode = new RNode(r, 1);
 			nodes.put(r.getId(), curNode);
 		}
 	}
