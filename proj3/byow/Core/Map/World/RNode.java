@@ -7,13 +7,15 @@ import java.util.Map;
 
 public class RNode {
 	private long id;
-	//private Position center;
-	//private Map<Long, RNode> rnodes;
-
 	private Room room;
+
+	public long getId() {
+		return id;
+	}
 
 	public RNode(Room room, long id) {
 		this.room = room;
+		this.id = id;
 		//this.center = room.getLRPosition();
 	}
 
