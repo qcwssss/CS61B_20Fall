@@ -47,6 +47,24 @@ public class Room{
 		return lowerLeft.getY();
 	}
 
+	/**
+	 * Check if this Room is overlapping with other.
+	 * @param other Room
+	 * @return a boolean
+	 */
+	public boolean isOverlap(Room other) {
+		boolean indicator = true;
+		// if there is no overlapping on X
+		if (this.getXPos() + this.getWidth() <= other.getXPos() || other.getXPos() + other.getWidth() <= this.getXPos()) {
+			indicator = false;
+		}
+		// if there is no overlapping on Y
+		if (this.getYPos() + this.getHeight() <= other.getYPos() || other.getYPos() + other.height <= this.getYPos()) {
+			indicator = false;
+		}
+		return indicator;
+	}
+
 
 
 

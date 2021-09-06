@@ -28,20 +28,28 @@ public class MapGenerator {
 		int mapHeight = this.mapGrid[0].length;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
-			//double sigmaWidth = mapWidth * 3 / 4;
-			//int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/4);
-			int xPos = rand.nextInt(mapWidth);
-
+			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/4);
+			//int xPos = rand.nextInt(mapWidth);
 			int yPos = rand.nextInt(mapHeight);
 			int width = rand.nextInt(mapWidth/10) + 4; // floor = 4-2 = 2
-			//if (xPos > mapWidth / 2) width  = 4;
-
 			int height = rand.nextInt(mapHeight/10) + 4;
 
+			// check if lower left corner is out of bound
 			if (yPos + height - 1 > mapHeight - 1 || xPos + width - 1 > mapWidth - 1) {
 				continue;
 			}
+
+
 			Room curRoom = new Room(width, height, xPos, yPos);
+			// check overlap
+			if (listOfRooms.size() > 1) {
+				for (Room r : listOfRooms) {
+					if (curRoom.isOverlap(r)) {
+						break;
+					}
+				}
+			}
+
 			try {
 				buildRoom(curRoom);
 			} catch (IllegalArgumentException e) {
@@ -49,8 +57,10 @@ public class MapGenerator {
 						", width: " + width +  ",height : " + height);
 				continue;
 			}
-			listOfRooms.add(curRoom);
 
+
+
+			listOfRooms.add(curRoom);
 			//System.out.println("xPos: " + xPos + ", width: " + width);
 
 		}
@@ -58,10 +68,6 @@ public class MapGenerator {
 	}
 
 	public void buildRoom(Room room) {
-		int xStart = room.getXPos();
-		int yStart = room.getYPos();
-		int width = room.getWidth();
-		int height = room.getHeight();
 		buildRoom(room.getXPos(),  room.getYPos(), room.getWidth(), room.getHeight());
 	}
 
