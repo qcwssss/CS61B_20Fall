@@ -40,7 +40,7 @@ public class MapGenerator {
 				continue;
 			}
 
-			Room curRoom = new Room(width, height, xPos, yPos);
+			Room curRoom = new Room(width, height, xPos, yPos, (long) (i+1));
 			// check overlap
 			if (isOverLap(curRoom, listOfRooms)) {
 				continue;

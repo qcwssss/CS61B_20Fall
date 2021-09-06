@@ -8,22 +8,28 @@ public class Room{
 	private int height;
 	private Position lowerLeft;
 
+	private Long id;
+
+
 	/**
 	 * Create a Room object, with position
 	 * @param width w
 	 * @param height h
 	 * @param lowerLeft position
 	 */
-	public Room(int width, int height, Position lowerLeft) {
+	public Room(int width, int height, Position lowerLeft, Long id) {
 		this.width = width;
 		this.height = height;
 		this.lowerLeft = lowerLeft;
+		this.id = id;
 	}
 
-	public Room(int width, int height, int xPos, int yPos) {
+	public Room(int width, int height, int xPos, int yPos, Long id) {
 		this.width = width;
 		this.height = height;
 		this.lowerLeft = new Position(xPos, yPos);
+		this.id = id;
+
 	}
 
 	/** Getters. */
@@ -45,6 +51,14 @@ public class Room{
 
 	public int getYPos() {
 		return lowerLeft.getY();
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	/**
