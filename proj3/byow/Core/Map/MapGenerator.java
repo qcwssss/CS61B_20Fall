@@ -1,11 +1,14 @@
 package byow.Core.Map;
 
+import byow.Core.Map.World.RNode;
+import byow.Core.Map.World.WorldGraph;
 import byow.Core.RandomUtils;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -53,12 +56,22 @@ public class MapGenerator {
 				continue;
 			}
 
-
 			listOfRooms.add(curRoom);
-			//System.out.println("xPos: " + xPos + ", width: " + width);
 
 		}
 		return listOfRooms;
+	}
+
+	private void connectRooms(WorldGraph wg) {
+		Map<Long, RNode> rNodeMap = wg.getRodeMap();
+		for (Long v : rNodeMap.keySet()) {
+			RNode curRode = rNodeMap.get(v);
+			for (RNode n : wg.getNeighbors().get(v)) {
+				// draw path
+				// buildHallWay(Positon p1, Position p2);
+				curRode.getRoom().getLRPosition();
+			}
+		}
 	}
 
 	private boolean isOverLap(Room cur, List<Room> listOfRooms) {

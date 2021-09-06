@@ -24,8 +24,7 @@ public class WorldGraph {
 			neighbors.put(id, connectNeighbors(id, 6));
 		}
 
-
-		}
+	}
 
 	private Set<RNode> connectNeighbors(Long v, int dist) {
 		Set<RNode> rNodeSet = new HashSet<>();
@@ -48,5 +47,14 @@ public class WorldGraph {
 		double estDist = Math.sqrt(distX*distX + distY*distY);
 		return estDist;
 
+	}
+
+
+	public Map<Long, RNode> getRodeMap() {
+		return rNodeMap;
+	}
+
+	public Map<Long, Set<RNode>> getNeighbors() {
+		return neighbors;
 	}
 }
