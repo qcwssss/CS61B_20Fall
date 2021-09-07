@@ -98,16 +98,16 @@ public class TestMapGenerator {
 
 	@Test
 	public void testHorizontalHallWays() {
-		map.buildHallWays(10, 0, 0, true);
-		map.buildHallWays(8, 0, 3, true);
-		map.buildHallWays(10, 0, 27, true);
+		map.buildStraightWay(10, 0, 0, true);
+		map.buildStraightWay(8, 0, 3, true);
+		map.buildStraightWay(10, 0, 27, true);
 
 		System.out.println(TETile.toString(grid));
 	}
 
 	@Test (expected = IllegalArgumentException.class)
 	public void testHallWayExceptionHorizon1() {
-		map.buildHallWays(10, 0, 28, true);
+		map.buildStraightWay(10, 0, 28, true);
 
 	}
 

@@ -23,25 +23,51 @@ public class MapVisualTest {
 		wg.toString();
 
 	}
-	private List<Room> buildRoomList() {
+
+	@Test
+	public void testConnectRooms() {
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+
+		//TERenderer ter = new TERenderer();
+		//ter.initialize(WIDTH, HEIGHT);
+
 		MapGenerator map = new MapGenerator(grid);
-		return map.createRandomRooms(random);
+		List<Room> roomList = map.createRandomRooms(random, 10);
+
+		//WorldGraph wg = new WorldGraph(roomList);
+		//map.connectRooms(wg);
+		//ter.renderFrame(grid);
+		Position p1 = roomList.get(roomList.size() - 1).getLRPosition();
+		Position p2 = roomList.get(roomList.size() - 2).getLRPosition();
+
+		map.buildHallWays(p1, p2);
+
+
+		System.out.println(TETile.toString(grid));
 
 	}
 
 
-	public void main(String[] args) {
-		//final int WIDTH = 80, HEIGHT = 40;
+	private List<Room> buildRoomList() {
+		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+		MapGenerator map = new MapGenerator(grid);
+		return map.createRandomRooms(random, 200);
+
+	}
+
+
+	public static void main(String[] args) {
+		final int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
 		MapGenerator map = new MapGenerator(grid);
-		List<Room> roomList = map.createRandomRooms(random);
+		List<Room> roomList = map.createRandomRooms(random, 200);
 
 		WorldGraph wg = new WorldGraph(roomList);
+		map.connectRooms(wg);
 
 		ter.renderFrame(grid);
 

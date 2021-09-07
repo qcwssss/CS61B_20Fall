@@ -23,8 +23,8 @@ public class MapGenerator {
 		this.mapGrid = grid;
 	}
 
-	public ArrayList<Room> createRandomRooms(Random rand) {
-		final int UPPER_LIMIT = 200;
+	public ArrayList<Room> createRandomRooms(Random rand, int UPPER_LIMIT) {
+		//final int UPPER_LIMIT = 200;
 		ArrayList<Room> listOfRooms = new ArrayList<>();
 		// duplicates? overlap?
 
@@ -62,14 +62,16 @@ public class MapGenerator {
 		return listOfRooms;
 	}
 
-	private void connectRooms(WorldGraph wg) {
+	void connectRooms(WorldGraph wg) {
 		Map<Long, RNode> rNodeMap = wg.getRodeMap();
 		for (Long v : rNodeMap.keySet()) {
 			RNode curRode = rNodeMap.get(v);
 			for (RNode n : wg.getNeighbors().get(v)) {
 				// draw path
-				// buildHallWay(Positon p1, Position p2);
-				curRode.getRoom().getLRPosition();
+				Position p1 = curRode.getRoom().getLRPosition();
+				Position p2 = n.getRoom().getLRPosition();
+
+				buildHallWays(p1, p2);
 			}
 		}
 	}
@@ -86,7 +88,7 @@ public class MapGenerator {
 		return false;
 	}
 
-	public void buildRoom(Room room) {
+	private void buildRoom(Room room) {
 		buildRoom(room.getXPos(),  room.getYPos(), room.getWidth(), room.getHeight());
 	}
 
@@ -102,12 +104,26 @@ public class MapGenerator {
 	}
 
 	/** Lower left corner is the starting point. */
-	void buildHallWays(int length, int xStart, int yStart, boolean horizontal){
+	void buildStraightWay(int length, int xStart, int yStart, boolean horizontal){
 		buildLine(length, xStart, yStart, horizontal, Tileset.WALL);
 		buildLine(length, xStart, yStart + 1, horizontal, Tileset.FLOOR);
 		buildLine(length, xStart, yStart + 2, horizontal, Tileset.WALL);
 
 	}
+
+	void buildHallWays(Position p1, Position p2){
+		int startX = Math.min(p1.getX(), p2.getX());
+		int startY = Math.min(p1.getY(), p2.getY());
+		int endX = Math.max(p1.getX(), p2.getX());
+		int endY = Math.max(p1.getY(), p2.getY());
+
+		// first draw horizontal way, then vertical
+		buildLine(endX - startX, startX, startY, true, Tileset.FLOOR);
+		buildLine(endY - startY, endX, startY, false, Tileset.FLOOR);
+
+
+	}
+
 
 
 	/*
@@ -163,7 +179,7 @@ public class MapGenerator {
 			int x = 0, y = 0;
 			if (horizontal) x = i;
 			else y = i;
-
+			// from left to right, bottom to top
 			this.mapGrid[xStart + x][yStart + y] = tile;
 		}
 	}
