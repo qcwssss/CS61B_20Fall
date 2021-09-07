@@ -43,13 +43,17 @@ public class MapVisualTest {
 
 		//WorldGraph wg = new WorldGraph(roomList);
 		//map.connectRooms(wg);
+		Room r1 = roomList.get(roomList.size() - 1);
+		Room r2 = roomList.get(roomList.size() - 2);
 		Position p1 = roomList.get(roomList.size() - 1).getCenter();
 		Position p2 = roomList.get(roomList.size() - 2).getCenter();
 
 		KDTree kdtCenter = new KDTree(centerList);
 		Position p3 = kdtCenter.nearest(20, 40);
-		//map.buildHallWays(p1, p2);
-		map.buildHallWays(p2, p3);
+		map.buildHallWays(p1, p2);
+		map.breakTwoRoomWalls(r2, r1);
+
+		//map.buildHallWays(p2, p3);
 
 		ter.renderFrame(grid);
 

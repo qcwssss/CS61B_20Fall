@@ -77,7 +77,34 @@ public class MapGenerator {
 		}
 	}
 
-	private void breakRoomWalls(Room r1, Room r2) {
+	void breakTwoRoomWalls(Room r1, Room r2) {
+		int pX1, pY1, pX2, pY2;
+		int diffX, diffY;
+		Position p1, p2;
+		int r1X = r1.getCenter().getX();
+		int r2X = r2.getCenter().getX();
+		int r1Y = r1.getCenter().getY();
+		int r2Y = r2.getCenter().getY();
+
+		if (r1X < r2X) { // r1 on the left side
+			pX1 = r1X + r1.getWidth()/2;
+			pX2 = r2X - r2.getWidth()/2;
+		} else {
+			pX1 = r2X + r2.getWidth()/2;
+			pX2 = r1X - r1.getWidth()/2;
+		}
+
+		if (r1Y < r2Y) { // r1 on the bottom
+			pY1 = r1Y + r1.getHeight()/2;
+			pY2 = r2Y - r2.getHeight()/2;
+		} else {
+			pY1 = r2Y + r2.getHeight()/2;
+			pY2 = r1Y - r1.getHeight()/2;
+		}
+		p1 = new Position(pX1, pY1);
+		p2 = new Position(pX2, pY2);
+		buildHallWays(p1, p2);
+
 
 	}
 
