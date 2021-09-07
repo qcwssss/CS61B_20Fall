@@ -1,10 +1,12 @@
 package byow.Core.Map;
 
+import byow.Core.Map.World.KDTree;
 import byow.Core.Map.World.WorldGraph;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -33,13 +35,21 @@ public class MapVisualTest {
 
 		MapGenerator map = new MapGenerator(grid);
 		List<Room> roomList = map.createRandomRooms(random, 15);
+		List<Position> centerList = new ArrayList<>(roomList.size());
+		for(Room r : roomList) {
+			centerList.add(r.getCenter());
+		}
+
 
 		//WorldGraph wg = new WorldGraph(roomList);
 		//map.connectRooms(wg);
 		Position p1 = roomList.get(roomList.size() - 1).getCenter();
 		Position p2 = roomList.get(roomList.size() - 2).getCenter();
 
-		map.buildHallWays(p1, p2);
+		KDTree kdtCenter = new KDTree(centerList);
+		Position p3 = kdtCenter.nearest(20, 40);
+		//map.buildHallWays(p1, p2);
+		map.buildHallWays(p2, p3);
 
 		ter.renderFrame(grid);
 
@@ -77,8 +87,8 @@ public class MapVisualTest {
 
 
 	public static void main(String[] args) {
-		renderMap();
-		//testConnectRooms();
+		//renderMap();
+		testConnectRooms();
 
 	}
 }
