@@ -32,11 +32,12 @@ public class MapGenerator {
 		int mapHeight = this.mapGrid[0].length;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
-			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/3);
 			//int xPos = rand.nextInt(mapWidth);
-			int yPos = rand.nextInt(mapHeight);
-			int width = rand.nextInt(mapWidth/8) + 4; // floor = 4-2 = 2
-			int height = rand.nextInt(mapHeight/8) + 4;
+			//int yPos = rand.nextInt(mapHeight);
+			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/3);
+			int yPos = (int) RandomUtils.gaussian(rand, mapHeight / 2, mapHeight/3);
+			int width = rand.nextInt(mapWidth/8) + 5; // floor = 4-2 = 2
+			int height = rand.nextInt(mapHeight/6) + 4;
 
 			// check if lower left corner is out of bound
 			if (yPos + height - 1 > mapHeight - 1 || xPos + width - 1 > mapWidth - 1) {
@@ -76,6 +77,11 @@ public class MapGenerator {
 		}
 	}
 
+	private void breakRoomWalls(Room r1, Room r2) {
+
+	}
+
+
 	private boolean isOverLap(Room cur, List<Room> listOfRooms) {
 		// check overlap
 		if (listOfRooms.size() > 1) {
@@ -113,6 +119,7 @@ public class MapGenerator {
 
 	void buildHallWays(Position p1, Position p2){
 		int startX, startY, endX, endY;
+
 		// case 1: p1 and p2 are on the line points to upper right /
 		if ((p1.getX() <= p2.getX() && p1.getY() <= p2.getY())
 				|| (p2.getX() <= p1.getX() && p2.getY() <= p1.getY())) {
@@ -121,7 +128,6 @@ public class MapGenerator {
 			startY = Math.min(p1.getY(), p2.getY());
 			endX = Math.max(p1.getX(), p2.getX());
 			endY = Math.max(p1.getY(), p2.getY());
-
 
 			// first draw horizontal way, then vertical
 			buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
@@ -132,7 +138,6 @@ public class MapGenerator {
 			// start from point on the left, draw horizontally
 			if (p1.getX() < p2.getX()) {
 				buildLine(p2.getX() - p1.getX() + 1, p1.getX(), p1.getY(), true, Tileset.GRASS);
-
 			} else {
 				buildLine(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true, Tileset.GRASS);
 			}
@@ -141,12 +146,9 @@ public class MapGenerator {
 			if (p1.getY() < p2.getY()) {
 				// start from p1, horizontal
 				buildLine(p2.getY() - p1.getY() + 1, p1.getX(), p1.getY(), false, Tileset.GRASS);
-
 			} else {
 				buildLine(p1.getY() - p2.getY() + 1, p2.getX(), p2.getY(), false, Tileset.GRASS);
 			}
-
-
 		}
 
 		// first draw horizontal way, then vertical

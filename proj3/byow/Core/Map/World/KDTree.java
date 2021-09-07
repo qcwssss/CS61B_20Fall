@@ -1,4 +1,4 @@
-package bearmaps.proj2ab;
+package byow.Core.Map.World;
 
 import java.util.List;
 

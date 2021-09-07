@@ -20,8 +20,10 @@ public class WorldGraph {
 			curId++;
 		}
 		// add RNode to neighbors
+
 		for(Long id : rNodeMap.keySet()) {
-			neighbors.put(id, connectNeighbors(id, 10));
+			int dist = rNodeMap.get(id).getRoom().getWidth() + rNodeMap.get(id).getRoom().getHeight();
+			neighbors.put(id, connectNeighbors(id, dist/2));
 		}
 
 	}
