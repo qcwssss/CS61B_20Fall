@@ -113,14 +113,46 @@ public class MapGenerator {
 
 	void buildHallWays(Position p1, Position p2){
 		// start end incorrect!
-		int startX = Math.min(p1.getX(), p2.getX());
-		int startY = Math.min(p1.getY(), p2.getY());
-		int endX = Math.max(p1.getX(), p2.getX());
-		int endY = Math.max(p1.getY(), p2.getY());
+		int startX, startY, endX, endY;
+		// case 1: p1 and p2 are on the line points to upper right /
+		if ((p1.getX() <= p2.getX() && p1.getY() <= p2.getY())
+				|| (p2.getX() <= p1.getX() && p2.getY() <= p1.getY())) {
+
+			startX = Math.min(p1.getX(), p2.getX());
+			startY = Math.min(p1.getY(), p2.getY());
+			endX = Math.max(p1.getX(), p2.getX());
+			endY = Math.max(p1.getY(), p2.getY());
+
+
+			// first draw horizontal way, then vertical
+			buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
+			buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
+
+		} else {
+			// case 2: p1 and p2 are on the line points to lower right \
+			// start from point on the left, draw horizontally
+			if (p1.getX() < p2.getX()) {
+				buildLine(p2.getX() - p1.getX(), p1.getX(), p1.getY(), true, Tileset.GRASS);
+
+			} else {
+				buildLine(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true, Tileset.GRASS);
+			}
+
+			// start from point on the bottom, draw vertically
+			if (p1.getY() < p2.getY()) {
+				// start from p1, horizontal
+				buildLine(p2.getY() - p1.getY(), p1.getX(), p1.getY(), false, Tileset.GRASS);
+
+			} else {
+				buildLine(p1.getY() - p2.getY(), p2.getX(), p2.getY(), false, Tileset.GRASS);
+			}
+
+
+		}
 
 		// first draw horizontal way, then vertical
-		buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
-		buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
+		//buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
+		//buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
 		//buildStraightWay(endX - startX, startX, startY, true);
 		//buildStraightWay(endY - startY, endX, startY, false);
 
