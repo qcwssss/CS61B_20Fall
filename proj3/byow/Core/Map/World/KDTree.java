@@ -1,37 +1,38 @@
 package byow.Core.Map.World;
 
+import byow.Core.Map.Position;
+
 import java.util.List;
 
-public class KDTree implements PointSet {
+public class KDTree {
 	private Node root;
 
 	private static class Node {
-		Point point;
+		Position point;
 		Node left;
 		Node right;
 		private Orientation orient;
 
-		Node(Point p, Orientation o) {
+		Node(Position p, Orientation o) {
 			point = p;
 			orient = o;
 		}
 	}
 
-	public KDTree(List<Point> points) {
-		for (Point p : points) {
+	public KDTree(List<Position> points) {
+		for (Position p : points) {
 			root = put(p, root, Orientation.HORIZONTAL);
 		}
 	}
 
-	@Override
-	public Point nearest(double x, double y) {
-		return nearest(root, new Point(x, y), root.point);
+	public Position nearest(int x, int y) {
+		return nearest(root, new Position(x, y), root.point);
 	}
 
-	private Point nearest(Node node, Point goal, Point best) {
+	private Position nearest(Node node, Position goal, Position best) {
 		if (node == null) {
 			return best;
-		}if (Point.distance(goal, node.point) < Point.distance(goal, best)) {
+		}if (Position.distance(goal, node.point) < Position.distance(goal, best)) {
 			best = node.point;
 		}
 
@@ -49,13 +50,13 @@ public class KDTree implements PointSet {
 
 		best = nearest(goodSide, goal, best);
 		// Check to prune bad side or not.
-		if (axisDifference * axisDifference < Point.distance(goal, best)) {
+		if (axisDifference * axisDifference < Position.distance(goal, best)) {
 			best = nearest(badSide, goal, best);
 		}
 		return best;
 	}
 
-	private Node put(Point point, Node x, Orientation oldOrient) {
+	private Node put(Position point, Node x, Orientation oldOrient) {
 		if (x == null) {
 			return new Node(point, oldOrient);
 		}
@@ -72,7 +73,7 @@ public class KDTree implements PointSet {
 		return x;
 	}
 
-	private double axisDiff(Point p1, Point p2, Orientation o) {
+	private double axisDiff(Position p1, Position p2, Orientation o) {
 		if (o == Orientation.HORIZONTAL) {
 			return p1.getX() - p2.getX();
 		} else {
