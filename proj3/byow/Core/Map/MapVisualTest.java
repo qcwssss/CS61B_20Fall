@@ -77,8 +77,8 @@ public class MapVisualTest {
 
 
 	public static void main(String[] args) {
-		//renderMap();
-		testConnectRooms();
+		renderMap();
+		//testConnectRooms();
 
 	}
 }
