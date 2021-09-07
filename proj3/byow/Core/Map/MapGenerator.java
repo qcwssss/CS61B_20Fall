@@ -68,8 +68,8 @@ public class MapGenerator {
 			RNode curRode = rNodeMap.get(v);
 			for (RNode n : wg.getNeighbors().get(v)) {
 				// draw path
-				Position p1 = curRode.getRoom().getLRPosition();
-				Position p2 = n.getRoom().getLRPosition();
+				Position p1 = curRode.getRoom().getCenter();
+				Position p2 = n.getRoom().getCenter();
 
 				buildHallWays(p1, p2);
 			}
@@ -120,7 +120,8 @@ public class MapGenerator {
 		// first draw horizontal way, then vertical
 		buildLine(endX - startX, startX, startY, true, Tileset.FLOOR);
 		buildLine(endY - startY, endX, startY, false, Tileset.FLOOR);
-
+		//buildStraightWay(endX - startX, startX, startY, true);
+		//buildStraightWay(endY - startY, endX, startY, false);
 
 	}
 

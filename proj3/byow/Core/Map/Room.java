@@ -7,6 +7,7 @@ public class Room{
 	private int width;
 	private int height;
 	private Position lowerLeft;
+	private Position center;
 
 	private Long id;
 
@@ -22,14 +23,25 @@ public class Room{
 		this.height = height;
 		this.lowerLeft = lowerLeft;
 		this.id = id;
+		this.center = calculateCenter(lowerLeft, width, height);
+
 	}
 
 	public Room(int width, int height, int xPos, int yPos, Long id) {
 		this.width = width;
 		this.height = height;
 		this.lowerLeft = new Position(xPos, yPos);
+		this.center = calculateCenter(this.lowerLeft, width, height);
+
 		this.id = id;
 
+
+	}
+
+	private Position calculateCenter(Position lr, int width, int height) {
+		int cenX = lr.getX() + width / 2;
+		int cenY = lr.getY() + height / 2;
+		return new Position(cenX, cenY);
 	}
 
 	/** Getters. */
@@ -53,12 +65,14 @@ public class Room{
 		return lowerLeft.getY();
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	//public void setId(Long id) { this.id = id; 	}
 
 	public Long getId() {
 		return id;
+	}
+
+	public Position getCenter() {
+		return center;
 	}
 
 	/**

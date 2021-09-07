@@ -37,8 +37,8 @@ public class MapVisualTest {
 		//WorldGraph wg = new WorldGraph(roomList);
 		//map.connectRooms(wg);
 		//ter.renderFrame(grid);
-		Position p1 = roomList.get(roomList.size() - 1).getLRPosition();
-		Position p2 = roomList.get(roomList.size() - 2).getLRPosition();
+		Position p1 = roomList.get(roomList.size() - 1).getCenter();
+		Position p2 = roomList.get(roomList.size() - 2).getCenter();
 
 		map.buildHallWays(p1, p2);
 

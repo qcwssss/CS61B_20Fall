@@ -21,7 +21,7 @@ public class WorldGraph {
 		}
 		// add RNode to neighbors
 		for(Long id : rNodeMap.keySet()) {
-			neighbors.put(id, connectNeighbors(id, 6));
+			neighbors.put(id, connectNeighbors(id, 10));
 		}
 
 	}
@@ -42,8 +42,8 @@ public class WorldGraph {
 	private double estimateDistance(Long start, Long goal) {
 		RNode sRode = rNodeMap.get(start);
 		RNode goalRode = rNodeMap.get(goal);
-		int distX = sRode.getRoom().getXPos() - goalRode.getRoom().getXPos();
-		int distY = sRode.getRoom().getYPos() - goalRode.getRoom().getYPos();
+		int distX = sRode.getRoom().getCenter().getX() - goalRode.getRoom().getCenter().getX();
+		int distY = sRode.getRoom().getCenter().getY() - goalRode.getRoom().getCenter().getY();
 		double estDist = Math.sqrt(distX*distX + distY*distY);
 		return estDist;
 
