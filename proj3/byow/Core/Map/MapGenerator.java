@@ -112,14 +112,15 @@ public class MapGenerator {
 	}
 
 	void buildHallWays(Position p1, Position p2){
+		// start end incorrect!
 		int startX = Math.min(p1.getX(), p2.getX());
 		int startY = Math.min(p1.getY(), p2.getY());
 		int endX = Math.max(p1.getX(), p2.getX());
 		int endY = Math.max(p1.getY(), p2.getY());
 
 		// first draw horizontal way, then vertical
-		buildLine(endX - startX, startX, startY, true, Tileset.FLOOR);
-		buildLine(endY - startY, endX, startY, false, Tileset.FLOOR);
+		buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
+		buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
 		//buildStraightWay(endX - startX, startX, startY, true);
 		//buildStraightWay(endY - startY, endX, startY, false);
 

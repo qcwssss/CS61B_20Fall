@@ -24,24 +24,24 @@ public class MapVisualTest {
 
 	}
 
-	@Test
-	public void testConnectRooms() {
+	private static void testConnectRooms() {
+		int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
-		//TERenderer ter = new TERenderer();
-		//ter.initialize(WIDTH, HEIGHT);
+		TERenderer ter = new TERenderer();
+		ter.initialize(WIDTH, HEIGHT);
 
 		MapGenerator map = new MapGenerator(grid);
-		List<Room> roomList = map.createRandomRooms(random, 10);
+		List<Room> roomList = map.createRandomRooms(random, 15);
 
 		//WorldGraph wg = new WorldGraph(roomList);
 		//map.connectRooms(wg);
-		//ter.renderFrame(grid);
 		Position p1 = roomList.get(roomList.size() - 1).getCenter();
 		Position p2 = roomList.get(roomList.size() - 2).getCenter();
 
 		map.buildHallWays(p1, p2);
 
+		ter.renderFrame(grid);
 
 		System.out.println(TETile.toString(grid));
 
@@ -56,7 +56,7 @@ public class MapVisualTest {
 	}
 
 
-	public static void main(String[] args) {
+	private static void renderMap() {
 		final int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
@@ -73,5 +73,12 @@ public class MapVisualTest {
 
 
 		//System.out.println(TETile.toString(grid));
+	}
+
+
+	public static void main(String[] args) {
+		//renderMap();
+		testConnectRooms();
+
 	}
 }
