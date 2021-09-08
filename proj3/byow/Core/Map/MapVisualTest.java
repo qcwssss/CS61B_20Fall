@@ -50,10 +50,17 @@ public class MapVisualTest {
 
 		KDTree kdtCenter = new KDTree(centerList);
 		Position p3 = kdtCenter.nearest(20, 40);
-		//map.buildHallWays(p1, p2);
-		map.breakTwoRoomWalls(r2, r1);
-
 		//map.buildHallWays(p2, p3);
+		//map.buildHallWays(p1, p2);
+
+		//map.breakTwoRoomWalls(r1, roomList.get(0));
+		//map.breakTwoRoomWalls(r1, roomList.get(1));
+		//map.breakTwoRoomWalls(r1, roomList.get(2));
+		map.breakTwoRoomWalls(r1, roomList.get(3));
+		//map.breakTwoRoomWalls(r1, roomList.get(4));
+
+
+
 
 		ter.renderFrame(grid);
 

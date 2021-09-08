@@ -72,35 +72,43 @@ public class MapGenerator {
 				Position p1 = curRode.getRoom().getCenter();
 				Position p2 = n.getRoom().getCenter();
 
-				buildHallWays(p1, p2);
+				breakTwoRoomWalls(curRode.getRoom(), n.getRoom());
+				//buildHallWays(p1, p2);
 			}
 		}
 	}
 
 	void breakTwoRoomWalls(Room r1, Room r2) {
-		int diffX, diffY;
 		Position p1, p2;
 		int r1X = r1.getCenter().getX();
-		int r2X = r2.getCenter().getX();
 		int r1Y = r1.getCenter().getY();
+		int r2X = r2.getCenter().getX();
 		int r2Y = r2.getCenter().getY();
 
-		int pX1 = r1X, pY1 = r1Y, pX2 = r2X, pY2 = r2Y;
+		int pX1 , pY1, pX2, pY2;
 
-
-		if (r1X < r2X) { // r1 on the left side
+		// r1 on the left side
+		if (r1X < r2X) {
 			pX1 = r1X + r1.getWidth()/2;
-		} else {
+			pY1 = r1Y;
+			pX2 = r2X;
+			if (r1Y < r2Y) {
+				pY2 = r2Y - r2.getHeight()/2;
+			} else {
+				pY2 = r2Y + r2.getHeight()/2;
+			}
+		} else { // r1 on the right side
 			pX1 = r2X + r2.getWidth()/2;
+			pY1 = r2Y;
 			pX2 = r1X;
+			if (r1Y < r2Y) {
+				pY2 = r1Y + r1.getHeight()/2;
+			} else {
+				pY2 = r1Y - r1.getHeight()/2;
+
+			}
 		}
 
-		if (r1Y < r2Y) { // r1 on the bottom
-			pY1 = r2Y;
-			pY2 = r1Y + r2.getHeight()/2;
-		} else {
-			pY1 = r1Y - r1.getHeight()/2;
-		}
 		p1 = new Position(pX1, pY1);
 		p2 = new Position(pX2, pY2);
 		buildHallWays(p1, p2);
@@ -163,8 +171,8 @@ public class MapGenerator {
 		} else {
 			// case 2: p1 and p2 are on the line points to lower right \
 			// start from point on the left, draw horizontally
-			if (p1.getX() < p2.getX()) {
-				buildLine(p2.getX() - p1.getX() + 1, p1.getX(), p1.getY(), true, Tileset.GRASS);
+			if (p1.getX() < p2.getX()) { // + 1?
+				buildLine(p2.getX() - p1.getX(), p1.getX(), p1.getY(), true, Tileset.GRASS);
 			} else {
 				buildLine(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true, Tileset.GRASS);
 			}
