@@ -113,9 +113,7 @@ public class MapGenerator {
 		p2 = new Position(pX2, pY2);
 		buildHallWays(p1, p2);
 
-
 	}
-
 
 	private boolean isOverLap(Room cur, List<Room> listOfRooms) {
 		// check overlap
@@ -146,9 +144,17 @@ public class MapGenerator {
 
 	/** Lower left corner is the starting point. */
 	void buildStraightWay(int length, int xStart, int yStart, boolean horizontal){
-		buildLine(length, xStart, yStart, horizontal, Tileset.WALL);
-		buildLine(length, xStart, yStart + 1, horizontal, Tileset.FLOOR);
-		buildLine(length, xStart, yStart + 2, horizontal, Tileset.WALL);
+		if (horizontal == true) {
+			buildLine(length, xStart, yStart - 1, true, Tileset.WALL);
+			buildLine(length, xStart, yStart, true, Tileset.GRASS);
+			buildLine(length, xStart, yStart + 1, true, Tileset.WALL);
+
+		} else { // vertical
+			buildLine(length, xStart - 1, yStart, false, Tileset.WALL);
+			buildLine(length, xStart, yStart, false, Tileset.GRASS);
+			buildLine(length, xStart + 1, yStart, false, Tileset.WALL);
+
+		}
 
 	}
 
@@ -165,50 +171,39 @@ public class MapGenerator {
 			endY = Math.max(p1.getY(), p2.getY());
 
 			// first draw horizontal way, then vertical
-			buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
-			buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
+			//buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
+			buildStraightWay(endX - startX, startX, startY, true);
+
+			//buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
+			buildStraightWay(endY - startY, endX, startY, false);
 
 		} else {
 			// case 2: p1 and p2 are on the line points to lower right \
 			// start from point on the left, draw horizontally
 			if (p1.getX() < p2.getX()) { // + 1?
-				buildLine(p2.getX() - p1.getX(), p1.getX(), p1.getY(), true, Tileset.GRASS);
+				//buildLine(p2.getX() - p1.getX(), p1.getX(), p1.getY(), true, Tileset.GRASS);
+				buildStraightWay(p2.getX() - p1.getX(), p1.getX(), p1.getY(), true);
+
 			} else {
-				buildLine(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true, Tileset.GRASS);
+				//buildLine(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true, Tileset.GRASS);
+				buildStraightWay(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true);
+
 			}
 
 			// start from point on the bottom, draw vertically
 			if (p1.getY() < p2.getY()) {
 				// start from p1, horizontal
-				buildLine(p2.getY() - p1.getY() + 1, p1.getX(), p1.getY(), false, Tileset.GRASS);
+				//buildLine(p2.getY() - p1.getY() + 1, p1.getX(), p1.getY(), false, Tileset.GRASS);
+				buildStraightWay(p2.getY() - p1.getY() + 1, p1.getX(), p1.getY(), false);
+
 			} else {
-				buildLine(p1.getY() - p2.getY() + 1, p2.getX(), p2.getY(), false, Tileset.GRASS);
+				//buildLine(p1.getY() - p2.getY() + 1, p2.getX(), p2.getY(), false, Tileset.GRASS);
+				buildStraightWay(p1.getY() - p2.getY() + 1, p2.getX(), p2.getY(), false);
+
 			}
 		}
 
-		// first draw horizontal way, then vertical
-		//buildLine(endX - startX, startX, startY, true, Tileset.GRASS);
-		//buildLine(endY - startY, endX, startY, false, Tileset.GRASS);
-		//buildStraightWay(endX - startX, startX, startY, true);
-		//buildStraightWay(endY - startY, endX, startY, false);
-
 	}
-
-
-
-	/*
-	1. Create a tile grid
-	buildEmptyMap(int width, int height)
-	2. Helper methods to create all kinds of rooms, hall ways, etc.
-	buildWall(int length, int xStart, int yStart, int direct)
-		buildLine
-	buildHallWay
-		L turn, T, cross turns?
-	buildRoom
-		buildPlane (rectangle)
-	connectRoom
-		isOverlap?
-	 */
 
 
 

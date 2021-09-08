@@ -105,6 +105,15 @@ public class TestMapGenerator {
 		System.out.println(TETile.toString(grid));
 	}
 
+	@Test
+	public void testVericalHallways() {
+		map.buildStraightWay(4, 0, 10, false);
+		map.buildStraightWay(6, 5, 10, false);
+		map.buildStraightWay(10, 10, 10, false);
+
+		System.out.println(TETile.toString(grid));
+	}
+
 	@Test (expected = IllegalArgumentException.class)
 	public void testHallWayExceptionHorizon1() {
 		map.buildStraightWay(10, 0, 28, true);
