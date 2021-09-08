@@ -88,18 +88,18 @@ public class MapGenerator {
 
 		if (r1X < r2X) { // r1 on the left side
 			pX1 = r1X + r1.getWidth()/2;
-			pX2 = r2X - r2.getWidth()/2;
+			pX2 = r2X;
 		} else {
 			pX1 = r2X + r2.getWidth()/2;
-			pX2 = r1X - r1.getWidth()/2;
+			pX2 = r1X;
 		}
 
 		if (r1Y < r2Y) { // r1 on the bottom
-			pY1 = r1Y + r1.getHeight()/2;
-			pY2 = r2Y - r2.getHeight()/2;
+			pY1 = r2Y;
+			pY2 = r2Y + r2.getHeight()/2;
 		} else {
-			pY1 = r2Y + r2.getHeight()/2;
-			pY2 = r1Y - r1.getHeight()/2;
+			pY1 = r1Y - r1.getHeight()/2;
+			pY2 = r2Y;
 		}
 		p1 = new Position(pX1, pY1);
 		p2 = new Position(pX2, pY2);
