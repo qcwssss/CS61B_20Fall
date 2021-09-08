@@ -72,8 +72,8 @@ public class MapGenerator {
 				Position p1 = curRode.getRoom().getCenter();
 				Position p2 = n.getRoom().getCenter();
 
-				breakTwoRoomWalls(curRode.getRoom(), n.getRoom());
-				//buildHallWays(p1, p2);
+				//breakTwoRoomWalls(curRode.getRoom(), n.getRoom());
+				buildHallWays(p1, p2);
 			}
 		}
 	}
