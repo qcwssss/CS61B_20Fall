@@ -78,7 +78,6 @@ public class MapGenerator {
 	}
 
 	void breakTwoRoomWalls(Room r1, Room r2) {
-		int pX1, pY1, pX2, pY2;
 		int diffX, diffY;
 		Position p1, p2;
 		int r1X = r1.getCenter().getX();
@@ -86,9 +85,11 @@ public class MapGenerator {
 		int r1Y = r1.getCenter().getY();
 		int r2Y = r2.getCenter().getY();
 
+		int pX1 = r1X, pY1 = r1Y, pX2 = r2X, pY2 = r2Y;
+
+
 		if (r1X < r2X) { // r1 on the left side
 			pX1 = r1X + r1.getWidth()/2;
-			pX2 = r2X;
 		} else {
 			pX1 = r2X + r2.getWidth()/2;
 			pX2 = r1X;
@@ -96,10 +97,9 @@ public class MapGenerator {
 
 		if (r1Y < r2Y) { // r1 on the bottom
 			pY1 = r2Y;
-			pY2 = r2Y + r2.getHeight()/2;
+			pY2 = r1Y + r2.getHeight()/2;
 		} else {
 			pY1 = r1Y - r1.getHeight()/2;
-			pY2 = r2Y;
 		}
 		p1 = new Position(pX1, pY1);
 		p2 = new Position(pX2, pY2);
