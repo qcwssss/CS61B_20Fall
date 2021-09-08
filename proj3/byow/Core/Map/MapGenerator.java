@@ -250,7 +250,11 @@ public class MapGenerator {
 			if (horizontal) x = i;
 			else y = i;
 			// from left to right, bottom to top
-			this.mapGrid[xStart + x][yStart + y] = tile;
+			if (this.mapGrid[xStart + x][yStart + y] == Tileset.FLOOR) {
+				continue;
+			} else {
+				this.mapGrid[xStart + x][yStart + y] = tile;
+			}
 		}
 	}
 
