@@ -134,6 +134,10 @@ public class MapGenerator {
 		inner1 = new Position(p1.getX(), p1.getY() - 1);
 		inner2 = new Position(p2.getX() - 1, p2.getY());
 		buildTurn(inner1, inner2, Tileset.WATER);
+		
+		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
+		System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
+		System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
 
 	}
 

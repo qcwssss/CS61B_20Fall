@@ -44,4 +44,11 @@ public class Position {
 		return Math.sqrt(dSqr);
 	}
 
+	@Override
+	public String toString() {
+		return "Position{" +
+				"xPos=" + xPos +
+				", yPos=" + yPos +
+				'}';
+	}
 }

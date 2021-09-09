@@ -50,8 +50,8 @@ public class MapVisualTest {
 
 		KDTree kdtCenter = new KDTree(centerList);
 		Position p3 = kdtCenter.nearest(20, 40);
-		//map.buildHallWays(p2, p3);
-		map.buildHallWays(p1, p2);
+		map.buildHallWays(p2, p3);
+		//map.buildHallWays(p1, p2);
 
 
 
