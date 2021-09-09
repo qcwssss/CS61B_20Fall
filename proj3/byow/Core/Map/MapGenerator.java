@@ -144,35 +144,6 @@ public class MapGenerator {
 	private void buildTurn(Position p1, Position p2, TETile tile){
 		int startX, startY, endX, endY;
 
-		// case 1: p1 and p2 are on the line points to upper right /
-		if ((p1.getX() <= p2.getX() && p1.getY() <= p2.getY())
-				|| (p2.getX() <= p1.getX() && p2.getY() <= p1.getY())) {
-
-			startX = Math.min(p1.getX(), p2.getX());
-			startY = Math.min(p1.getY(), p2.getY());
-			endX = Math.max(p1.getX(), p2.getX());
-			endY = Math.max(p1.getY(), p2.getY());
-
-			// first draw horizontal way, then vertical
-			buildLine(endX - startX, startX, startY, true, tile);
-			buildLine(endY - startY, endX, startY, false, tile);
-
-		} else {
-			// case 2: p1 and p2 are on the line points to lower right \
-			// start from point on the left, draw horizontally
-			if (p1.getX() < p2.getX()) { // + 1?
-				buildLine(p2.getX() - p1.getX() + 1, p1.getX(), p1.getY(), true, tile);
-			} else {
-				buildLine(p1.getX() - p2.getX() + 1, p2.getX(), p2.getY(), true, tile);
-			}
-			// start from point on the bottom, draw vertically
-			if (p1.getY() < p2.getY()) {
-				// start from p1, horizontal
-				buildLine(p2.getY() - p1.getY() + 1, p1.getX(), p1.getY(), false, tile);
-			} else {
-				buildLine(p1.getY() - p2.getY() + 1, p2.getX(), p2.getY(), false, tile);
-			}
-		}
 
 	}
 
