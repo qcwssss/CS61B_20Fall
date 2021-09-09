@@ -4,6 +4,7 @@ import byow.Core.Map.World.KDTree;
 import byow.Core.Map.World.WorldGraph;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class MapVisualTest {
 
 		KDTree kdtCenter = new KDTree(centerList);
 		Position p3 = kdtCenter.nearest(20, 40);
-		//map.buildHallWays(p2, p3);
+		map.buildHallWays(p2, p3);
 		map.buildHallWays(p1, p2);
 
 
@@ -65,6 +66,38 @@ public class MapVisualTest {
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 		MapGenerator map = new MapGenerator(grid);
 		return map.createRandomRooms(random, 200);
+
+	}
+
+	@Test
+	public void testBuildTurns() {
+		int WIDTH = 30, HEIGHT = 30;
+		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+
+		TERenderer ter = new TERenderer();
+		//ter.initialize(WIDTH, HEIGHT);
+
+		MapGenerator map = new MapGenerator(grid);
+		Position p0 = new Position(15, 15) ;
+		Position p1 = new Position(18, 18) ;
+
+		int num = 3;
+		map.buildTurn(new Position(15,16), new Position(17, 18), Tileset.WALL);
+		map.buildTurn(p0, p1, Tileset.GRASS);
+		map.buildTurn(new Position(15,14), new Position(19, 18), Tileset.MOUNTAIN);
+		// (12, 18)
+		map.buildTurn(p0, new Position(12 ,18), Tileset.WATER);
+
+		//ter.renderFrame(grid);
+
+		System.out.println(TETile.toString(grid));
+
+	}
+
+	private void drawThreeTurns(MapGenerator map, Position p1, Position p2) {
+		//map.buildTurn(new Position(15,16), new Position(17, 18), Tileset.WALL);
+		map.buildTurn(p1, p2, Tileset.GRASS);
+		//map.buildTurn(new Position(15,14), new Position(19, 18), Tileset.MOUNTAIN);
 
 	}
 

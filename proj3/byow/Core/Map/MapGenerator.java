@@ -141,8 +141,28 @@ public class MapGenerator {
 
 	}
 
-	private void buildTurn(Position p1, Position p2, TETile tile){
+	void buildTurn(Position p1, Position p2, TETile tile){
 		int startX, startY, endX, endY;
+		int lenX, lenY;
+		// starts from the left
+		if (p1.getX() < p2.getX()) {
+			startX = p1.getX();
+			startY = p1.getY();
+			endY = p2.getY();
+		} else {
+			startX = p2.getX();
+			startY = p2.getY();
+			endY = p1.getY();
+		}
+		lenX = Math.abs(p1.getX() - p2.getX());
+		lenY = Math.abs(p1.getY() - p2.getY());
+
+		buildLine(lenX, startX, startY, true, tile);
+		if (endY > startY) {
+			buildLine(lenY, startX + lenX, startY, false, tile);
+		} else {
+			buildLine(lenY + 1, startX + lenX, endY, false, tile);
+		}
 
 
 	}
