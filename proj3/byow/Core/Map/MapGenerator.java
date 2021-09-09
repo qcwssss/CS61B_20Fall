@@ -129,22 +129,20 @@ public class MapGenerator {
 
 		out1 = new Position(p1.getX(), p1.getY() + 1);
 		out2 = new Position(p2.getX() + 1, p2.getY());
-		buildTurn(out1, out2, Tileset.MOUNTAIN);
+		buildTurn(out1, out2, Tileset.WATER);
 
 		inner1 = new Position(p1.getX(), p1.getY() - 1);
 		inner2 = new Position(p2.getX() - 1, p2.getY());
-		buildTurn(inner1, inner2, Tileset.WATER);
-		/*
+		buildTurn(inner1, inner2, Tileset.MOUNTAIN);
+
 		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
 		System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
 		System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
-		*/
+
 	}
 
 	private void buildTurn(Position p1, Position p2, TETile tile){
 		int startX, startY, endX, endY;
-		System.out.println("In buildTurn(): ");
-		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
 
 		// case 1: p1 and p2 are on the line points to upper right /
 		if ((p1.getX() <= p2.getX() && p1.getY() <= p2.getY())
@@ -158,29 +156,18 @@ public class MapGenerator {
 			// first draw horizontal way, then vertical
 			buildLine(endX - startX, startX, startY, true, tile);
 			buildLine(endY - startY, endX, startY, false, tile);
-			String startToEnd = String.format("start(%d, %d), end(%d, %d)" + startX, startY, endX, endY);
-			System.out.println(startToEnd);
 
 		} else {
 			// case 2: p1 and p2 are on the line points to lower right \
 			// start from point on the left, draw horizontally
-			int lenH, lenV;
 			if (p1.getX() < p2.getX()) { // + 1?
-				lenH = p2.getX() - p1.getX();
-				startX = p1.getX();
-				startY = p1.getY();
-				//buildLine(p2.getX() - p1.getX(), p1.getX(), p1.getY(), true, tile);
+				buildLine(p2.getX() - p1.getX() + 1, p1.getX(), p1.getY(), true, tile);
 			} else {
-				lenH = p1.getX() - p2.getX();
-				startX = p2.getX();
-				startY = p2.getY();
-				//buildLine(p1.getX() - p2.getX(), p2.getX(), p2.getY(), true, tile);
+				buildLine(p1.getX() - p2.getX() + 1, p2.getX(), p2.getY(), true, tile);
 			}
-			buildLine(lenH, startX, startY, true, tile);
-
-
 			// start from point on the bottom, draw vertically
 			if (p1.getY() < p2.getY()) {
+				// start from p1, horizontal
 				buildLine(p2.getY() - p1.getY() + 1, p1.getX(), p1.getY(), false, tile);
 			} else {
 				buildLine(p1.getY() - p2.getY() + 1, p2.getX(), p2.getY(), false, tile);
@@ -188,8 +175,6 @@ public class MapGenerator {
 		}
 
 	}
-
-
 
 	private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
 		checkLocation(xStart, yStart);
@@ -233,6 +218,8 @@ public class MapGenerator {
 				this.mapGrid[xStart + x][yStart + y] = tile;
 			}
 		}
+		String startToEnd =String.format("start(%d,%d),length=%d", xStart,yStart,length);
+		System.out.println(startToEnd);
 	}
 
 	/** start position locates at lower left corner. */
