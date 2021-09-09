@@ -53,14 +53,6 @@ public class MapVisualTest {
 		//map.buildHallWays(p2, p3);
 		map.buildHallWays(p1, p2);
 
-		//map.breakTwoRoomWalls(r1, roomList.get(0));
-		//map.breakTwoRoomWalls(r1, roomList.get(1));
-		//map.breakTwoRoomWalls(r1, roomList.get(2));
-		//map.breakTwoRoomWalls(r1, roomList.get(3));
-		//map.breakTwoRoomWalls(r1, roomList.get(4));
-		//map.breakTwoRoomWalls(r1, roomList.get(5));
-
-
 
 
 		ter.renderFrame(grid);
