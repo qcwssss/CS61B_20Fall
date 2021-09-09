@@ -161,7 +161,7 @@ public class MapGenerator {
 		if (endY > startY) {
 			buildLine(lenY, startX + lenX, startY, false, tile);
 		} else {
-			buildLine(lenY + 1, startX + lenX, endY, false, tile);
+			buildLine(lenY, startX + lenX, endY, false, tile);
 		}
 
 
@@ -211,6 +211,37 @@ public class MapGenerator {
 		}
 		String startToEnd =String.format("start(%d,%d),length=%d", xStart,yStart,length);
 		System.out.println(startToEnd);
+	}
+
+	void drawLineToPos(Position p1,Position p2, TETile tile){
+		checkLocation(p1.getX(), p1.getY());
+		checkLocation(p2.getX(), p2.getY());
+
+		// find turning point
+		//Position turn = new Position(Math.)
+
+		int startX, startY, endX, endY;
+		int lenX, lenY;
+		// starts from the left
+		if (p1.getX() < p2.getX()) {
+			startX = p1.getX();
+			startY = p1.getY();
+			endY = p2.getY();
+		} else {
+			startX = p2.getX();
+			startY = p2.getY();
+			endY = p1.getY();
+		}
+		lenX = Math.abs(p1.getX() - p2.getX()) + 1;
+		lenY = Math.abs(p1.getY() - p2.getY()) + 1;
+
+		buildLine(lenX, startX, startY, true, tile);
+		if (endY > startY) {
+			buildLine(lenY, startX + lenX, startY, false, tile);
+		} else {
+			buildLine(lenY, startX + lenX, endY, false, tile);
+		}
+
 	}
 
 	/** start position locates at lower left corner. */

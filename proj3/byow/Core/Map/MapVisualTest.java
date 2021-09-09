@@ -69,26 +69,27 @@ public class MapVisualTest {
 
 	}
 
-	@Test
-	public void testBuildTurns() {
+
+	public static void testBuildTurns() {
 		int WIDTH = 30, HEIGHT = 30;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
 		TERenderer ter = new TERenderer();
-		//ter.initialize(WIDTH, HEIGHT);
+		ter.initialize(WIDTH, HEIGHT);
 
 		MapGenerator map = new MapGenerator(grid);
-		Position p0 = new Position(15, 15) ;
-		Position p1 = new Position(18, 18) ;
+		Position p0 = new Position(3, 3) ;
+		Position p1 = new Position(6, 6) ;
 
 		int num = 3;
-		map.buildTurn(new Position(15,16), new Position(17, 18), Tileset.WALL);
+		//map.buildTurn(new Position(15,16), new Position(17, 18), Tileset.WALL);
 		map.buildTurn(p0, p1, Tileset.GRASS);
-		map.buildTurn(new Position(15,14), new Position(19, 18), Tileset.MOUNTAIN);
-		// (12, 18)
-		map.buildTurn(p0, new Position(12 ,18), Tileset.WATER);
+		//map.buildTurn(new Position(15,14), new Position(19, 18), Tileset.MOUNTAIN);
+		map.buildTurn(p0, new Position(0 ,6), Tileset.WATER);
+		map.buildTurn(p0, new Position(0 ,1), Tileset.MOUNTAIN);
+		map.buildTurn(p0, new Position(6 ,1), Tileset.FLOOR);
 
-		//ter.renderFrame(grid);
+		ter.renderFrame(grid);
 
 		System.out.println(TETile.toString(grid));
 
@@ -124,7 +125,8 @@ public class MapVisualTest {
 
 	public static void main(String[] args) {
 		//renderMap();
-		testConnectRooms();
+		//testConnectRooms();
+		testBuildTurns();
 
 	}
 }
