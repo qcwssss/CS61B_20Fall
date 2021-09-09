@@ -158,6 +158,8 @@ public class MapGenerator {
 
 	}
 
+	// Possible better idea:
+	// Create and make 3 calls to drawLTiles method that takes a tile type as an argument.
 	void buildHallWays(Position p1, Position p2){
 		int startX, startY, endX, endY;
 
@@ -245,9 +247,7 @@ public class MapGenerator {
 			if (horizontal) x = i;
 			else y = i;
 			// from left to right, bottom to top
-			if (this.mapGrid[xStart + x][yStart + y] == Tileset.FLOOR) {
-				continue;
-			} else {
+			if (this.mapGrid[xStart + x][yStart + y] != Tileset.FLOOR) {
 				this.mapGrid[xStart + x][yStart + y] = tile;
 			}
 		}
