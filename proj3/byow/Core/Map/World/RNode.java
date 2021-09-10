@@ -6,17 +6,11 @@ import byow.Core.Map.Room;
 import java.util.Map;
 
 public class RNode {
-	private long id;
 	private Room room;
 
-	public long getId() {
-		return id;
-	}
 
-	public RNode(Room room, long id) {
+	public RNode(Room room) {
 		this.room = room;
-		this.id = id;
-		//this.center = room.getLRPosition();
 	}
 
 

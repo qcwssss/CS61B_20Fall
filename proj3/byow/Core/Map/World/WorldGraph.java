@@ -15,8 +15,8 @@ public class WorldGraph {
 	public WorldGraph(List<Room> roomList) {
 		long curId = 1;
 		for (Room r: roomList) {
-			RNode curNode = new RNode(r, curId);
-			rNodeMap.put(r.getId(), curNode);
+			RNode curNode = new RNode(r);
+			rNodeMap.put(curId, curNode);
 			curId++;
 		}
 		// add RNode to neighbors
