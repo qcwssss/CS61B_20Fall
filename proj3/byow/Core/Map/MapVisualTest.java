@@ -55,7 +55,6 @@ public class MapVisualTest {
 			centerList.add(r.getCenter());
 		}
 
-
 		//WorldGraph wg = new WorldGraph(roomList);
 		//map.connectRooms(wg);
 		//Room r1 = roomList.get(roomList.size() - 1);
@@ -70,7 +69,6 @@ public class MapVisualTest {
 
 
 		ter.renderFrame(grid);
-
 		System.out.println(TETile.toString(grid));
 
 	}
@@ -125,7 +123,6 @@ public class MapVisualTest {
 		map.buildHallWays(p0, p3);
 		//map.buildHallWays(p0, p4); // correct
 
-
 		ter.renderFrame(grid);
 		System.out.println(TETile.toString(grid));
 
@@ -146,13 +143,11 @@ public class MapVisualTest {
 		map.connectRooms(wg);
 
 		ter.renderFrame(grid);
-
-
 		//System.out.println(TETile.toString(grid));
 	}
 
 	private static void createWorld() {
-		int WIDTH = 80, HEIGHT = 36;
+		int WIDTH = 80, HEIGHT = 38;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
 		MapGenerator world = new MapGenerator(random, grid);

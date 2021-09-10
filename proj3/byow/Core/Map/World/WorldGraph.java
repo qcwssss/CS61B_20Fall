@@ -24,7 +24,6 @@ public class WorldGraph {
 			int dist = rNodeMap.get(id).getRoom().getWidth() + rNodeMap.get(id).getRoom().getHeight();
 			neighbors.put(id, connectNeighbors(id, dist));
 		}
-
 	}
 
 
