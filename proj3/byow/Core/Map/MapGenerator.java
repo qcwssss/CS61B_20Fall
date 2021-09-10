@@ -27,9 +27,11 @@ public class MapGenerator {
 		// sort rooms based on xPos
 		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
 		//System.out.println(roomList);
-		for (int i = 1; i < roomList.size(); i++) {
-			buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter());
-		}
+
+		//for (int i = 1; i < roomList.size(); i++) {
+			//buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter()); }
+		WorldGraph wg = new WorldGraph(roomList);
+		this.connectRooms(wg);
 	}
 
 
@@ -141,35 +143,25 @@ public class MapGenerator {
 		Position out1, out2, inner1, inner2;
 		buildTurn(p1, p2, Tileset.FLOOR);
 
-		/*
-		int offX1 = 0, offY1 = 0, offX2 = 0, offY2 = 0;
-		out1 = new Position(p1X + offX1, p1Y + offY1);
-		out2 = new Position(p2X + offX2, p2Y + offY2);
-		buildTurn(out1, out2, Tileset.WATER);
-		*/
-
+		out1 = new Position(p1X, p1Y + 1);
+		inner1 = new Position(p1X, p1Y - 1);
 		// works for \
 		if ( (p1X < p2X && p1Y > p2Y) || (p1X > p2X && p1Y < p2Y)) {
-			inner1 = new Position(p1X, p1Y - 1);
 			inner2 = new Position(p2X - 1, p2Y);
-			out1 = new Position(p1X, p1Y + 1);
 			out2 = new Position(p2X + 1, p2Y);
-
 		} else {
-			inner1 = new Position(p1X, p1Y - 1); // correct
+			//inner1 = new Position(p1X, p1Y - 1); // correct
 			inner2 = new Position(p2X + 1, p2Y);
-			out1 = new Position(p1X, p1Y + 1);// correct
+			//out1 = new Position(p1X, p1Y + 1);// correct
 			out2 = new Position(p2X - 1, p2Y);
 
 		}
+		buildTurn(inner1, inner2, Tileset.WALL);
+		buildTurn(out1, out2, Tileset.WALL);
 
-		buildTurn(inner1, inner2, Tileset.MOUNTAIN);
-		buildTurn(out1, out2, Tileset.WATER);
-
-		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
-		System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
-		System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
-
+		//System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
+		//System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
+		//System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
 	}
 
 	void buildTurn(Position p1, Position p2, TETile tile){

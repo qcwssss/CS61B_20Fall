@@ -20,17 +20,13 @@ public class WorldGraph {
 			curId++;
 		}
 		// add RNode to neighbors
-
 		for(Long id : rNodeMap.keySet()) {
 			int dist = rNodeMap.get(id).getRoom().getWidth() + rNodeMap.get(id).getRoom().getHeight();
-			neighbors.put(id, connectNeighbors(id, 2 * dist/3));
+			neighbors.put(id, connectNeighbors(id, dist));
 		}
 
 	}
 
-	void connectRooms(Room r1, Room r2) {
-
-	}
 
 	private Set<RNode> connectNeighbors(Long v, int dist) {
 		Set<RNode> rNodeSet = new HashSet<>();
