@@ -142,26 +142,42 @@ public class MapGenerator {
 	}
 
 	void buildTurn(Position p1, Position p2, TETile tile){
-		int startX, startY, endX, endY;
-		int lenX, lenY;
-		// starts from the left
-		if (p1.getX() < p2.getX()) {
-			startX = p1.getX();
-			startY = p1.getY();
-			endY = p2.getY();
-		} else {
-			startX = p2.getX();
-			startY = p2.getY();
-			endY = p1.getY();
-		}
-		lenX = Math.abs(p1.getX() - p2.getX());
-		lenY = Math.abs(p1.getY() - p2.getY());
+		int pX1, pX2, pY1, pY2;
+		pX1 = p1.getX();
+		pY1 = p1.getY();
 
-		buildLine(lenX, startX, startY, true, tile);
-		if (endY > startY) {
-			buildLine(lenY, startX + lenX, startY, false, tile);
-		} else {
-			buildLine(lenY, startX + lenX, endY, false, tile);
+		pX2 = p2.getX();
+		pY2 = p2.getY();
+
+		//case 1:  move right, then up
+		if (pX1 < pX2) {
+			for (int i = pX1; i < pX2; i++) {
+				this.mapGrid[i][pY1] = tile;
+			}
+			if (pY1 < pY2) { // go up
+				for (int j = pY1; j <= pY2; j++) {
+					this.mapGrid[pX2][j] = tile;
+				}
+			} else { // go down
+				for (int j = pY1; j >= pY2; j--) {
+					this.mapGrid[pX2][j] = tile;
+				}
+			}
+
+		} else { // go left
+			for (int i = pX1; i > pX2; i--) {
+				this.mapGrid[i][pY1] = tile;
+			}
+			if (pY1 < pY2) { // go up
+				for (int j = pY1; j <= pY2; j++) {
+					this.mapGrid[pX2][j] = tile;
+				}
+			} else { // go down
+				for (int j = pY1; j >= pY2; j--) {
+					this.mapGrid[pX2][j] = tile;
+				}
+			}
+
 		}
 
 

@@ -81,10 +81,7 @@ public class MapVisualTest {
 		Position p0 = new Position(3, 3) ;
 		Position p1 = new Position(6, 6) ;
 
-		int num = 3;
-		//map.buildTurn(new Position(15,16), new Position(17, 18), Tileset.WALL);
 		map.buildTurn(p0, p1, Tileset.GRASS);
-		//map.buildTurn(new Position(15,14), new Position(19, 18), Tileset.MOUNTAIN);
 		map.buildTurn(p0, new Position(0 ,6), Tileset.WATER);
 		map.buildTurn(p0, new Position(0 ,1), Tileset.MOUNTAIN);
 		map.buildTurn(p0, new Position(6 ,1), Tileset.FLOOR);
@@ -125,8 +122,8 @@ public class MapVisualTest {
 
 	public static void main(String[] args) {
 		//renderMap();
-		//testConnectRooms();
-		testBuildTurns();
+		testConnectRooms();
+		//testBuildTurns();
 
 	}
 }
