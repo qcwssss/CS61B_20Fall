@@ -28,6 +28,10 @@ public class WorldGraph {
 
 	}
 
+	void connectRooms(Room r1, Room r2) {
+
+	}
+
 	private Set<RNode> connectNeighbors(Long v, int dist) {
 		Set<RNode> rNodeSet = new HashSet<>();
 		for(Long id : rNodeMap.keySet()) {

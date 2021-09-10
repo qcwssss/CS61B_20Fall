@@ -22,21 +22,20 @@ public class MapGenerator {
 	}
 
 	public MapGenerator(Random random, TETile[][] grid){
-
-		MapGenerator map = new MapGenerator(grid);
-		List<Room> roomList = map.createRandomRooms(random, 200);
+		this.mapGrid = grid;
+		List<Room> roomList = createRandomRooms(random, 200);
 		// sort rooms based on xPos
 		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
-		System.out.println(roomList);
-		WorldGraph wg = new WorldGraph(roomList);
-		map.connectRooms(wg);
+		//System.out.println(roomList);
+		for (int i = 1; i < roomList.size(); i++) {
+			buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter());
+		}
+
 
 
 	}
 
-	private void sortRoomListHorizontally(List<Room> roomList) {
-		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
-	}
+
 
 	public ArrayList<Room> createRandomRooms(Random rand, int UPPER_LIMIT) {
 		//final int UPPER_LIMIT = 200;

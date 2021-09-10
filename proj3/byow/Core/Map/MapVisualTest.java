@@ -31,6 +31,16 @@ public class MapVisualTest {
 
 	}
 
+	@Test
+	public void testGenerateWorld() {
+		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+
+		MapGenerator world = new MapGenerator(random, grid);
+		System.out.println(TETile.toString(grid));
+
+
+	}
+
 	private static void testConnectRooms() {
 		int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
@@ -96,13 +106,6 @@ public class MapVisualTest {
 
 	}
 
-	private void drawThreeTurns(MapGenerator map, Position p1, Position p2) {
-		//map.buildTurn(new Position(15,16), new Position(17, 18), Tileset.WALL);
-		map.buildTurn(p1, p2, Tileset.GRASS);
-		//map.buildTurn(new Position(15,14), new Position(19, 18), Tileset.MOUNTAIN);
-
-	}
-
 
 	private static void renderMap() {
 		final int WIDTH = 80, HEIGHT = 40;
@@ -123,11 +126,22 @@ public class MapVisualTest {
 		//System.out.println(TETile.toString(grid));
 	}
 
+	private static void createWorld() {
+		int WIDTH = 80, HEIGHT = 36;
+		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+
+		MapGenerator world = new MapGenerator(random, grid);
+
+		TERenderer ter = new TERenderer();
+		ter.initialize(WIDTH, HEIGHT);
+		ter.renderFrame(grid);
+	}
 
 	public static void main(String[] args) {
-		renderMap();
+		//renderMap();
 		//testConnectRooms();
 		//testBuildTurns();
+		createWorld();
 
 	}
 }
