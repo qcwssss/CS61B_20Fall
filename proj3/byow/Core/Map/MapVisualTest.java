@@ -8,6 +8,7 @@ import byow.TileEngine.Tileset;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -19,11 +20,14 @@ public class MapVisualTest {
 	private final int WIDTH = 80, HEIGHT = 40;
 
 
+
 	@Test
-	public void testWGraphConstructor() {
+	public void testSortRoomList() {
 		List<Room> roomList = buildRoomList();
-		WorldGraph wg = new WorldGraph(roomList);
-		wg.toString();
+		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
+		for (Room r : roomList) {
+			System.out.println(r);
+		}
 
 	}
 

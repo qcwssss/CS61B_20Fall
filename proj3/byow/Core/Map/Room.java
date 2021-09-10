@@ -93,7 +93,12 @@ public class Room{
 		return indicator;
 	}
 
-
-
-
+	@Override
+	public String toString() {
+		return "Room{" +
+				"width=" + width +
+				", height=" + height +
+				", lowerLeft=" + lowerLeft +
+				'}';
+	}
 }

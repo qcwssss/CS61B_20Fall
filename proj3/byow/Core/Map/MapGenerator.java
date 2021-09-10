@@ -3,13 +3,11 @@ package byow.Core.Map;
 import byow.Core.Map.World.RNode;
 import byow.Core.Map.World.WorldGraph;
 import byow.Core.RandomUtils;
+import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Create by Chen.
@@ -19,8 +17,25 @@ import java.util.Random;
 public class MapGenerator {
 	private TETile[][] mapGrid;
 
-	public MapGenerator(TETile[][] grid) {
+	MapGenerator(TETile[][] grid) {
 		this.mapGrid = grid;
+	}
+
+	public MapGenerator(Random random, TETile[][] grid){
+
+		MapGenerator map = new MapGenerator(grid);
+		List<Room> roomList = map.createRandomRooms(random, 200);
+		// sort rooms based on xPos
+		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
+		System.out.println(roomList);
+		WorldGraph wg = new WorldGraph(roomList);
+		map.connectRooms(wg);
+
+
+	}
+
+	private void sortRoomListHorizontally(List<Room> roomList) {
+		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
 	}
 
 	public ArrayList<Room> createRandomRooms(Random rand, int UPPER_LIMIT) {
@@ -247,8 +262,8 @@ public class MapGenerator {
 				this.mapGrid[xStart + x][yStart + y] = tile;
 			}
 		}
-		String startToEnd =String.format("start(%d,%d),length=%d", xStart,yStart,length);
-		System.out.println(startToEnd);
+		//String startToEnd =String.format("start(%d,%d),length=%d", xStart,yStart,length);
+		//System.out.println(startToEnd);
 	}
 
 
