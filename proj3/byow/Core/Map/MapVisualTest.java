@@ -106,6 +106,31 @@ public class MapVisualTest {
 
 	}
 
+	private static void testBuildHallWays() {
+		int WIDTH = 30, HEIGHT = 30;
+		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
+
+		TERenderer ter = new TERenderer();
+		ter.initialize(WIDTH, HEIGHT);
+
+		MapGenerator map = new MapGenerator(grid);
+		Position p0 = new Position(6, 6) ;
+		Position p1 = new Position(2, 10) ;
+		Position p2 = new Position(10, 10) ;
+		Position p3 = new Position(2, 2) ;
+		Position p4 = new Position(10, 2) ;
+
+		map.buildHallWays(p0, p1); // correct
+		//map.buildHallWays(p0, p2);
+		//map.buildHallWays(p0, p3);
+		map.buildHallWays(p0, p4); // correct
+
+
+		ter.renderFrame(grid);
+		System.out.println(TETile.toString(grid));
+
+	}
+
 
 	private static void renderMap() {
 		final int WIDTH = 80, HEIGHT = 40;
@@ -141,7 +166,7 @@ public class MapVisualTest {
 		//renderMap();
 		//testConnectRooms();
 		//testBuildTurns();
-		createWorld();
-
+		//createWorld();
+		testBuildHallWays();
 	}
 }

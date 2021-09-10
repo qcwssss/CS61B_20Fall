@@ -139,19 +139,19 @@ public class MapGenerator {
 	// Create and make 3 calls to drawLTiles method that takes a tile type as an argument.
 	void buildHallWays(Position p1, Position p2){
 		Position out1, out2, inner1, inner2;
-		buildTurn(p1, p2, Tileset.GRASS);
+		buildTurn(p1, p2, Tileset.FLOOR);
 
 		out1 = new Position(p1.getX(), p1.getY() + 1);
 		out2 = new Position(p2.getX() + 1, p2.getY());
-		buildTurn(out1, out2, Tileset.WALL);
+		buildTurn(out1, out2, Tileset.WATER);
 
 		inner1 = new Position(p1.getX(), p1.getY() - 1);
 		inner2 = new Position(p2.getX() - 1, p2.getY());
-		buildTurn(inner1, inner2, Tileset.WALL);
+		buildTurn(inner1, inner2, Tileset.MOUNTAIN);
 
-		//System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
-		//System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
-		//System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
+		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
+		System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
+		System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
 
 	}
 
