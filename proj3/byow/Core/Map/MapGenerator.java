@@ -17,6 +17,7 @@ import java.util.*;
 public class MapGenerator {
 	private TETile[][] mapGrid;
 
+	/* A constructor for testing. */
 	MapGenerator(TETile[][] grid) {
 		this.mapGrid = grid;
 	}
@@ -27,7 +28,10 @@ public class MapGenerator {
 		// sort rooms based on xPos
 		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
 
-		//for (int i = 1; i < roomList.size(); i++) { buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter()); }
+		/*
+		for (int i = 1; i < roomList.size(); i++) {
+			buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter());
+		}*/
 		WorldGraph wg = new WorldGraph(roomList);
 		this.connectRooms(wg);
 	}
@@ -146,9 +150,7 @@ public class MapGenerator {
 			inner2 = new Position(p2X - 1, p2Y);
 			out2 = new Position(p2X + 1, p2Y);
 		} else {
-			//inner1 = new Position(p1X, p1Y - 1); // correct
 			inner2 = new Position(p2X + 1, p2Y);
-			//out1 = new Position(p1X, p1Y + 1);// correct
 			out2 = new Position(p2X - 1, p2Y);
 
 		}
@@ -307,9 +309,7 @@ public class MapGenerator {
 	public static void main(String[] args) {
 		TETile[][] grid = buildEmptyMap(30 ,30);
 		MapGenerator map = new MapGenerator(grid);
-		//map.testLines();
 		map.testBuildPlanes();
-
 
 		System.out.println(TETile.toString(grid));
 	}
