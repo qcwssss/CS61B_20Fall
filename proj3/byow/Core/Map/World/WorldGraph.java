@@ -23,7 +23,7 @@ public class WorldGraph {
 
 		for(Long id : rNodeMap.keySet()) {
 			int dist = rNodeMap.get(id).getRoom().getWidth() + rNodeMap.get(id).getRoom().getHeight();
-			neighbors.put(id, connectNeighbors(id, dist/2));
+			neighbors.put(id, connectNeighbors(id, 2 * dist/3));
 		}
 
 	}

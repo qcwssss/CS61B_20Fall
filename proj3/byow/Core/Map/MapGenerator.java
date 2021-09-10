@@ -129,15 +129,15 @@ public class MapGenerator {
 
 		out1 = new Position(p1.getX(), p1.getY() + 1);
 		out2 = new Position(p2.getX() + 1, p2.getY());
-		buildTurn(out1, out2, Tileset.WATER);
+		buildTurn(out1, out2, Tileset.WALL);
 
 		inner1 = new Position(p1.getX(), p1.getY() - 1);
 		inner2 = new Position(p2.getX() - 1, p2.getY());
-		buildTurn(inner1, inner2, Tileset.MOUNTAIN);
+		buildTurn(inner1, inner2, Tileset.WALL);
 
-		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
-		System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
-		System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
+		//System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
+		//System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
+		//System.out.println("inner1: " + inner1.toString() + "  inner2: " + inner2.toString());
 
 	}
 
@@ -145,7 +145,6 @@ public class MapGenerator {
 		int pX1, pX2, pY1, pY2;
 		pX1 = p1.getX();
 		pY1 = p1.getY();
-
 		pX2 = p2.getX();
 		pY2 = p2.getY();
 
@@ -167,9 +166,7 @@ public class MapGenerator {
 			} else { // go down
 				goDown(pY1, pY2, pX2, tile);
 			}
-
 		}
-
 	}
 
 	private void goRight(int pX1, int pX2, int pY1, TETile tile){
@@ -187,7 +184,6 @@ public class MapGenerator {
 			}
 		}
 	}
-
 
 	private void goDown(int pY1, int pY2, int pX2, TETile tile) {
 		for (int j = pY1; j >= pY2; j--) {
@@ -255,36 +251,6 @@ public class MapGenerator {
 		System.out.println(startToEnd);
 	}
 
-	void drawLineToPos(Position p1,Position p2, TETile tile){
-		checkLocation(p1.getX(), p1.getY());
-		checkLocation(p2.getX(), p2.getY());
-
-		// find turning point
-		//Position turn = new Position(Math.)
-
-		int startX, startY, endX, endY;
-		int lenX, lenY;
-		// starts from the left
-		if (p1.getX() < p2.getX()) {
-			startX = p1.getX();
-			startY = p1.getY();
-			endY = p2.getY();
-		} else {
-			startX = p2.getX();
-			startY = p2.getY();
-			endY = p1.getY();
-		}
-		lenX = Math.abs(p1.getX() - p2.getX()) + 1;
-		lenY = Math.abs(p1.getY() - p2.getY()) + 1;
-
-		buildLine(lenX, startX, startY, true, tile);
-		if (endY > startY) {
-			buildLine(lenY, startX + lenX, startY, false, tile);
-		} else {
-			buildLine(lenY, startX + lenX, endY, false, tile);
-		}
-
-	}
 
 	/** start position locates at lower left corner. */
 	private void buildPlane(int xStart, int yStart, int width, int height, TETile tile) {
