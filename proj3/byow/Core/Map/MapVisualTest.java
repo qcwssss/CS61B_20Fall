@@ -120,10 +120,10 @@ public class MapVisualTest {
 		Position p3 = new Position(2, 2) ;
 		Position p4 = new Position(10, 2) ;
 
-		map.buildHallWays(p0, p1); // correct
-		//map.buildHallWays(p0, p2);
-		//map.buildHallWays(p0, p3);
-		map.buildHallWays(p0, p4); // correct
+		//map.buildHallWays(p0, p1); // correct
+		map.buildHallWays(p0, p2);
+		map.buildHallWays(p0, p3);
+		//map.buildHallWays(p0, p4); // correct
 
 
 		ter.renderFrame(grid);
@@ -166,7 +166,7 @@ public class MapVisualTest {
 		//renderMap();
 		//testConnectRooms();
 		//testBuildTurns();
-		//createWorld();
-		testBuildHallWays();
+		createWorld();
+		//testBuildHallWays();
 	}
 }

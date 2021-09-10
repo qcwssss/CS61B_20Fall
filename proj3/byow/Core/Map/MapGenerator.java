@@ -30,9 +30,6 @@ public class MapGenerator {
 		for (int i = 1; i < roomList.size(); i++) {
 			buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter());
 		}
-
-
-
 	}
 
 
@@ -138,16 +135,36 @@ public class MapGenerator {
 	// Possible better idea:
 	// Create and make 3 calls to drawLTiles method that takes a tile type as an argument.
 	void buildHallWays(Position p1, Position p2){
+		int p1X = p1.getX(), p2X = p2.getX();
+		int p1Y = p1.getY(), p2Y = p2.getY();
+
 		Position out1, out2, inner1, inner2;
 		buildTurn(p1, p2, Tileset.FLOOR);
 
-		out1 = new Position(p1.getX(), p1.getY() + 1);
-		out2 = new Position(p2.getX() + 1, p2.getY());
+		/*
+		int offX1 = 0, offY1 = 0, offX2 = 0, offY2 = 0;
+		out1 = new Position(p1X + offX1, p1Y + offY1);
+		out2 = new Position(p2X + offX2, p2Y + offY2);
 		buildTurn(out1, out2, Tileset.WATER);
+		*/
 
-		inner1 = new Position(p1.getX(), p1.getY() - 1);
-		inner2 = new Position(p2.getX() - 1, p2.getY());
+		// works for \
+		if ( (p1X < p2X && p1Y > p2Y) || (p1X > p2X && p1Y < p2Y)) {
+			inner1 = new Position(p1X, p1Y - 1);
+			inner2 = new Position(p2X - 1, p2Y);
+			out1 = new Position(p1X, p1Y + 1);
+			out2 = new Position(p2X + 1, p2Y);
+
+		} else {
+			inner1 = new Position(p1X, p1Y - 1); // correct
+			inner2 = new Position(p2X + 1, p2Y);
+			out1 = new Position(p1X, p1Y + 1);// correct
+			out2 = new Position(p2X - 1, p2Y);
+
+		}
+
 		buildTurn(inner1, inner2, Tileset.MOUNTAIN);
+		buildTurn(out1, out2, Tileset.WATER);
 
 		System.out.println("p1: " + p1.toString() + "  p2: " + p2.toString());
 		System.out.println("out1: " + out1.toString() + "  out2: " + out2.toString());
