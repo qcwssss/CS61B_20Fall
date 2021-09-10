@@ -149,38 +149,64 @@ public class MapGenerator {
 		pX2 = p2.getX();
 		pY2 = p2.getY();
 
-		//case 1:  move right, then up
+		//case 1:  move right first
 		if (pX1 < pX2) {
-			for (int i = pX1; i < pX2; i++) {
-				this.mapGrid[i][pY1] = tile;
-			}
-			if (pY1 < pY2) { // go up
-				for (int j = pY1; j <= pY2; j++) {
-					this.mapGrid[pX2][j] = tile;
-				}
-			} else { // go down
-				for (int j = pY1; j >= pY2; j--) {
-					this.mapGrid[pX2][j] = tile;
-				}
-			}
+			goRight(pX1, pX2, pY1, tile);
 
-		} else { // go left
-			for (int i = pX1; i > pX2; i--) {
-				this.mapGrid[i][pY1] = tile;
-			}
 			if (pY1 < pY2) { // go up
-				for (int j = pY1; j <= pY2; j++) {
-					this.mapGrid[pX2][j] = tile;
-				}
+				goUp(pY1, pY2, pX2, tile);
 			} else { // go down
-				for (int j = pY1; j >= pY2; j--) {
-					this.mapGrid[pX2][j] = tile;
-				}
+				goDown(pY1, pY2, pX2, tile);
+			}
+		//case 2:  move left first
+		} else { // go left
+			goLeft(pX1, pX2, pY1, tile);
+
+			if (pY1 < pY2) { // go up
+				goUp(pY1, pY2, pX2, tile);
+			} else { // go down
+				goDown(pY1, pY2, pX2, tile);
 			}
 
 		}
 
+	}
 
+	private void goRight(int pX1, int pX2, int pY1, TETile tile){
+		for (int i = pX1; i < pX2; i++) {
+			if (isNotFloor(i, pY1)) {
+				this.mapGrid[i][pY1] = tile;
+			}
+		}
+	}
+
+	private void goLeft(int pX1, int pX2, int pY1, TETile tile){
+		for (int i = pX1; i > pX2; i--) {
+			if (isNotFloor(i, pY1)) {
+				this.mapGrid[i][pY1] = tile;
+			}
+		}
+	}
+
+
+	private void goDown(int pY1, int pY2, int pX2, TETile tile) {
+		for (int j = pY1; j >= pY2; j--) {
+			if (isNotFloor(pX2, j)) {
+				this.mapGrid[pX2][j] = tile;
+			}
+		}
+	}
+
+	private void goUp(int pY1, int pY2, int pX2, TETile tile) {
+		for (int j = pY1; j <= pY2; j++) {
+			if (isNotFloor(pX2, j)) {
+				this.mapGrid[pX2][j] = tile;
+			}
+		}
+	}
+
+	private boolean isNotFloor(int xPos, int yPos) {
+		return this.mapGrid[xPos][yPos] != Tileset.FLOOR;
 	}
 
 	private void isLineValid(int length, int xStart, int yStart, boolean horizontal) {
