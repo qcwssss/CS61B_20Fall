@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static byow.Core.Engine.WIDTH;
 import static byow.Core.Map.MapGenerator.buildEmptyMap;
 
 public class MapVisualTest {
@@ -20,15 +19,13 @@ public class MapVisualTest {
 	private final int WIDTH = 80, HEIGHT = 40;
 
 
-
 	@Test
 	public void testSortRoomList() {
 		List<Room> roomList = buildRoomList();
-		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
+		roomList.sort((r1, r2) -> (r1.getXPos() - r2.getXPos()));
 		for (Room r : roomList) {
 			System.out.println(r);
 		}
-
 	}
 
 	@Test
@@ -37,11 +34,10 @@ public class MapVisualTest {
 
 		MapGenerator world = new MapGenerator(random, grid);
 		System.out.println(TETile.toString(grid));
-
-
 	}
 
-	private static void testConnectRooms() {
+	@Test
+	public void testConnectRooms() {
 		int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
@@ -55,10 +51,6 @@ public class MapVisualTest {
 			centerList.add(r.getCenter());
 		}
 
-		//WorldGraph wg = new WorldGraph(roomList);
-		//map.connectRooms(wg);
-		//Room r1 = roomList.get(roomList.size() - 1);
-		//Room r2 = roomList.get(roomList.size() - 2);
 		Position p1 = roomList.get(roomList.size() - 1).getCenter();
 		Position p2 = roomList.get(roomList.size() - 2).getCenter();
 
@@ -67,10 +59,8 @@ public class MapVisualTest {
 		map.buildHallWays(p2, p3);
 		map.buildHallWays(p1, p2);
 
-
 		ter.renderFrame(grid);
 		System.out.println(TETile.toString(grid));
-
 	}
 
 
@@ -81,8 +71,8 @@ public class MapVisualTest {
 
 	}
 
-
-	public static void testBuildTurns() {
+	@Test
+	public void testBuildTurns() {
 		int WIDTH = 30, HEIGHT = 30;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
@@ -104,7 +94,8 @@ public class MapVisualTest {
 
 	}
 
-	private static void testBuildHallWays() {
+	@Test
+	public void testBuildHallWays() {
 		int WIDTH = 30, HEIGHT = 30;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
@@ -129,7 +120,8 @@ public class MapVisualTest {
 	}
 
 
-	private static void renderMap() {
+	@Test
+	public void testRenderMap() {
 		final int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
@@ -142,11 +134,11 @@ public class MapVisualTest {
 		WorldGraph wg = new WorldGraph(roomList);
 		map.connectRooms(wg);
 
-		ter.renderFrame(grid);
-		//System.out.println(TETile.toString(grid));
+		//ter.renderFrame(grid);
+		System.out.println(TETile.toString(grid));
 	}
 
-	private static void createWorld() {
+	public void createWorld() {
 		int WIDTH = 80, HEIGHT = 38;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
@@ -158,10 +150,7 @@ public class MapVisualTest {
 	}
 
 	public static void main(String[] args) {
-		//renderMap();
-		//testConnectRooms();
-		//testBuildTurns();
-		createWorld();
-		//testBuildHallWays();
+		MapVisualTest visual = new MapVisualTest();
+		visual.createWorld();
 	}
 }
