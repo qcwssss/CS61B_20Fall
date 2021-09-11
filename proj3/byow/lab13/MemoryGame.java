@@ -97,8 +97,27 @@ public class MemoryGame {
 
     public void startGame() {
         //TODO: Set any relevant variables before the game starts
-
+        int round = 1;
+        boolean isGameOver = false;
+        String roundMessage, target, input;
         //TODO: Establish Engine loop
+        while (!isGameOver) {
+            roundMessage = "Round: " + round;
+            drawFrame(roundMessage);
+            target = generateRandomString(round);
+            flashSequence(target);
+
+            input = solicitNCharsInput(round);
+            if (input.equals(target)) {
+                round += 1;
+            } else {
+                isGameOver = true;
+                String gameOver = "Game Over! You made it to round:" + round;
+                drawFrame(gameOver);
+
+            }
+
+        }
     }
 
 }
