@@ -73,11 +73,26 @@ public class MemoryGame {
 
     public void flashSequence(String letters) {
         //TODO: Display each character in letters, making sure to blank the screen between letters
+        int second = 1000;
+        char[] charsOfLetter = letters.toCharArray();
+        for (int i = 0 ; i< charsOfLetter.length; i++) {
+            String single = String.valueOf(letters.charAt(i));
+            drawFrame(single);
+
+            StdDraw.pause(second);
+            StdDraw.clear();
+            StdDraw.pause(second / 2);
+        }
     }
 
     public String solicitNCharsInput(int n) {
         //TODO: Read n letters of player input
-        return null;
+        char[] chars = new char[n];
+        int i = 0;
+        while(StdDraw.hasNextKeyTyped()) {
+            chars[i] = StdDraw.nextKeyTyped();
+        }
+        return new String(chars);
     }
 
     public void startGame() {
