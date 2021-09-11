@@ -59,16 +59,14 @@ public class MemoryGame {
     public void drawFrame(String s) {
         //TODO: Take the string and display it in the center of the screen
         StdDraw.clear(Color.BLACK);
-        // clears the canvas, sets the font to be large and bold (size 30 is appropriate),
-        Font font = new Font("Monaco", Font.BOLD, 30);
+        Font font = new Font("Monaco", Font.BOLD, 40);
         StdDraw.setFont(font);
-        // draws the input string so that it is centered on the canvas,
-        StdDraw.text(this.width/2, this.height / 2, s);
         StdDraw.setPenColor(Color.CYAN);
-        // and then shows the canvas on the screen.
+        StdDraw.text(width / 2, height / 2, s);
         StdDraw.show();
 
         //TODO: If game is not over, display relevant game information at the top of the screen
+
     }
 
     public void flashSequence(String letters) {
@@ -87,31 +85,42 @@ public class MemoryGame {
 
     public String solicitNCharsInput(int n) {
         //TODO: Read n letters of player input
-        char[] chars = new char[n];
-        int i = 0;
-        while(StdDraw.hasNextKeyTyped()) {
-            chars[i] = StdDraw.nextKeyTyped();
+        String input = "";
+        drawFrame(input);
+
+        while(input.length() < n) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                input += key;
+                drawFrame(input);
+            }
         }
-        return new String(chars);
+        StdDraw.pause(500);
+        return input;
     }
 
     public void startGame() {
         //TODO: Set any relevant variables before the game starts
-        int round = 1;
-        boolean isGameOver = false;
-        String roundMessage, target, input;
+        this.round = 1;
+        this.gameOver = false;
+        playerTurn = false;
+
+        String target, input;
         //TODO: Establish Engine loop
-        while (!isGameOver) {
-            roundMessage = "Round: " + round;
-            drawFrame(roundMessage);
+        while (!gameOver) {
+            drawFrame("Round: " + round);
+            StdDraw.pause(1500);
+
             target = generateRandomString(round);
             flashSequence(target);
 
             input = solicitNCharsInput(round);
             if (input.equals(target)) {
+                drawFrame("Correct, good job");
+                StdDraw.pause(1500);
                 round += 1;
             } else {
-                isGameOver = true;
+                gameOver = true;
                 String gameOver = "Game Over! You made it to round:" + round;
                 drawFrame(gameOver);
 
