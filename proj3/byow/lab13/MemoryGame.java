@@ -44,15 +44,30 @@ public class MemoryGame {
         StdDraw.enableDoubleBuffering();
 
         //TODO: Initialize random number generator
+        this.rand = new Random(seed);
     }
 
     public String generateRandomString(int n) {
         //TODO: Generate random string of letters of length n
-        return null;
+        char[] randChars = new char[n];
+        for (int i = 0; i < n; i++) {
+            randChars[i] = CHARACTERS[rand.nextInt(26)];
+        }
+        return new String(randChars);
     }
 
     public void drawFrame(String s) {
         //TODO: Take the string and display it in the center of the screen
+        StdDraw.clear(Color.BLACK);
+        // clears the canvas, sets the font to be large and bold (size 30 is appropriate),
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        // draws the input string so that it is centered on the canvas,
+        StdDraw.text(this.width/2, this.height / 2, s);
+        StdDraw.setPenColor(Color.CYAN);
+        // and then shows the canvas on the screen.
+        StdDraw.show();
+
         //TODO: If game is not over, display relevant game information at the top of the screen
     }
 
