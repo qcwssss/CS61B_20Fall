@@ -57,15 +57,24 @@ public class MemoryGame {
     }
 
     public void drawFrame(String s) {
+        int midX = width / 2;
+        int midY = height / 2;
+        String hint = this.playerTurn ? "Type!" : "Watch!";
         //TODO: Take the string and display it in the center of the screen
         StdDraw.clear(Color.BLACK);
         Font font = new Font("Monaco", Font.BOLD, 40);
         StdDraw.setFont(font);
-        StdDraw.setPenColor(Color.CYAN);
-        StdDraw.text(width / 2, height / 2, s);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(midX, midY, s);
         StdDraw.show();
 
         //TODO: If game is not over, display relevant game information at the top of the screen
+        int uiY = height - 2;
+        if (!gameOver) {
+            StdDraw.text(2, uiY, "Round: " + round);
+            StdDraw.text(midX, uiY, hint);
+            StdDraw.textRight(width - 2, uiY, ENCOURAGEMENT[rand.nextInt(7)]);
+        }
 
     }
 
@@ -77,7 +86,7 @@ public class MemoryGame {
             String single = String.valueOf(letters.charAt(i));
             drawFrame(single);
 
-            StdDraw.pause(second);
+            StdDraw.pause(second/2);
             StdDraw.clear();
             StdDraw.pause(second / 2);
         }
@@ -103,20 +112,21 @@ public class MemoryGame {
         //TODO: Set any relevant variables before the game starts
         this.round = 1;
         this.gameOver = false;
-        playerTurn = false;
 
         String target, input;
         //TODO: Establish Engine loop
         while (!gameOver) {
+            playerTurn = false;
             drawFrame("Round: " + round);
             StdDraw.pause(1500);
 
             target = generateRandomString(round);
             flashSequence(target);
 
+            playerTurn = true;
             input = solicitNCharsInput(round);
             if (input.equals(target)) {
-                drawFrame("Correct, good job");
+                drawFrame("Correct, good job!");
                 StdDraw.pause(1500);
                 round += 1;
             } else {
