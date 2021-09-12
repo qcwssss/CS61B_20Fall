@@ -49,13 +49,23 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
+        if (!input.contains("S")) {
+            throw new IllegalArgumentException("input must have S!");
+        }
         String[] inputArray = input.split("S", 2);
         long seed = Long.parseLong(inputArray[0]);
 
         TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
 
         MapGenerator map = new MapGenerator(new Random(seed), board);
-
+        showTheWorld(board);
+        
         return board;
+    }
+
+    private void showTheWorld(TETile[][] grid) {
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        ter.renderFrame(grid);
     }
 }
