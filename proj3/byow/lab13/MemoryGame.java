@@ -59,22 +59,25 @@ public class MemoryGame {
     public void drawFrame(String s) {
         int midX = width / 2;
         int midY = height / 2;
-        String hint = this.playerTurn ? "Type!" : "Watch!";
         //TODO: Take the string and display it in the center of the screen
         StdDraw.clear(Color.BLACK);
         Font font = new Font("Monaco", Font.BOLD, 40);
         StdDraw.setFont(font);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(midX, midY, s);
-        StdDraw.show();
 
         //TODO: If game is not over, display relevant game information at the top of the screen
         int uiY = height - 2;
         if (!gameOver) {
-            StdDraw.text(2, uiY, "Round: " + round);
-            StdDraw.text(midX, uiY, hint);
+            Font uiFont = new Font("Monaco", Font.ITALIC, 20);
+            StdDraw.setFont(uiFont);
+            StdDraw.textLeft(2, uiY, "Round: " + round);
+            StdDraw.text(midX, uiY,this.playerTurn ? "Type!" : "Watch!");
             StdDraw.textRight(width - 2, uiY, ENCOURAGEMENT[rand.nextInt(7)]);
+            StdDraw.line(0, uiY-1, width, uiY - 1);
         }
+
+        StdDraw.show();
 
     }
 
@@ -131,7 +134,7 @@ public class MemoryGame {
                 round += 1;
             } else {
                 gameOver = true;
-                String gameOver = "Game Over! You made it to round:" + round;
+                String gameOver = "Game Over! Final round score:" + round;
                 drawFrame(gameOver);
 
             }
