@@ -57,22 +57,10 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        InputSource StringInput = new StringInputDevice(input);
-        StringBuilder seedBuilder = new StringBuilder();
-        while (StringInput.possibleNextInput()) {
-            StringInput.getNextKey();
-
-        }
-
-        if (!input.contains("S")) {
-            throw new IllegalArgumentException("input must have S!");
-        }
-        String[] inputArray = input.split("S", 2);
-        this.seed = Long.parseLong(inputArray[0]);
-
+        InputSource source = new StringInputDevice(input);
         TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
-
-        MapGenerator map = new MapGenerator(new Random(seed), board);
+        Random rand = new Random(getSeed(source));
+        MapGenerator map = new MapGenerator(rand, board);
         showTheWorld(board);
 
         return board;
@@ -82,6 +70,18 @@ public class Engine {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(grid);
+    }
+
+    private Long getSeed(InputSource input) {
+        StringBuilder seedBuilder = new StringBuilder();
+        while (input.possibleNextInput()) {
+            char c = input.getNextKey();
+            if (c!= 'S') {
+                seedBuilder.append(c);
+            }
+        }
+        this.seed = Long.parseLong(seedBuilder.toString());
+        return seed;
     }
 
     // add interactivity to an avatar
