@@ -1,7 +1,5 @@
 package byow.lab13;
 
-import java.util.Random;
-
 public class MemoryGameTest {
 	private MemoryGame game = new MemoryGame(30, 30, 1022);
 
