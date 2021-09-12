@@ -1,8 +1,12 @@
 package byow.Core;
 
 import byow.Core.Map.MapGenerator;
+import byow.Core.Map.Position;
+import byow.InputDemo.InputSource;
+import byow.InputDemo.StringInputDevice;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
 import byow.lab12.HexWorld;
 
 import java.util.Random;
@@ -12,6 +16,9 @@ public class Engine {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 40;
+
+    private Position posOfAvatar;
+    private long seed;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -49,17 +56,25 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
+
+        InputSource StringInput = new StringInputDevice(input);
+        StringBuilder seedBuilder = new StringBuilder();
+        while (StringInput.possibleNextInput()) {
+            StringInput.getNextKey();
+
+        }
+
         if (!input.contains("S")) {
             throw new IllegalArgumentException("input must have S!");
         }
         String[] inputArray = input.split("S", 2);
-        long seed = Long.parseLong(inputArray[0]);
+        this.seed = Long.parseLong(inputArray[0]);
 
         TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
 
         MapGenerator map = new MapGenerator(new Random(seed), board);
         showTheWorld(board);
-        
+
         return board;
     }
 
@@ -68,4 +83,12 @@ public class Engine {
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(grid);
     }
+
+    // add interactivity to an avatar
+    private void moveAvatar(TETile[][] grid, Position moveTo) {
+        grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
+        grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
+        this.posOfAvatar = moveTo;
+    }
+
 }
