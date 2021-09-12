@@ -3,7 +3,6 @@ package byow.Core.Map;
 import byow.Core.Map.World.RNode;
 import byow.Core.Map.World.WorldGraph;
 import byow.Core.RandomUtils;
-import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
@@ -17,10 +16,7 @@ import java.util.*;
 public class MapGenerator {
 	private TETile[][] mapGrid;
 
-	/* A constructor for testing. */
-	MapGenerator(TETile[][] grid) {
-		this.mapGrid = grid;
-	}
+
 
 	public MapGenerator(Random random, TETile[][] grid){
 		this.mapGrid = grid;
@@ -45,8 +41,6 @@ public class MapGenerator {
 		int mapHeight = this.mapGrid[0].length;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
-			//int xPos = rand.nextInt(mapWidth);
-			//int yPos = rand.nextInt(mapHeight);
 			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/3);
 			int yPos = (int) RandomUtils.gaussian(rand, mapHeight / 2, mapHeight/3);
 			int width = rand.nextInt(mapWidth/8) + 5; // floor = 4-2 = 2
@@ -284,7 +278,7 @@ public class MapGenerator {
 	// --------------Test private methods----------------//
 
 	/** Create a tile world of nothing. For testing private method.	 */
-	static TETile[][] buildEmptyMap(int width, int height) {
+	public static TETile[][] buildEmptyMap(int width, int height) {
 		TETile[][] world = new TETile[width][height];
 		for (int x = 0; x < width; x += 1) {
 			for (int y = 0; y < height; y += 1) {
@@ -308,7 +302,8 @@ public class MapGenerator {
 
 	public static void main(String[] args) {
 		TETile[][] grid = buildEmptyMap(30 ,30);
-		MapGenerator map = new MapGenerator(grid);
+		Random rand = new Random(1000);
+		MapGenerator map = new MapGenerator(rand,grid);
 		map.testBuildPlanes();
 
 		System.out.println(TETile.toString(grid));

@@ -1,14 +1,12 @@
 package byow.Core.Map;
 
 import byow.Core.Map.World.KDTree;
-import byow.Core.Map.World.WorldGraph;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -44,7 +42,7 @@ public class MapVisualTest {
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
-		MapGenerator map = new MapGenerator(grid);
+		MapGenerator map = new MapGenerator(random, grid);
 		List<Room> roomList = map.createRandomRooms(random, 15);
 		List<Position> centerList = new ArrayList<>(roomList.size());
 		for(Room r : roomList) {
@@ -66,7 +64,7 @@ public class MapVisualTest {
 
 	private List<Room> buildRoomList() {
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
-		MapGenerator map = new MapGenerator(grid);
+		MapGenerator map = new MapGenerator(random, grid);
 		return map.createRandomRooms(random, 200);
 
 	}
@@ -79,7 +77,7 @@ public class MapVisualTest {
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
-		MapGenerator map = new MapGenerator(grid);
+		MapGenerator map = new MapGenerator(random, grid);
 		Position p0 = new Position(3, 3) ;
 		Position p1 = new Position(6, 6) ;
 
@@ -102,7 +100,7 @@ public class MapVisualTest {
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
-		MapGenerator map = new MapGenerator(grid);
+		MapGenerator map = new MapGenerator(random, grid);
 		Position p0 = new Position(6, 6) ;
 		Position p1 = new Position(2, 10) ;
 		Position p2 = new Position(10, 10) ;
@@ -128,18 +126,14 @@ public class MapVisualTest {
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
-		MapGenerator map = new MapGenerator(grid);
-		List<Room> roomList = map.createRandomRooms(random, 200);
-
-		WorldGraph wg = new WorldGraph(roomList);
-		map.connectRooms(wg);
+		MapGenerator map = new MapGenerator(random, grid);
 
 		//ter.renderFrame(grid);
 		System.out.println(TETile.toString(grid));
 	}
 
 	public void createWorld() {
-		int WIDTH = 80, HEIGHT = 38;
+		int WIDTH = 80, HEIGHT = 40;
 		TETile[][] grid = buildEmptyMap(WIDTH ,HEIGHT);
 
 		MapGenerator world = new MapGenerator(random, grid);

@@ -1,14 +1,17 @@
 package byow.Core;
 
+import byow.Core.Map.MapGenerator;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.lab12.HexWorld;
+
+import java.util.Random;
 
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
-    public static final int HEIGHT = 30;
+    public static final int HEIGHT = 40;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -46,9 +49,13 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
-        TETile[][] board = HexWorld.buildBoardWithNothing();
+        String[] inputArray = input.split("S", 2);
+        long seed = Long.parseLong(inputArray[0]);
 
-        TETile[][] finalWorldFrame = null;
-        return finalWorldFrame;
+        TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
+
+        MapGenerator map = new MapGenerator(new Random(seed), board);
+
+        return board;
     }
 }

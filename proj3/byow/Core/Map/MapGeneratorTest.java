@@ -6,16 +6,19 @@ import byow.TileEngine.Tileset;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 import static byow.Core.Map.MapGenerator.buildEmptyMap;
 
 /**
  * A visual test for MapGenerator.
  * Created by Chen.
  */
-public class TestMapGenerator {
+public class MapGeneratorTest {
 
 	TETile[][] grid;
 	MapGenerator map;
+	Random rand = new Random(1000);
 
 	/*
 	Test public methods of build
@@ -31,7 +34,7 @@ public class TestMapGenerator {
 	@Before
 	public void setUp() {
 		grid = buildEmptyMap(30 ,30);
-		map = new MapGenerator(grid);
+		map = new MapGenerator(rand, grid);
 	}
 
 	@Test
@@ -77,8 +80,7 @@ public class TestMapGenerator {
 		TERenderer ter = new TERenderer();
 		ter.initialize(WIDTH, HEIGHT);
 
-		MapGenerator map = new MapGenerator(grid);
-		map.buildRoom(40, 12, 7, 5);
+		MapGenerator map = new MapGenerator(rand,grid);
 
 		ter.renderFrame(grid);
 
