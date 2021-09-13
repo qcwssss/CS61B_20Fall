@@ -9,7 +9,9 @@ import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 import byow.lab12.HexWorld;
+import edu.princeton.cs.introcs.StdDraw;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Engine {
@@ -23,6 +25,8 @@ public class Engine {
     private TETile[][] world;
     private InputSource source;
     private boolean isGameOver;
+    private boolean isBeginning;
+
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -32,6 +36,7 @@ public class Engine {
         source = new KeyboardInputSource();
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
         isGameOver = false;
+        isBeginning = true;
         showTheWorld(world);
 
         while (!isGameOver) {
@@ -99,6 +104,7 @@ public class Engine {
                 getSeed(input);
                 MapGenerator map = new MapGenerator(new Random(this.seed), world);
                 posOfAvatar = map.getAvatarPos();
+                isBeginning = false;
                 break;
             case ':':
                 if (input.possibleNextInput()){
@@ -151,6 +157,95 @@ public class Engine {
         }
     }
 
+    private void drawFrame(String s) {
+        int midX = WIDTH / 2;
+        int midY = HEIGHT / 2;
+        //TODO: Take the string and display it in the center of the screen
+        StdDraw.clear(Color.BLACK);
+        Font font = new Font("Monaco", Font.BOLD, 40);
+        StdDraw.setFont(font);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(midX, midY, s);
+
+        //TODO: If game is not over, display relevant game information at the top of the screen
+        int uiY = HEIGHT - 1;
+        if (!isGameOver) {
+            Font uiFont = new Font("Monaco", Font.ITALIC, 20);
+            StdDraw.setFont(uiFont);
+            //StdDraw.textLeft(2, uiY, "Keys: " + numOfKey);
+            //StdDraw.textRight(WIDTH - 2, uiY, tileInfo);
+            StdDraw.line(0, uiY-1, WIDTH, uiY - 1);
+        }
+        StdDraw.show();
+
+    }
+
+    /**
+     * Display each character in letters, blank the screen between letters
+     * @param letters input seed
+     */
+    private void flashSequence(String letters) {
+        int second = 1000;
+        char[] charsOfLetter = letters.toCharArray();
+        for (int i = 0 ; i< charsOfLetter.length; i++) {
+            String single = String.valueOf(letters.charAt(i));
+            drawFrame(single);
+
+            StdDraw.pause(second/2);
+            StdDraw.clear();
+            StdDraw.pause(second / 2);
+        }
+    }
+
+    private String solicitNCharsInput(int n) {
+        //TODO: Read n letters of player input
+        String input = "";
+        drawFrame(input);
+
+        while(input.length() < n) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                input += key;
+                drawFrame(input);
+            }
+        }
+        StdDraw.pause(500);
+        return input;
+    }
+
+    /*
+    private void startGame() {
+        //TODO: Set any relevant variables before the game starts
+        this.round = 1;
+        this.gameOver = false;
+
+        String target, input;
+        //TODO: Establish Engine loop
+        while (!gameOver) {
+            playerTurn = false;
+            drawFrame("Round: " + round);
+            StdDraw.pause(1500);
+
+            target = generateRandomString(round);
+            flashSequence(target);
+
+            playerTurn = true;
+            input = solicitNCharsInput(round);
+            if (input.equals(target)) {
+                drawFrame("Correct, good job!");
+                StdDraw.pause(1500);
+                round += 1;
+            } else {
+                gameOver = true;
+                String gameOver = "Game Over! Final round score:" + round;
+                drawFrame(gameOver);
+
+            }
+        }
+    }
+
+     */
+
     // add interactivity to an avatar
     private void moveAvatar(TETile[][] grid, int xPos, int yPos) {
         if (grid[xPos][yPos] == Tileset.FLOOR) {
@@ -160,5 +255,6 @@ public class Engine {
             this.posOfAvatar = moveTo;
         }
     }
+
 
 }
