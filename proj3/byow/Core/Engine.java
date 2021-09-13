@@ -19,6 +19,7 @@ public class Engine {
 
     private Position posOfAvatar;
     private long seed;
+    private TETile[][] world;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -59,11 +60,46 @@ public class Engine {
 
         InputSource source = new StringInputDevice(input);
         TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
-        Random rand = new Random(getSeed(source));
+        getSeed(source);
+        Random rand = new Random(this.seed);
         MapGenerator map = new MapGenerator(rand, board);
+        this.world = board;
         showTheWorld(board);
 
         return board;
+    }
+
+    private void processInput(InputSource input, char action) {
+        switch (action) {
+            case 'N':
+                getSeed(input);
+                break;
+            case ':':
+                if (input.possibleNextInput()){
+                    if (input.getNextKey() == 'q') {
+                      // save and exit
+                    }
+                }
+                break;
+            case 'L':
+                //load
+                break;
+            // move avatar
+            case 'W':
+                moveAvatar(world, posOfAvatar.getX(), posOfAvatar.getY() + 1);
+                break;
+            case 'S':
+                moveAvatar(world, posOfAvatar.getX(), posOfAvatar.getY() - 1);
+                break;
+            case 'A':
+                moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
+                break;
+            case 'D':
+                moveAvatar(world, posOfAvatar.getX() - 1, posOfAvatar.getY());
+                break;
+        }
+
+
     }
 
     private void showTheWorld(TETile[][] grid) {
@@ -72,20 +108,25 @@ public class Engine {
         ter.renderFrame(grid);
     }
 
-    private Long getSeed(InputSource input) {
+    private void getSeed(InputSource input) {
         StringBuilder seedBuilder = new StringBuilder();
         while (input.possibleNextInput()) {
-            char c = input.getNextKey();
+            char c = Character.toUpperCase(input.getNextKey());
+            if (c == 'N') {
+                continue;
+            }
             if (c!= 'S') {
                 seedBuilder.append(c);
+            } else {
+                this.seed = Long.parseLong(seedBuilder.toString());
+                return;
             }
         }
-        this.seed = Long.parseLong(seedBuilder.toString());
-        return seed;
     }
 
     // add interactivity to an avatar
-    private void moveAvatar(TETile[][] grid, Position moveTo) {
+    private void moveAvatar(TETile[][] grid, int xPos, int yPos) {
+        Position moveTo = new Position(xPos, yPos);
         grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
         grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
         this.posOfAvatar = moveTo;
