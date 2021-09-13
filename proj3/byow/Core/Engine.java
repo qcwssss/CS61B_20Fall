@@ -19,6 +19,7 @@ public class Engine {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 40;
+    private static final int TILE_SIZE = 16;
 
     private Position posOfAvatar;
     private long seed;
@@ -36,8 +37,8 @@ public class Engine {
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
         isGameOver = false;
 
-        drawStartMenu();
         showTheWorld(world);
+        drawStartMenu();
 
         while (!isGameOver) {
             char action = source.getNextKey();
@@ -204,17 +205,20 @@ public class Engine {
         Font font = new Font("Monaco", Font.BOLD, 40);
         StdDraw.setFont(font);
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(midX, midY, "CS61B: Zelda Game");
+        StdDraw.text(midX, midY * 4 /3, "CS61B: Zelda Game");
         // menu options
         Font menuFont = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(menuFont);
         String[] options = new String[] {"New Game (N)", "Load Game (L)", "Quit (Q)", "Replay (R)"};
         for (int i = 0; i < options.length; i++) {
-            StdDraw.text(midX, midY - 2*i, options[i]);
+            StdDraw.text(midX, midY - 2 * i, options[i]);
         }
 
+        // Reset font size to original tile size.
+        font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
+        StdDraw.setFont(font);
+
         StdDraw.show();
-        System.out.println("menu");
 
     }
 
