@@ -59,17 +59,16 @@ public class Engine {
         // that works for many different input types.
 
         InputSource source = new StringInputDevice(input);
-        TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
+        this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
         while (source.possibleNextInput()) {
             char action = source.getNextKey();
             processInput(source, action);
         }
 
-        MapGenerator map = new MapGenerator(new Random(this.seed), board);
-        this.world = board;
+
         showTheWorld(world);
 
-        return board;
+        return world;
     }
 
     /**
@@ -78,9 +77,12 @@ public class Engine {
      * @param action types of action
      */
     private void processInput(InputSource input, char action) {
+        action = Character.toUpperCase(action);
         switch (action) {
             case 'N':
                 getSeed(input);
+                MapGenerator map = new MapGenerator(new Random(this.seed), world);
+                posOfAvatar = map.getAvatarPos();
                 break;
             case ':':
                 if (input.possibleNextInput()){
@@ -127,6 +129,7 @@ public class Engine {
                 seedBuilder.append(c);
             } else {
                 this.seed = Long.parseLong(seedBuilder.toString());
+
                 return;
             }
         }

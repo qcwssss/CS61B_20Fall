@@ -15,6 +15,7 @@ import java.util.*;
  */
 public class MapGenerator {
 	private TETile[][] mapGrid;
+	private Position avatarPos;
 
 
 
@@ -30,6 +31,17 @@ public class MapGenerator {
 		}*/
 		WorldGraph wg = new WorldGraph(roomList);
 		this.connectRooms(wg);
+		// add avatar
+		createAvatar(roomList, random);
+
+	}
+
+	private void createAvatar(List<Room> roomList, Random r) {
+		Room randRoom = roomList.get(r.nextInt(roomList.size()));
+		Position birthPos = randRoom.getCenter();
+		this.mapGrid[birthPos.getX()][birthPos.getY()] = Tileset.AVATAR;
+		this.avatarPos = birthPos;
+
 	}
 
 	ArrayList<Room> createRandomRooms(Random rand, int UPPER_LIMIT) {
@@ -286,6 +298,10 @@ public class MapGenerator {
 			}
 		}
 		return world;
+	}
+
+	public Position getAvatarPos() {
+		return avatarPos;
 	}
 
 
