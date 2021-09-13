@@ -26,7 +26,12 @@ public class WorldGraph {
 		}
 	}
 
-
+	/**
+	 * Connect RNode within distance as neighbors.
+	 * @param v id
+	 * @param dist scope
+	 * @return neighbors' set
+	 */
 	private Set<RNode> connectNeighbors(Long v, int dist) {
 		Set<RNode> rNodeSet = new HashSet<>();
 		for(Long id : rNodeMap.keySet()) {
@@ -35,6 +40,10 @@ public class WorldGraph {
 					rNodeSet.add(rNodeMap.get(id));
 				}
 			}
+		}
+		Long[] keySet = rNodeMap.keySet().toArray(new Long[0]);
+		if (rNodeSet.size() == 0) {
+			rNodeSet.add(rNodeMap.get(keySet[0]));
 		}
 		return rNodeSet;
 
