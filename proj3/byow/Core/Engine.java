@@ -60,15 +60,23 @@ public class Engine {
 
         InputSource source = new StringInputDevice(input);
         TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
-        getSeed(source);
-        Random rand = new Random(this.seed);
-        MapGenerator map = new MapGenerator(rand, board);
+        while (source.possibleNextInput()) {
+            char action = source.getNextKey();
+            processInput(source, action);
+        }
+
+        MapGenerator map = new MapGenerator(new Random(this.seed), board);
         this.world = board;
-        showTheWorld(board);
+        showTheWorld(world);
 
         return board;
     }
 
+    /**
+     * Take actions based on input.
+     * @param input input key
+     * @param action types of action
+     */
     private void processInput(InputSource input, char action) {
         switch (action) {
             case 'N':
@@ -126,10 +134,12 @@ public class Engine {
 
     // add interactivity to an avatar
     private void moveAvatar(TETile[][] grid, int xPos, int yPos) {
-        Position moveTo = new Position(xPos, yPos);
-        grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
-        grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
-        this.posOfAvatar = moveTo;
+        if (grid[xPos][yPos] == Tileset.FLOOR) {
+            Position moveTo = new Position(xPos, yPos);
+            grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
+            grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
+            this.posOfAvatar = moveTo;
+        }
     }
 
 }
