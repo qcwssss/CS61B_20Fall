@@ -25,7 +25,6 @@ public class Engine {
     private TETile[][] world;
     private InputSource source;
     private boolean isGameOver;
-    private boolean isBeginning;
 
 
     /**
@@ -36,7 +35,8 @@ public class Engine {
         source = new KeyboardInputSource();
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
         isGameOver = false;
-        isBeginning = true;
+
+        drawStartMenu();
         showTheWorld(world);
 
         while (!isGameOver) {
@@ -104,7 +104,6 @@ public class Engine {
                 getSeed(input);
                 MapGenerator map = new MapGenerator(new Random(this.seed), world);
                 posOfAvatar = map.getAvatarPos();
-                isBeginning = false;
                 break;
             case ':':
                 if (input.possibleNextInput()){
@@ -197,8 +196,34 @@ public class Engine {
         }
     }
 
+    void drawStartMenu() {
+        int midX = WIDTH / 2;
+        int midY = HEIGHT / 2;
+        // title
+        StdDraw.clear(Color.BLACK);
+        Font font = new Font("Monaco", Font.BOLD, 40);
+        StdDraw.setFont(font);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(midX, midY, "CS61B: Zelda Game");
+        // menu options
+        Font menuFont = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(menuFont);
+        String[] options = new String[] {"New Game (N)", "Load Game (L)", "Quit (Q)", "Replay (R)"};
+        for (int i = 0; i < options.length; i++) {
+            StdDraw.text(midX, midY - 2*i, options[i]);
+        }
+
+        StdDraw.show();
+        System.out.println("menu");
+
+    }
+
+    /**
+     * Read n letters of player input
+     * @param n number of chars
+     * @return input as a string
+     */
     private String solicitNCharsInput(int n) {
-        //TODO: Read n letters of player input
         String input = "";
         drawFrame(input);
 
