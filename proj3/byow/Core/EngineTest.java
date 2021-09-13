@@ -17,7 +17,8 @@ public class EngineTest {
 		Engine engine = new Engine();
 
 		//engine.interactWithInputString("n3424sddw");
-		engine.interactWithInputString("n3424s");
+		//engine.interactWithInputString("n3424s");
+		engine.interactWithKeyboard();
 
 
 

@@ -1,5 +1,6 @@
 package byow.Core;
 
+import byow.Core.Input.KeyboardInputSource;
 import byow.Core.Map.MapGenerator;
 import byow.Core.Map.Position;
 import byow.InputDemo.InputSource;
@@ -20,12 +21,22 @@ public class Engine {
     private Position posOfAvatar;
     private long seed;
     private TETile[][] world;
+    private InputSource source;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        source = new KeyboardInputSource();
+        this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
+
+        while (source.possibleNextInput()) {
+            char action = source.getNextKey();
+            processInput(source, action);
+        }
+
+        showTheWorld(world);
     }
 
     /**
@@ -58,7 +69,7 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        InputSource source = new StringInputDevice(input);
+        this.source = new StringInputDevice(input);
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
         while (source.possibleNextInput()) {
             char action = source.getNextKey();
@@ -102,10 +113,10 @@ public class Engine {
                 moveAvatar(world, posOfAvatar.getX(), posOfAvatar.getY() - 1);
                 break;
             case 'A':
-                moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
+                moveAvatar(world, posOfAvatar.getX() - 1, posOfAvatar.getY());
                 break;
             case 'D':
-                moveAvatar(world, posOfAvatar.getX() - 1, posOfAvatar.getY());
+                moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
                 break;
         }
 
