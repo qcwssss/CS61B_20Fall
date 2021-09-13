@@ -22,6 +22,7 @@ public class Engine {
     private long seed;
     private TETile[][] world;
     private InputSource source;
+    private boolean isGameOver;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -30,13 +31,16 @@ public class Engine {
     public void interactWithKeyboard() {
         source = new KeyboardInputSource();
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
+        isGameOver = false;
+        showTheWorld(world);
 
-        while (source.possibleNextInput()) {
+        while (!isGameOver) {
             char action = source.getNextKey();
             processInput(source, action);
+            //showTheWorld(world);
+            ter.renderFrame(world);
         }
 
-        showTheWorld(world);
     }
 
     /**
@@ -78,6 +82,7 @@ public class Engine {
 
 
         showTheWorld(world);
+        ter.renderFrame(world);
 
         return world;
     }
@@ -124,9 +129,9 @@ public class Engine {
     }
 
     private void showTheWorld(TETile[][] grid) {
-        TERenderer ter = new TERenderer();
+        ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
-        ter.renderFrame(grid);
+        //ter.renderFrame(grid);
     }
 
     private void getSeed(InputSource input) {
