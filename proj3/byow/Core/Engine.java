@@ -132,7 +132,6 @@ public class Engine {
                 break;
         }
 
-
     }
 
     private void showTheWorld(TETile[][] grid) {
@@ -145,12 +144,9 @@ public class Engine {
         StringBuilder seedBuilder = new StringBuilder();
         while (input.possibleNextInput()) {
             char c = Character.toUpperCase(input.getNextKey());
-            if (c == 'N') {
-                continue;
-            }
-            if (c!= 'S') {
+            if (c != 'S') {
                 seedBuilder.append(c);
-                flashSequence(seedBuilder.toString());
+                drawFrame(seedBuilder.toString());
             } else {
                 this.seed = Long.parseLong(seedBuilder.toString());
 
@@ -169,7 +165,6 @@ public class Engine {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(midX, midY, s);
 
-        resetFontToOriginal(font);
 
         //TODO: If game is not over, display relevant game information at the top of the screen
         int uiY = HEIGHT - 1;
@@ -180,6 +175,8 @@ public class Engine {
             //StdDraw.textRight(WIDTH - 2, uiY, tileInfo);
             StdDraw.line(0, uiY-1, WIDTH, uiY - 1);
         }
+
+        resetFontToOriginal();
         StdDraw.show();
 
     }
@@ -219,14 +216,14 @@ public class Engine {
         }
 
         // Reset font size to original tile size.
-        resetFontToOriginal(font);
+        resetFontToOriginal();
 
         StdDraw.show();
 
     }
 
-    private void resetFontToOriginal(Font font) {
-        font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
+    private void resetFontToOriginal() {
+        Font font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
         StdDraw.setFont(font);
     }
 
