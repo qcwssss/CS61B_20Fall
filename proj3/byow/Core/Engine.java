@@ -108,8 +108,9 @@ public class Engine {
                 break;
             case ':':
                 if (input.possibleNextInput()){
-                    if (input.getNextKey() == 'q') {
+                    if (input.getNextKey() == 'Q') {
                       // save and exit
+                        System.exit(0);
                     }
                 }
                 break;
@@ -149,6 +150,7 @@ public class Engine {
             }
             if (c!= 'S') {
                 seedBuilder.append(c);
+                flashSequence(seedBuilder.toString());
             } else {
                 this.seed = Long.parseLong(seedBuilder.toString());
 
@@ -166,6 +168,8 @@ public class Engine {
         StdDraw.setFont(font);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(midX, midY, s);
+
+        resetFontToOriginal(font);
 
         //TODO: If game is not over, display relevant game information at the top of the screen
         int uiY = HEIGHT - 1;
@@ -185,15 +189,15 @@ public class Engine {
      * @param letters input seed
      */
     private void flashSequence(String letters) {
-        int second = 1000;
+        int second = 200;
         char[] charsOfLetter = letters.toCharArray();
         for (int i = 0 ; i< charsOfLetter.length; i++) {
             String single = String.valueOf(letters.charAt(i));
             drawFrame(single);
 
-            StdDraw.pause(second/2);
+            StdDraw.pause(second);
             StdDraw.clear();
-            StdDraw.pause(second / 2);
+            StdDraw.pause(second);
         }
     }
 
@@ -215,11 +219,15 @@ public class Engine {
         }
 
         // Reset font size to original tile size.
-        font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
-        StdDraw.setFont(font);
+        resetFontToOriginal(font);
 
         StdDraw.show();
 
+    }
+
+    private void resetFontToOriginal(Font font) {
+        font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
+        StdDraw.setFont(font);
     }
 
     /**
