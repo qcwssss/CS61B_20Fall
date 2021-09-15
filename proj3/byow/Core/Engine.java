@@ -186,19 +186,21 @@ public class Engine {
 
     }
 
+    /**
+     * If game is not over, display relevant game information at the top of the screen.
+     */
     private void drawHelperUI(){
-        //TODO: If game is not over, display relevant game information at the top of the screen
-        int uiY = HEIGHT/2 - 1;
-        Font uiFont = new Font("Monaco", Font.ITALIC, 20);
+        int uiY = HEIGHT - 1;
+        Position mousePos = new Position((int)StdDraw.mouseX(), (int)StdDraw.mouseY());
+        Font uiFont = new Font("Monaco", Font.BOLD, 20);
         StdDraw.setFont(uiFont);
         StdDraw.setPenColor(Color.WHITE);
-        //StdDraw.textLeft(2, uiY, "Keys: " + numOfKey);
-        //StdDraw.textRight(WIDTH - 2, uiY, tileInfo);
-        StdDraw.line(0, uiY-1, WIDTH, uiY - 1);
+        StdDraw.textLeft(2, uiY, "Items: nothing ");
+        StdDraw.textRight(WIDTH - 2, uiY, "TileInfo: " + showTileInfo(mousePos));
+        StdDraw.line(0, uiY - 1, WIDTH, uiY - 1);
 
         resetFontToOriginal();
         StdDraw.show();
-        System.out.println("Why no UI?");
 
     }
 
@@ -248,6 +250,12 @@ public class Engine {
         StdDraw.setFont(font);
     }
 
+    private String showTileInfo(Position mouse) {
+        String info = this.world[mouse.getX()][mouse.getY()].description();
+        return info;
+
+
+    }
     /**
      * Read n letters of player input
      * @param n number of chars

@@ -50,7 +50,7 @@ public class MapGenerator {
 		// duplicates? overlap?
 
 		int mapWidth = this.mapGrid.length;
-		int mapHeight = this.mapGrid[0].length;
+		int mapHeight = this.mapGrid[0].length -2;
 
 		for (int i = 0; i < UPPER_LIMIT; i++) {
 			int xPos = (int) RandomUtils.gaussian(rand, mapWidth / 2, mapWidth/3);
