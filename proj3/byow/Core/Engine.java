@@ -44,6 +44,7 @@ public class Engine {
             char action = source.getNextKey();
             processInput(source, action);
             //showTheWorld(world);
+            drawHelperUI();
             ter.renderFrame(world);
         }
 
@@ -85,7 +86,6 @@ public class Engine {
             char action = source.getNextKey();
             processInput(source, action);
         }
-
 
         showTheWorld(world);
         ter.renderFrame(world);
@@ -137,19 +137,18 @@ public class Engine {
     private void showTheWorld(TETile[][] grid) {
         ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
-        //ter.renderFrame(grid);
     }
 
     private void getSeed(InputSource input) {
         StringBuilder seedBuilder = new StringBuilder();
-        drawFrame("Please input a seed, press 'S' to confirm");
+        drawInputSeedGuide("");
 
         while (input.possibleNextInput()) {
             char c = Character.toUpperCase(input.getNextKey());
 
             if (c != 'S') {
                 seedBuilder.append(c);
-                drawFrame(seedBuilder.toString());
+                drawInputSeedGuide(seedBuilder.toString());
 
             } else {
                 this.seed = Long.parseLong(seedBuilder.toString());
@@ -169,16 +168,33 @@ public class Engine {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(midX, midY, s);
 
+        resetFontToOriginal();
+        StdDraw.show();
+    }
 
+    private void drawInputSeedGuide(String s) {
+        int midX = WIDTH / 2;
+        int midY = HEIGHT / 2;
+        StdDraw.clear(Color.BLACK);
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(midX, midY, "Please input a seed, press 'S' to confirm");
+        StdDraw.text(midX, midY - 2, s);
+
+        resetFontToOriginal();
+        StdDraw.show();
+
+    }
+
+    private void drawHelperUI(){
         //TODO: If game is not over, display relevant game information at the top of the screen
         int uiY = HEIGHT - 1;
-        if (!isGameOver) {
-            Font uiFont = new Font("Monaco", Font.ITALIC, 20);
-            StdDraw.setFont(uiFont);
-            //StdDraw.textLeft(2, uiY, "Keys: " + numOfKey);
-            //StdDraw.textRight(WIDTH - 2, uiY, tileInfo);
-            StdDraw.line(0, uiY-1, WIDTH, uiY - 1);
-        }
+        Font uiFont = new Font("Monaco", Font.ITALIC, 20);
+        StdDraw.setFont(uiFont);
+        //StdDraw.textLeft(2, uiY, "Keys: " + numOfKey);
+        //StdDraw.textRight(WIDTH - 2, uiY, tileInfo);
+        StdDraw.line(0, uiY-1, WIDTH, uiY - 1);
 
         resetFontToOriginal();
         StdDraw.show();
