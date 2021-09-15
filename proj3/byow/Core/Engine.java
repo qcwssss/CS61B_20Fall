@@ -142,11 +142,15 @@ public class Engine {
 
     private void getSeed(InputSource input) {
         StringBuilder seedBuilder = new StringBuilder();
+        drawFrame("Please input a seed, press 'S' to confirm");
+
         while (input.possibleNextInput()) {
             char c = Character.toUpperCase(input.getNextKey());
+
             if (c != 'S') {
                 seedBuilder.append(c);
                 drawFrame(seedBuilder.toString());
+
             } else {
                 this.seed = Long.parseLong(seedBuilder.toString());
 
