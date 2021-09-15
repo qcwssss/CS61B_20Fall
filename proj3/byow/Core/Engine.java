@@ -43,9 +43,9 @@ public class Engine {
         while (!isGameOver) {
             char action = source.getNextKey();
             processInput(source, action);
-            //showTheWorld(world);
-            drawHelperUI();
             ter.renderFrame(world);
+            drawHelperUI();
+
         }
 
     }
@@ -146,13 +146,12 @@ public class Engine {
         while (input.possibleNextInput()) {
             char c = Character.toUpperCase(input.getNextKey());
 
-            if (c != 'S') {
+            if (Character.isDigit(c)) {
                 seedBuilder.append(c);
                 drawInputSeedGuide(seedBuilder.toString());
 
-            } else {
+            } else if (c == 'S'){
                 this.seed = Long.parseLong(seedBuilder.toString());
-
                 return;
             }
         }
@@ -189,15 +188,17 @@ public class Engine {
 
     private void drawHelperUI(){
         //TODO: If game is not over, display relevant game information at the top of the screen
-        int uiY = HEIGHT - 1;
+        int uiY = HEIGHT/2 - 1;
         Font uiFont = new Font("Monaco", Font.ITALIC, 20);
         StdDraw.setFont(uiFont);
+        StdDraw.setPenColor(Color.WHITE);
         //StdDraw.textLeft(2, uiY, "Keys: " + numOfKey);
         //StdDraw.textRight(WIDTH - 2, uiY, tileInfo);
         StdDraw.line(0, uiY-1, WIDTH, uiY - 1);
 
         resetFontToOriginal();
         StdDraw.show();
+        System.out.println("Why no UI?");
 
     }
 
