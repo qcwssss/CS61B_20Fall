@@ -123,14 +123,19 @@ public class Engine {
             case 'L':
                 //load
                 loadGame();
-                if (savedStatus.equals("")) {
-                    System.exit(0);
-                } else {
-                    world = interactWithInputString(savedStatus);
-                    if (input.getClass().equals(KeyboardInputSource.class)) {
-                        ter.renderFrame(world);
-                    }
+                TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
+                MapGenerator worldGen = new MapGenerator(new Random(this.seed), board);
+                showTheWorld(world);
+                drawStartMenu();
+
+                while (!gameOver) {
+                    char action = keySource.getNextKey();
+                    processInput(keySource, action);
+                    ter.renderFrame(world);
+                    drawHelperUI();
+
                 }
+
                 break;
             // move avatar
             case 'W':
