@@ -26,7 +26,7 @@ public class Engine {
     private long seed;
     private TETile[][] world;
     private InputSource source;
-    private StringBuilder savedString = new StringBuilder();
+    //private StringBuilder savedString = new StringBuilder();
 
 
     /**
@@ -99,11 +99,11 @@ public class Engine {
      */
     private void processInput(InputSource input, char action) {
         action = Character.toUpperCase(action);
-        savedString.append(action);
+        //savedString.append(action);
         switch (action) {
             case 'N':
                 getSeed(input);
-                savedString.append(this.seed).append('S');
+                //savedString.append(this.seed).append('S');
 
                 MapGenerator map = new MapGenerator(new Random(this.seed), world);
                 posOfAvatar = map.getAvatarPos();
@@ -112,9 +112,9 @@ public class Engine {
                 if (input.possibleNextInput()){
                     if (input.getNextKey() == 'Q') {
                       // save and exit
-                        savedString.deleteCharAt(savedString.length() - 1);
-                        System.out.println(savedString);
-                        saveGame(savedString.toString());
+                        //savedString.deleteCharAt(savedString.length() - 1);
+                        //System.out.println(savedString);
+                        //saveGame(savedString.toString());
 
                         System.exit(0);
                     }
@@ -125,16 +125,11 @@ public class Engine {
                 loadGame();
                 TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
                 MapGenerator worldGen = new MapGenerator(new Random(this.seed), board);
+                board[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.AVATAR;
+                this.world = board;
                 showTheWorld(world);
-                drawStartMenu();
-
-                while (!gameOver) {
-                    char action = keySource.getNextKey();
-                    processInput(keySource, action);
-                    ter.renderFrame(world);
-                    drawHelperUI();
-
-                }
+                ter.renderFrame(world);
+                interactWithKeyboard();
 
                 break;
             // move avatar
