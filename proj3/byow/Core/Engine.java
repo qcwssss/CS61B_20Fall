@@ -12,6 +12,10 @@ import byow.lab12.HexWorld;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 public class Engine {
@@ -25,7 +29,7 @@ public class Engine {
     private long seed;
     private TETile[][] world;
     private InputSource source;
-    private boolean isGameOver;
+    private StringBuilder savedString = new StringBuilder();
 
 
     /**
@@ -35,12 +39,11 @@ public class Engine {
     public void interactWithKeyboard() {
         source = new KeyboardInputSource();
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
-        isGameOver = false;
 
         showTheWorld(world);
         drawStartMenu();
 
-        while (!isGameOver) {
+        while (true) {
             char action = source.getNextKey();
             processInput(source, action);
             ter.renderFrame(world);
@@ -100,9 +103,12 @@ public class Engine {
      */
     private void processInput(InputSource input, char action) {
         action = Character.toUpperCase(action);
+        savedString.append(action);
         switch (action) {
             case 'N':
                 getSeed(input);
+                savedString.append(this.seed).append('S');
+
                 MapGenerator map = new MapGenerator(new Random(this.seed), world);
                 posOfAvatar = map.getAvatarPos();
                 break;
@@ -110,6 +116,10 @@ public class Engine {
                 if (input.possibleNextInput()){
                     if (input.getNextKey() == 'Q') {
                       // save and exit
+                        savedString.deleteCharAt(savedString.length() - 1);
+                        System.out.println(savedString);
+                        saveGame(savedString.toString());
+
                         System.exit(0);
                     }
                 }
@@ -204,24 +214,24 @@ public class Engine {
 
     }
 
-    /**
-     * Display each character in letters, blank the screen between letters
-     * @param letters input seed
-     */
-    private void flashSequence(String letters) {
-        int second = 200;
-        char[] charsOfLetter = letters.toCharArray();
-        for (int i = 0 ; i< charsOfLetter.length; i++) {
-            String single = String.valueOf(letters.charAt(i));
-            drawFrame(single);
+    private void saveGame(String saved) {
+        File f = new File("./save.txt");
+        try {
 
-            StdDraw.pause(second);
-            StdDraw.clear();
-            StdDraw.pause(second);
-        }
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            FileOutputStream fs = new FileOutputStream(f);
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(saved);
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
+            }
+
     }
 
-    void drawStartMenu() {
+    private void drawStartMenu() {
         int midX = WIDTH / 2;
         int midY = HEIGHT / 2;
         // title
