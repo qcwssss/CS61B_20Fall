@@ -1,14 +1,13 @@
 package byow.Core;
 
+import byow.Core.Input.InputSource;
 import byow.Core.Input.KeyboardInputSource;
+import byow.Core.Input.StringInputDevice;
 import byow.Core.Map.MapGenerator;
 import byow.Core.Map.Position;
-import byow.InputDemo.InputSource;
-import byow.InputDemo.StringInputDevice;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
-import byow.lab12.HexWorld;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
@@ -23,6 +22,7 @@ public class Engine {
     private static final int TILE_SIZE = 16;
 
     private Position posOfAvatar;
+    private boolean gameOver;
     private long seed;
     private TETile[][] world;
     private InputSource source;
@@ -34,15 +34,15 @@ public class Engine {
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
-        source = new KeyboardInputSource();
+        InputSource keySource = new KeyboardInputSource();
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
 
         showTheWorld(world);
         drawStartMenu();
 
-        while (true) {
-            char action = source.getNextKey();
-            processInput(source, action);
+        while (!gameOver) {
+            char action = keySource.getNextKey();
+            processInput(keySource, action);
             ter.renderFrame(world);
             drawHelperUI();
 
@@ -122,13 +122,14 @@ public class Engine {
                 break;
             case 'L':
                 //load
-                String savedStatus = loadGame();
-                if (savedStatus == "") {
-                    System.exit(0); // no save data
+                loadGame();
+                if (savedStatus.equals("")) {
+                    System.exit(0);
                 } else {
-                    this.world = interactWithInputString(savedStatus);
-                    ter.renderFrame(world);
-                    this.source = new KeyboardInputSource();
+                    world = interactWithInputString(savedStatus);
+                    if (input.getClass().equals(KeyboardInputSource.class)) {
+                        ter.renderFrame(world);
+                    }
                 }
                 break;
             // move avatar
@@ -143,6 +144,8 @@ public class Engine {
                 break;
             case 'D':
                 moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
+                break;
+            default :
                 break;
         }
 
@@ -227,7 +230,10 @@ public class Engine {
             }
             FileOutputStream fs = new FileOutputStream(f);
             ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(saved);
+            os.writeObject(this.posOfAvatar);
+            os.writeObject(this.seed);
+            os.close();
+            fs.close();
             } catch (IOException e) {
                 System.out.println(e);
                 System.exit(0);
@@ -241,7 +247,10 @@ public class Engine {
             try {
                 FileInputStream fs = new FileInputStream(f);
                 ObjectInputStream os = new ObjectInputStream(fs);
-                return (String) os.readObject();
+                this.posOfAvatar = (Position) os.readObject();
+                this.seed = (Long) os.readObject();
+
+                //return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
                 System.exit(0);

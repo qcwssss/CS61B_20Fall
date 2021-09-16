@@ -11,7 +11,9 @@ public class DemoInputSource {
     private static final int STRING = 2;
 
     public static void main(String[] args) {
-        int inputType = KEYBOARD;
+        //int inputType = KEYBOARD;
+        int inputType = RANDOM;
+        //int inputType = STRING;
 
         InputSource inputSource;
 

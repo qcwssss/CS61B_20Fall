@@ -1,7 +1,5 @@
 package byow.Core.Input;
 
-import byow.InputDemo.InputSource;
-
 /**
  * Created by hug.
  */
