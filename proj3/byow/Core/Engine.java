@@ -12,10 +12,7 @@ import byow.lab12.HexWorld;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.Random;
 
 public class Engine {
@@ -90,9 +87,8 @@ public class Engine {
             processInput(source, action);
         }
 
-        showTheWorld(world);
-        ter.renderFrame(world);
-
+        //showTheWorld(world);
+        //ter.renderFrame(world);
         return world;
     }
 
@@ -126,6 +122,14 @@ public class Engine {
                 break;
             case 'L':
                 //load
+                String savedStatus = loadGame();
+                if (savedStatus == "") {
+                    System.exit(0); // no save data
+                } else {
+                    this.world = interactWithInputString(savedStatus);
+                    ter.renderFrame(world);
+                    this.source = new KeyboardInputSource();
+                }
                 break;
             // move avatar
             case 'W':
@@ -160,7 +164,7 @@ public class Engine {
                 seedBuilder.append(c);
                 drawInputSeedGuide(seedBuilder.toString());
 
-            } else if (c == 'S'){
+            } else if (c == 'S' && !seedBuilder.isEmpty()){
                 this.seed = Long.parseLong(seedBuilder.toString());
                 return;
             }
@@ -228,6 +232,30 @@ public class Engine {
                 System.out.println(e);
                 System.exit(0);
             }
+
+    }
+
+    private String loadGame() {
+        File f = new File("./save.txt");
+        if (f.exists()) {
+            try {
+                FileInputStream fs = new FileInputStream(f);
+                ObjectInputStream os = new ObjectInputStream(fs);
+                return (String) os.readObject();
+            } catch (FileNotFoundException e) {
+                System.out.println("file not found");
+                System.exit(0);
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
+            } catch (ClassNotFoundException e) {
+                System.out.println("class not found");
+                System.exit(0);
+            }
+        }
+
+        /* In the case no file has been saved yet, we return an empty string. */
+        return "";
 
     }
 
