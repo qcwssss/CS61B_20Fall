@@ -16,19 +16,18 @@ import java.util.*;
 public class MapGenerator {
 	private TETile[][] mapGrid;
 	private Position avatarPos;
+	private Position lockedRoomPos;
+	private Position keyPos;
 
 
 
 	public MapGenerator(Random random, TETile[][] grid){
 		this.mapGrid = grid;
 		List<Room> roomList = createRandomRooms(random, 200);
+
 		// sort rooms based on xPos
 		Collections.sort(roomList, (r1, r2)->(r1.getXPos() - r2.getXPos()));
 
-		/*
-		for (int i = 1; i < roomList.size(); i++) {
-			buildHallWays(roomList.get(i).getCenter(), roomList.get(i - 1).getCenter());
-		}*/
 		WorldGraph wg = new WorldGraph(roomList);
 		this.connectRooms(wg);
 		// add avatar
@@ -37,10 +36,41 @@ public class MapGenerator {
 	}
 
 	private void createAvatar(List<Room> roomList, Random r) {
-		Room randRoom = roomList.get(r.nextInt(roomList.size()));
+		int avatarRoomNum  = r.nextInt(roomList.size());
+		Room randRoom = roomList.get(avatarRoomNum);
 		Position birthPos = randRoom.getCenter();
 		this.mapGrid[birthPos.getX()][birthPos.getY()] = Tileset.AVATAR;
 		this.avatarPos = birthPos;
+
+		int lockedRoomNum  = r.nextInt(roomList.size());
+		while (lockedRoomNum == avatarRoomNum) {
+			lockedRoomNum  = r.nextInt(roomList.size());
+		}
+		Room locked = roomList.get(lockedRoomNum);
+		Position lockedPos = locked.getCenter();
+		this.mapGrid[lockedPos.getX()][lockedPos.getY()] = Tileset.LOCKED_DOOR;
+		this.lockedRoomPos = lockedPos;
+
+		int keyNum = r.nextInt(roomList.size());
+		while (keyNum == avatarRoomNum || keyNum == lockedRoomNum) {
+			keyNum  = r.nextInt(roomList.size());
+		}
+		Room keyRoom = roomList.get(keyNum);
+		Position keyPos = keyRoom.getCenter();
+		this.mapGrid[keyPos.getX()][keyPos.getY()] = Tileset.KEY;
+		this.keyPos = keyPos;
+
+
+
+	}
+
+	private void createLockedDoor(List<Room> roomList, Random r, int avatarRoomNum) {
+		int lockedRoomNum  = r.nextInt(roomList.size());
+		while (lockedRoomNum == avatarRoomNum) {
+			lockedRoomNum  = r.nextInt(roomList.size());
+		}
+		Room locked = roomList.get(lockedRoomNum);
+		Position lockedPos = locked.getCenter();
 
 	}
 
