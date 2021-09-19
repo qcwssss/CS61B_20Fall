@@ -23,6 +23,7 @@ public class Engine {
 
     private Position posOfAvatar;
     private boolean gameOver;
+    private boolean haveKey;
     private long seed;
     private TETile[][] world;
     private InputSource source;
@@ -39,6 +40,7 @@ public class Engine {
 
         showTheWorld(world);
         drawStartMenu();
+        gameOver = false;
 
         while (!gameOver) {
             char action = keySource.getNextKey();
@@ -110,7 +112,7 @@ public class Engine {
                 break;
             case ':':
                 if (input.possibleNextInput()){
-                    if (input.getNextKey() == 'Q') {
+                    if (input.getNextKey() == 'Q' && !gameOver) {
                       // save and exit
                         //savedString.deleteCharAt(savedString.length() - 1);
                         //System.out.println(savedString);
@@ -212,7 +214,11 @@ public class Engine {
         Font uiFont = new Font("Monaco", Font.BOLD, 20);
         StdDraw.setFont(uiFont);
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.textLeft(2, uiY, "Items: nothing ");
+
+        String haveKey = this.haveKey ? "key" : "none";
+        StdDraw.textLeft(2, uiY, "Items: " + haveKey);
+        StdDraw.text(WIDTH/2, uiY, "Unlock the door and escape!");
+
         StdDraw.textRight(WIDTH - 2, uiY, "TileInfo: " + showTileInfo(mousePos));
         StdDraw.line(0, uiY - 1, WIDTH, uiY - 1);
 
@@ -232,6 +238,8 @@ public class Engine {
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(this.posOfAvatar);
             os.writeObject(this.seed);
+            //System.out.println(posOfAvatar);
+
             os.close();
             fs.close();
             } catch (IOException e) {
@@ -303,25 +311,7 @@ public class Engine {
 
 
     }
-    /**
-     * Read n letters of player input
-     * @param n number of chars
-     * @return input as a string
-     */
-    private String solicitNCharsInput(int n) {
-        String input = "";
-        drawFrame(input);
 
-        while(input.length() < n) {
-            if (StdDraw.hasNextKeyTyped()) {
-                char key = StdDraw.nextKeyTyped();
-                input += key;
-                drawFrame(input);
-            }
-        }
-        StdDraw.pause(500);
-        return input;
-    }
 
     /*
     private void startGame() {
@@ -358,12 +348,33 @@ public class Engine {
 
     // add interactivity to an avatar
     private void moveAvatar(TETile[][] grid, int xPos, int yPos) {
-        if (grid[xPos][yPos] == Tileset.FLOOR) {
+        if (grid[xPos][yPos] == Tileset.LOCKED_DOOR) {
+            if (this.haveKey) {
+                grid[xPos][yPos] = Tileset.UNLOCKED_DOOR;
+                StdDraw.pause(500);
+            }
+        }
+
+        if (grid[xPos][yPos] == Tileset.FLOOR
+                || grid[xPos][yPos] == Tileset.KEY
+                || grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
+
+            if (grid[xPos][yPos] == Tileset.KEY) {
+                haveKey = true;
+            } else if (grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
+                // draw gameEnd
+                drawFrame("Congratulations, you escaped!");
+            }
+
             Position moveTo = new Position(xPos, yPos);
             grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
             grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
             this.posOfAvatar = moveTo;
+
+
         }
+
+
     }
 
 
