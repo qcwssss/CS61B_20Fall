@@ -23,5 +23,5 @@ Project 0 | [NBody Simulation](https://fa20.datastructur.es/materials/proj/proj0
 Project 1A | [ArrayDeque & LinkedListDeque](https://fa20.datastructur.es/materials/proj/proj1a/proj1aa) | [proj1a](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj1a)
 Project 2AB | [Extrinsic PQ and KDTree](https://fa20.datastructur.es/materials/proj/proj2ab/proj2ab) | [proj2ab](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj2ab/bearmaps)
 Project 2C | [AStarSolver](https://fa20.datastructur.es/materials/proj/proj2c/proj2c) | [proj2c](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj2c/bearmaps)
-Project 2D | [Bear Maps](https://fa20.datastructur.es/materials/proj/proj2d/proj2d) | [proj2c](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj2d)
+Project 2D | [Bear Maps](https://fa20.datastructur.es/materials/proj/proj2d/proj2d) | [proj2d](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj2d)
 Project 3 | [Bulid Your Own World](https://fa20.datastructur.es/materials/proj/proj3/proj3) | [proj3](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj3)
