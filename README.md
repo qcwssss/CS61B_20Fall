@@ -1,4 +1,4 @@
-# CS61B Data Structures 20Fall
+# CS61B: Data Structures 20Fall
 
 * * *
 
