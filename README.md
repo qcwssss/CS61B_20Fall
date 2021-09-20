@@ -1,6 +1,6 @@
 # CS61B: Data Structures 20Fall
 
-* * *
+
 
 @ UCB Data Structure, 2020 Fall 
 @ Instructor: [Josh Hug](https://www2.eecs.berkeley.edu/Faculty/Homepages/joshhug.html)   
