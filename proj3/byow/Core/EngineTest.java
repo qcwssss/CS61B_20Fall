@@ -22,8 +22,8 @@ public class EngineTest {
 		//engine.interactWithInputString("n3424sddw");
 		//engine.interactWithInputString("n3424s");
 		//engine.interactWithKeyboard();
-		engine.interactWithInputString(s1);
-		//engine.interactWithInputString(s2);
+		//engine.interactWithInputString(s1);
+		engine.interactWithInputString(s2);
 
 
 

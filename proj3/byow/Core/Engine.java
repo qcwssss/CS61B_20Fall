@@ -13,6 +13,7 @@ import edu.princeton.cs.introcs.StdDraw;
 import java.awt.*;
 import java.io.*;
 import java.util.Random;
+import java.util.spi.AbstractResourceBundleProvider;
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -47,7 +48,10 @@ public class Engine {
             processInput(keySource, action);
             ter.renderFrame(world);
             drawHelperUI();
+        }
 
+        if (gameOver) {
+            drawEnd();
         }
 
     }
@@ -351,31 +355,33 @@ public class Engine {
         if (grid[xPos][yPos] == Tileset.LOCKED_DOOR) {
             if (this.haveKey) {
                 grid[xPos][yPos] = Tileset.UNLOCKED_DOOR;
-                StdDraw.pause(500);
+                StdDraw.pause(1000);
             }
+        } else if (grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
+            // draw gameEnd
+            gameOver = true;
+            //drawEnd();
+            //System.exit(0);
+
         }
 
-        if (grid[xPos][yPos] == Tileset.FLOOR
-                || grid[xPos][yPos] == Tileset.KEY
-                || grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
-
+        if (grid[xPos][yPos] == Tileset.FLOOR|| grid[xPos][yPos] == Tileset.KEY) {
             if (grid[xPos][yPos] == Tileset.KEY) {
                 haveKey = true;
-            } else if (grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
-                // draw gameEnd
-                drawFrame("Congratulations, you escaped!");
             }
 
             Position moveTo = new Position(xPos, yPos);
             grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
             grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
             this.posOfAvatar = moveTo;
-
-
         }
+    }
+
+    private void drawEnd() {
+        drawFrame("Congratulations, you escaped!");
+        StdDraw.pause(10000);
 
 
     }
-
 
 }

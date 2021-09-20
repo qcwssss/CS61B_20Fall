@@ -31,11 +31,14 @@ public class MapGenerator {
 		WorldGraph wg = new WorldGraph(roomList);
 		this.connectRooms(wg);
 		// add avatar
-		createAvatar(roomList, random);
+		createAvatarPlus(roomList, random);
 
 	}
 
-	private void createAvatar(List<Room> roomList, Random r) {
+	/**
+	 * Create avatar, locked door, and key.
+	 */
+	private void createAvatarPlus(List<Room> roomList, Random r) {
 		int avatarRoomNum  = r.nextInt(roomList.size());
 		Room randRoom = roomList.get(avatarRoomNum);
 		Position birthPos = randRoom.getCenter();
@@ -64,15 +67,6 @@ public class MapGenerator {
 
 	}
 
-	private void createLockedDoor(List<Room> roomList, Random r, int avatarRoomNum) {
-		int lockedRoomNum  = r.nextInt(roomList.size());
-		while (lockedRoomNum == avatarRoomNum) {
-			lockedRoomNum  = r.nextInt(roomList.size());
-		}
-		Room locked = roomList.get(lockedRoomNum);
-		Position lockedPos = locked.getCenter();
-
-	}
 
 	ArrayList<Room> createRandomRooms(Random rand, int UPPER_LIMIT) {
 		//final int UPPER_LIMIT = 200;
