@@ -26,4 +26,6 @@ Project 2C | [AStarSolver](https://fa20.datastructur.es/materials/proj/proj2c/pr
 Project 2D | [Bear Maps](https://fa20.datastructur.es/materials/proj/proj2d/proj2d) | [proj2d](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj2d) 
 Project 3 | [Bulid Your Own World](https://fa20.datastructur.es/materials/proj/proj3/proj3) | [proj3](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj3)
 
+* * *
+Additional link to my Bear Maps, you can view it on this webpage: 
 [My bearmaps deployed on Heroku](http://bearmaps-fa20-cq210829.herokuapp.com/)
