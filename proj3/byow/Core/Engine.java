@@ -23,6 +23,7 @@ public class Engine {
 
     private Position posOfAvatar;
     private boolean gameOver;
+    private boolean isStart;
     private boolean haveKey;
     private long seed;
     private TETile[][] world;
@@ -38,7 +39,7 @@ public class Engine {
         InputSource keySource = new KeyboardInputSource();
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
 
-        showTheWorld(world);
+        showTheWorld();
         drawStartMenu();
         gameOver = false;
 
@@ -80,7 +81,6 @@ public class Engine {
         //
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
-
         this.source = new StringInputDevice(input);
         this.world = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
         while (source.possibleNextInput()) {
@@ -106,6 +106,7 @@ public class Engine {
 
                 MapGenerator map = new MapGenerator(new Random(this.seed), world);
                 posOfAvatar = map.getAvatarPos();
+                isStart = true;
                 break;
             case ':':
                 if (input.possibleNextInput()){
@@ -119,19 +120,14 @@ public class Engine {
                     }
                 }
                 break;
-            case 'L':
+            case 'L': case 'R':
                 //load
-                savedString.deleteCharAt(savedString.length() - 1);
-                String savedRecord = loadGame();
-                if (savedRecord == "") {
-                    System.exit(0);
-                } else {
-                    world = interactWithInputString(savedRecord);
-                    if (this.source.getClass().equals(KeyboardInputSource.class)) {
-                        ter.renderFrame(world);
-                    }
-                }
+                showSavedWorld();
                 break;
+            case 'Q':
+                if (!isStart) {
+                    System.exit(0);
+                }
 
             // move avatar
             case 'W':
@@ -146,11 +142,23 @@ public class Engine {
             case 'D':
                 moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
                 break;
-
         }
     }
 
-    private void showTheWorld(TETile[][] grid) {
+    private void showSavedWorld() {
+        savedString.deleteCharAt(savedString.length() - 1);
+        String savedRecord = loadGame();
+        if (savedRecord == "") {
+            System.exit(0);
+        } else {
+            world = interactWithInputString(savedRecord);
+            if (this.source.getClass().equals(KeyboardInputSource.class)) {
+                ter.renderFrame(world);
+            }
+        }
+    }
+
+    private void showTheWorld() {
         ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
     }
@@ -215,7 +223,7 @@ public class Engine {
         String haveKey = this.haveKey ? "key" : "none";
         StdDraw.textLeft(2, uiY, "Items: " + haveKey);
 
-        String hint = this.haveKey ? "Unlock the door and get out!" : "Find the key!";
+        String hint = this.haveKey ? "Unlock the door and get out of here!" : "Find the key!";
         StdDraw.text(WIDTH/2, uiY, hint);
 
         StdDraw.textRight(WIDTH - 2, uiY, "TileInfo: " + showTileInfo(mousePos));
@@ -291,9 +299,7 @@ public class Engine {
 
         // Reset font size to original tile size.
         resetFontToOriginal();
-
         StdDraw.show();
-
     }
 
     private void resetFontToOriginal() {
@@ -338,13 +344,13 @@ public class Engine {
     private void showEndMessage() {
         drawSentence("Congratulations, you made it!");
         drawSentence("The sequel: Back To The Dungeon");
-        drawSentence("Coming Soon in 2077");
-        drawFrame("Thanks for playing!");
+        drawSentence("Coming Soon In 2077");
+        drawFrame("Thanks For Playing!");
     }
 
     private void drawSentence(String s) {
         drawFrame(s);
-        StdDraw.pause(2000);
+        StdDraw.pause(1500);
     }
 
 
