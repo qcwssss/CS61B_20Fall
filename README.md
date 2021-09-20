@@ -27,5 +27,5 @@ Project 2D | [Bear Maps](https://fa20.datastructur.es/materials/proj/proj2d/proj
 Project 3 | [Bulid Your Own World](https://fa20.datastructur.es/materials/proj/proj3/proj3) | [proj3](https://github.com/qcwssss/CS61B_20Fall/tree/master/proj3)
 
 * * *
-Additional link to my Bear Maps, you can view it on this webpage: 
-[My bearmaps deployed on Heroku](http://bearmaps-fa20-cq210829.herokuapp.com/)
+Additional link to my Project2: Bear Maps, you can view it on this webpage: 
+[bearmaps_20fall_chen](http://bearmaps-fa20-cq210829.herokuapp.com/)
