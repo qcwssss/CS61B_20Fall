@@ -13,7 +13,6 @@ import edu.princeton.cs.introcs.StdDraw;
 import java.awt.*;
 import java.io.*;
 import java.util.Random;
-import java.util.spi.AbstractResourceBundleProvider;
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -28,7 +27,7 @@ public class Engine {
     private long seed;
     private TETile[][] world;
     private InputSource source;
-    //private StringBuilder savedString = new StringBuilder();
+    private StringBuilder savedString = new StringBuilder();
 
 
     /**
@@ -50,10 +49,9 @@ public class Engine {
             drawHelperUI();
         }
 
-        if (gameOver) {
-            drawFrame("Congratulations, you escaped!");
-
-        }
+        drawFrame("Congratulations, you escaped!");
+        StdDraw.pause(2000);
+        drawFrame("Thanks for playing!");
 
     }
 
@@ -106,11 +104,11 @@ public class Engine {
      */
     private void processInput(InputSource input, char action) {
         action = Character.toUpperCase(action);
-        //savedString.append(action);
+        savedString.append(action);
         switch (action) {
             case 'N':
                 getSeed(input);
-                //savedString.append(this.seed).append('S');
+                savedString.append(this.seed).append('S');
 
                 MapGenerator map = new MapGenerator(new Random(this.seed), world);
                 posOfAvatar = map.getAvatarPos();
@@ -119,9 +117,9 @@ public class Engine {
                 if (input.possibleNextInput()){
                     if (input.getNextKey() == 'Q' && !gameOver) {
                       // save and exit
-                        //savedString.deleteCharAt(savedString.length() - 1);
-                        //System.out.println(savedString);
-                        //saveGame(savedString.toString());
+                        savedString.deleteCharAt(savedString.length() - 1);
+                        System.out.println("saving: " + savedString);
+                        saveGame(savedString.toString());
 
                         System.exit(0);
                     }
@@ -129,14 +127,17 @@ public class Engine {
                 break;
             case 'L':
                 //load
-                loadGame();
-                TETile[][] board = MapGenerator.buildEmptyMap(WIDTH, HEIGHT);
-                MapGenerator worldGen = new MapGenerator(new Random(this.seed), board);
-                board[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.AVATAR;
-                this.world = board;
-                showTheWorld(world);
-                ter.renderFrame(world);
-                interactWithKeyboard();
+                savedString.deleteCharAt(savedString.length() - 1);
+                String savedRecord = loadGame();
+                if (savedRecord == "") {
+                    System.exit(0);
+                } else {
+                    world = interactWithInputString(savedRecord);
+                    if (this.source.getClass().equals(KeyboardInputSource.class)) {
+                        ter.renderFrame(world);
+                    }
+                }
+
 
                 break;
             // move avatar
@@ -152,8 +153,7 @@ public class Engine {
             case 'D':
                 moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
                 break;
-            default :
-                break;
+
         }
 
     }
@@ -235,15 +235,12 @@ public class Engine {
     private void saveGame(String saved) {
         File f = new File("./save.txt");
         try {
-
             if (!f.exists()) {
                 f.createNewFile();
             }
             FileOutputStream fs = new FileOutputStream(f);
             ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(this.posOfAvatar);
-            os.writeObject(this.seed);
-            //System.out.println(posOfAvatar);
+            os.writeObject(this.savedString);
 
             os.close();
             fs.close();
@@ -260,10 +257,10 @@ public class Engine {
             try {
                 FileInputStream fs = new FileInputStream(f);
                 ObjectInputStream os = new ObjectInputStream(fs);
-                this.posOfAvatar = (Position) os.readObject();
-                this.seed = (Long) os.readObject();
+                String loaded = os.readObject().toString();
+                System.out.println("loading: " + loaded);
+                return loaded;
 
-                //return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
                 System.exit(0);
@@ -360,14 +357,12 @@ public class Engine {
             }
         } else if (grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
             gameOver = true;
-
         }
 
         if (grid[xPos][yPos] == Tileset.FLOOR|| grid[xPos][yPos] == Tileset.KEY) {
             if (grid[xPos][yPos] == Tileset.KEY) {
                 haveKey = true;
             }
-
             Position moveTo = new Position(xPos, yPos);
             grid[posOfAvatar.getX()][posOfAvatar.getY()] = Tileset.FLOOR;
             grid[moveTo.getX()][moveTo.getY()] = Tileset.AVATAR;
