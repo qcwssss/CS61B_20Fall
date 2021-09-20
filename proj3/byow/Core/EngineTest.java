@@ -1,7 +1,6 @@
 package byow.Core;
 
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class EngineTest {

@@ -1,7 +1,5 @@
 package byow.Core.Map.World;
 
-import byow.Core.Map.Path.Node;
-import byow.Core.Map.Path.WeightedEdge;
 import byow.Core.Map.Room;
 
 import java.util.*;

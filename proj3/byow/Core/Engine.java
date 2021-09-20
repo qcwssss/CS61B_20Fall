@@ -113,7 +113,7 @@ public class Engine {
                     if (input.getNextKey() == 'Q' && !gameOver) {
                       // save and exit
                         savedString.deleteCharAt(savedString.length() - 1);
-                        System.out.println("saving: " + savedString);
+                        //System.out.println("saving: " + savedString);
                         saveGame(savedString.toString());
 
                         System.exit(0);
@@ -142,6 +142,8 @@ public class Engine {
             case 'D':
                 moveAvatar(world, posOfAvatar.getX() + 1, posOfAvatar.getY());
                 break;
+            default:
+                break;
         }
     }
 
@@ -152,9 +154,7 @@ public class Engine {
             System.exit(0);
         } else {
             world = interactWithInputString(savedRecord);
-            if (this.source.getClass().equals(KeyboardInputSource.class)) {
-                ter.renderFrame(world);
-            }
+            ter.renderFrame(world);
         }
     }
 
@@ -260,7 +260,7 @@ public class Engine {
                 FileInputStream fs = new FileInputStream(f);
                 ObjectInputStream os = new ObjectInputStream(fs);
                 String loaded = os.readObject().toString();
-                System.out.println("loading: " + loaded);
+                //System.out.println("loading: " + loaded);
                 return loaded;
 
             } catch (FileNotFoundException e) {
