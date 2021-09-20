@@ -49,10 +49,7 @@ public class Engine {
             drawHelperUI();
         }
 
-        drawFrame("Congratulations, you escaped!");
-        StdDraw.pause(2000);
-        drawFrame("Thanks for playing!");
-
+        showEndMessage();
     }
 
     /**
@@ -77,7 +74,6 @@ public class Engine {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] interactWithInputString(String input) {
-        // TODO: Fill out this method so that it run the engine using the input
         // passed in as an argument, and return a 2D tile representation of the
         // world that would have been drawn if the same inputs had been given
         // to interactWithKeyboard().
@@ -92,8 +88,6 @@ public class Engine {
             processInput(source, action);
         }
 
-        //showTheWorld(world);
-        //ter.renderFrame(world);
         return world;
     }
 
@@ -137,9 +131,8 @@ public class Engine {
                         ter.renderFrame(world);
                     }
                 }
-
-
                 break;
+
             // move avatar
             case 'W':
                 moveAvatar(world, posOfAvatar.getX(), posOfAvatar.getY() + 1);
@@ -155,7 +148,6 @@ public class Engine {
                 break;
 
         }
-
     }
 
     private void showTheWorld(TETile[][] grid) {
@@ -222,7 +214,9 @@ public class Engine {
 
         String haveKey = this.haveKey ? "key" : "none";
         StdDraw.textLeft(2, uiY, "Items: " + haveKey);
-        StdDraw.text(WIDTH/2, uiY, "Unlock the door and escape!");
+
+        String hint = this.haveKey ? "Unlock the door and get out!" : "Find the key!";
+        StdDraw.text(WIDTH/2, uiY, hint);
 
         StdDraw.textRight(WIDTH - 2, uiY, "TileInfo: " + showTileInfo(mousePos));
         StdDraw.line(0, uiY - 1, WIDTH, uiY - 1);
@@ -286,7 +280,7 @@ public class Engine {
         Font font = new Font("Monaco", Font.BOLD, 40);
         StdDraw.setFont(font);
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(midX, midY * 4 /3, "CS61B: Zelda Game");
+        StdDraw.text(midX, midY * 4 /3, "BYOW: Escape The Dungeon");
         // menu options
         Font menuFont = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(menuFont);
@@ -314,41 +308,12 @@ public class Engine {
 
     }
 
-
-    /*
-    private void startGame() {
-        //TODO: Set any relevant variables before the game starts
-        this.round = 1;
-        this.gameOver = false;
-
-        String target, input;
-        //TODO: Establish Engine loop
-        while (!gameOver) {
-            playerTurn = false;
-            drawFrame("Round: " + round);
-            StdDraw.pause(1500);
-
-            target = generateRandomString(round);
-            flashSequence(target);
-
-            playerTurn = true;
-            input = solicitNCharsInput(round);
-            if (input.equals(target)) {
-                drawFrame("Correct, good job!");
-                StdDraw.pause(1500);
-                round += 1;
-            } else {
-                gameOver = true;
-                String gameOver = "Game Over! Final round score:" + round;
-                drawFrame(gameOver);
-
-            }
-        }
-    }
-
+    /**
+     * Add interactivity to the avatar.
+     * @param grid world grid
+     * @param xPos x coordinate of destination
+     * @param yPos y coordinate of destination
      */
-
-    // add interactivity to an avatar
     private void moveAvatar(TETile[][] grid, int xPos, int yPos) {
         if (grid[xPos][yPos] == Tileset.LOCKED_DOOR) {
             if (this.haveKey) {
@@ -370,6 +335,17 @@ public class Engine {
         }
     }
 
+    private void showEndMessage() {
+        drawSentence("Congratulations, you made it!");
+        drawSentence("The sequel: Back To The Dungeon");
+        drawSentence("Coming Soon in 2077");
+        drawFrame("Thanks for playing!");
+    }
+
+    private void drawSentence(String s) {
+        drawFrame(s);
+        StdDraw.pause(2000);
+    }
 
 
 }
