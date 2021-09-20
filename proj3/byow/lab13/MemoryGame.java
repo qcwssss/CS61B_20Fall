@@ -138,7 +138,6 @@ public class MemoryGame {
                 drawFrame(gameOver);
 
             }
-
         }
     }
 
