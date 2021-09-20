@@ -51,7 +51,8 @@ public class Engine {
         }
 
         if (gameOver) {
-            drawEnd();
+            drawFrame("Congratulations, you escaped!");
+
         }
 
     }
@@ -355,13 +356,10 @@ public class Engine {
         if (grid[xPos][yPos] == Tileset.LOCKED_DOOR) {
             if (this.haveKey) {
                 grid[xPos][yPos] = Tileset.UNLOCKED_DOOR;
-                StdDraw.pause(1000);
+                StdDraw.pause(500);
             }
         } else if (grid[xPos][yPos] == Tileset.UNLOCKED_DOOR) {
-            // draw gameEnd
             gameOver = true;
-            //drawEnd();
-            //System.exit(0);
 
         }
 
@@ -377,11 +375,6 @@ public class Engine {
         }
     }
 
-    private void drawEnd() {
-        drawFrame("Congratulations, you escaped!");
-        StdDraw.pause(10000);
 
-
-    }
 
 }
