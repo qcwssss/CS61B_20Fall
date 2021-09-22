@@ -98,14 +98,6 @@ public class Engine {
         return world;
     }
 
-    private void checkInvalidInput(char action) {
-        String startInput = "NLRQ:";
-        if (!isStart) {
-            if (startInput.indexOf(action) == -1) {
-             //continue;
-            }
-        }
-    }
 
     /**
      * Take actions based on input.
