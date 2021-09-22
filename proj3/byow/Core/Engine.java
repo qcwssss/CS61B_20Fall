@@ -21,6 +21,7 @@ public class Engine {
     public static final int HEIGHT = 40;
     private static final int TILE_SIZE = 16;
 
+    private final String startInput = "NLRQ:";
     private Position posOfAvatar;
     private boolean gameOver;
     private boolean isStart;
@@ -45,6 +46,12 @@ public class Engine {
 
         while (!gameOver) {
             char action = keySource.getNextKey();
+            if (!isStart) {
+                if (startInput.indexOf(action) == -1) {
+                    continue;
+                }
+            }
+
             processInput(keySource, action);
             ter.renderFrame(world);
             drawHelperUI();
@@ -91,6 +98,15 @@ public class Engine {
         return world;
     }
 
+    private void checkInvalidInput(char action) {
+        String startInput = "NLRQ:";
+        if (!isStart) {
+            if (startInput.indexOf(action) == -1) {
+             //continue;
+            }
+        }
+    }
+
     /**
      * Take actions based on input.
      * @param input input key
@@ -128,6 +144,7 @@ public class Engine {
                 if (!isStart) {
                     System.exit(0);
                 }
+                break;
 
             // move avatar
             case 'W':
