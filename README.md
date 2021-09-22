@@ -1,6 +1,6 @@
 # CS61B: Data Structures 20Fall
 
-* * *
+
 
 @ UCB Data Structure, 2020 Fall 
 @ Instructor: [Josh Hug](https://www2.eecs.berkeley.edu/Faculty/Homepages/joshhug.html)   
@@ -14,8 +14,7 @@ The CS 61 series is an introduction to computer science, with particular emphasi
 <br><br>
 </p>
 
-* * *
-This repository contains all the assignments of the course CS61B, completed by Chen Qiu.
+* This repository contains all the assignments of the course CS61B, completed by Chen Qiu.
 
 
 ## CS61B Projects
